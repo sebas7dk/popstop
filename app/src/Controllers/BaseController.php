@@ -278,11 +278,14 @@ class BaseController {
      */
     private function getMovieByFileName($file) {
 
-           $file = preg_match('/(19|20)[0-9][0-9]/', $file, $matches);
-           $year = $matches[0];
+        $search = $file['search_name'];
+        if(preg_match('/\b\d{4}\b/', $search, $match)) {
+            $year = $match[0];
+            $search = str_replace($match[0], '', $search);
+        }
 
         $this->tmdb = new TMDB($this->getSettings()['api_key']);
-        $search = $this->tmdb->search($file['search_name'], "movie", $year);
+        $search = $this->tmdb->search($search, "movie", (isset($year)) ? $year : '');
 
         if (isset($search['results']) && $search['total_results'] > 0) {
             $result = $search['results'][0];
