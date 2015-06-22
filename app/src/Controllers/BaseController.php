@@ -279,7 +279,7 @@ class BaseController {
     private function getMovieByFileName($file) {
 
         $search = $file['search_name'];
-        if(preg_match('/\b\d{4}\b/', $search, $match)) {
+        if(preg_match('/(19|20)[0-9][0-9]/', $search, $match)) {
             $year = $match[0];
             $search = str_replace($match[0], '', $search);
         }

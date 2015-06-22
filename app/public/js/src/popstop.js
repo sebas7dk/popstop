@@ -156,8 +156,6 @@
             var data = {function : "isInstalled"};
             var response = _call(data, 'GET', false);
 
-            totalFiles = response.total_files;
-
             if (!response.is_installed) {
                 this.installationProcess();
             } else if(response.password) {
@@ -166,6 +164,7 @@
                 this.updateMovies();
             } else {
                 $(windowMargin).fadeIn(2000);
+                totalFiles = response.total_files;
                 this.getFeatured();
                 this.getMovies();
             }
