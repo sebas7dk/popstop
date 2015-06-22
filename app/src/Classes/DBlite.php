@@ -40,7 +40,7 @@ class DBlite  {
      * @param array $params query parameters
      * @return object|null
      */
-    public function bind($params, $search = false)
+    public function bind($params)
     {	
         foreach ($params as $key => $value) {
             $this->parameters[sizeof($this->parameters)] = [":" .$key => utf8_encode($value)];

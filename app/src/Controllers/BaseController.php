@@ -237,10 +237,9 @@ class BaseController {
     /**
      * Insert all the listed movies in the directories
      *
-     * @param array $params
      * @return array
      */
-    public function updateFiles($params)
+    public function updateFiles()
     {
         $path = $this->db->fetch("SELECT movie_id, path FROM files", false, true);
 
@@ -278,7 +277,10 @@ class BaseController {
      * @return array
      */
     private function getMovieByFileName($file) {
-        $year = (preg_match('/\b\d{4}\b/', $file, $matches)) ? $matches[0] : '';
+
+           $file = preg_match('/(19|20)[0-9][0-9]/', $file, $matches);
+           $year = $matches[0];
+
         $this->tmdb = new TMDB($this->getSettings()['api_key']);
         $search = $this->tmdb->search($file['search_name'], "movie", $year);
 
