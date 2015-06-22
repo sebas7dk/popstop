@@ -1,0 +1,332 @@
+@import url(http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css);
+
+video::-webkit-media-controls {
+    display:none !important;
+}
+video::-webkit-media-controls-enclosure {
+    display:none !important;
+}
+
+video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-height: 100%;
+    width: 100%;
+    height: auto;
+    background-size: cover;
+    transition: 1s opacity;
+    z-index: 9999;
+    background: #000;
+}
+
+/* CONTROLS
+---------------------------
+--------------------------- */
+.control-bar{
+    color: #FFF;
+    width: 50%;
+    height: 35px;
+    background-color: #353535;
+    position: absolute;
+    right: 20%;
+    bottom: 10%;
+    border-radius: 50px;
+    z-index: 2147483647;
+}
+
+#controls {
+    width: 100%;
+    position: fixed;
+    bottom: -200px;
+}
+
+
+#closeButton {
+    background: #353535;
+    color: #F94F6A;
+    position: fixed;
+    top: -60px;
+    left: 10px;
+    z-index: 2147483647;
+}
+
+#playerButton{
+    float: left;
+    height: 100%;
+    width: 35px;
+    position: relative;
+}
+#playerButton:hover{
+    color: #F94F6A;
+}
+
+.play:before {
+    position: absolute;
+    left: 10px;
+    top: 5px;
+    content:'\f144';
+    font-size: 25px;
+    font-family: FontAwesome;
+}
+
+
+.pause:before {
+    position: absolute;
+    left: 11px;
+    top: 5px;
+    content:'\f04c';
+    font-size: 18px;
+    font-family: FontAwesome;
+}
+
+/* INFORMATION
+---------------------------
+--------------------------- */
+.info .poster {
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 120px;
+    height: 120px;
+    line-height: 200px;
+    border-radius: 50%; /* the magic */
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border: 5px solid #353535;
+
+}
+
+.info {
+    position: absolute;
+    left: 25%;
+    bottom: -50px;
+}
+
+.info .title {
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 2px 2px 2px #000;
+    position: relative;
+    left: 135px;
+    bottom: 90px;
+    font-size: 30px;
+}
+.holder {
+    height: 25%;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 2147483647;
+}
+/* PROGRESSBAR
+---------------------------
+--------------------------- */
+#playingTime,
+#totalTime{
+    line-height: 35px;
+    float: left;
+    width: 35px;
+    height: 100%;
+    font-size: 11px;
+    cursor: default;
+    text-align: center;
+}
+#progressBar{
+    float: left;
+    width: calc(100% - 195px);
+    height: 10px;
+    margin: 13px 10px;
+    background-color: #000;
+    position: relative;
+}
+#played{
+    width: 0;
+    height: 10px;
+    background-color: #F94F6A;
+    position: absolute;
+    z-index: 3;
+}
+#loadedBar{
+    width: 0;
+    height: 10px;
+    background-color: #2B2627;
+    position: absolute;
+    z-index: 2;
+}
+/* FULLSCREEN
+---------------------------
+--------------------------- */
+#fullScreenButton{
+    float: left;
+    height: 35px;
+    width: 35px;
+    position: relative;
+    overflow: hidden;
+}
+#fullScreenButton:hover{
+    color: #F94F6A;
+}
+#fullScreenButton:before {
+    position: absolute;
+    left: 8px;
+    top: 5px;
+    content:'\f0b2';
+    font-size: 18px;
+    font-family: FontAwesome;
+}
+/* VOLUME
+---------------------------
+--------------------------- */
+#volume{
+    width: 35px;
+}
+#volumeIcon{
+    width: 100%;
+    z-index: 99;
+}
+#volume,
+#volumeIcon{
+    float: left;
+    height: 100%;
+    background-color: #353535;
+    position:relative;
+}
+#volume:hover #volumeControl{
+    bottom: 100%;
+    opacity: 1;
+    -webkit-transition: bottom 0s ease 0s;
+    -moz-transition: bottom 0s ease 0s;
+    -ms-transition: bottom 0s ease 0s;
+    -o-transition: bottom 0s ease 0s;
+    transition: bottom 0s ease 0s;
+}
+#volumeIcon:hover{
+    color: #F94F6A;
+}
+#volumeIcon span:before,
+#volumeIcon span:after{
+    content:"";
+    position:absolute;
+    top:50%;
+    left:0;
+    background:#FFF;
+}
+#volumeIcon span:before{
+    left: 4px;
+    border: 7px solid transparent;
+    border-right-color: #FFF;
+    margin-top: -7px;
+    background: transparent;
+}
+#volumeIcon span:after {
+    left: 10px;
+    width: 4px;
+    height: 6px;
+    margin-top:-3px;
+}
+
+
+#volumeIcon:before{
+    content:"";
+    position:absolute;
+    top:50%;
+    left:0;
+    width:6px;
+    height:6px;
+    -webkit-border-radius:0 15px 0 0;
+    -moz-border-radius:0 15px 0 0;
+    border-radius:0 15px 0 0;
+    -webkit-transform:rotate(45deg);
+    -moz-transform:rotate(45deg);
+    -ms-transform:rotate(45deg);
+    -o-transform:rotate(45deg);
+    transform:rotate(45deg);
+}
+
+#volumeIcon.volume-mid:before {
+    left: 17.1px;
+    margin-top: -4px;
+    border: 4px solid #FFF;
+    border-width: 2px 2px 0 0;
+}
+#volumeIcon.volume-max:before {
+    left: 18px;
+    margin-top: -6px;
+    border: 4px double #FFF;
+    border-width: 6px 6px 0 0;
+}
+
+#volumeControl{
+    height: 80px;
+    width: 50%;
+    float: left;
+    background-color: #353535;
+    cursor: default;
+    padding: 5px 6px;
+    position: absolute;
+    left: 9px;
+    bottom: -100px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-bottom: 6px;
+    opacity: 0;
+    -webkit-transition: all 0s ease 1s;
+    -moz-transition: all 0s ease 1s;
+    -ms-transition: all 0s ease 1s;
+    -o-transition: all 0s ease 1s;
+    transition: all 0s ease 1s;
+}
+#volumeControl:after{
+    content: "";
+    width: 0;
+    display: block;
+    margin: auto;
+    border-style: solid;
+    border-width: 6px 6px 0;
+    border-color: #353535 transparent;
+    position: absolute;
+    right: 0;
+    bottom: -6px;
+    left: 0;
+}
+#volumePosition{
+    background-color: #2B2627;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+#currentVolume{
+    background-color:#F94F6A;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+}
+.mute:before,
+.mute:after {
+    content: "";
+    position: absolute;
+    background: #FFF;
+    -webkit-transform:rotate(45deg);
+    -moz-transform:rotate(45deg);
+    -ms-transform:rotate(45deg);
+    -o-transform:rotate(45deg);
+    transform:rotate(45deg);
+}
+#volumeIcon.mute:before {
+    left: 24px;
+    top: 13px;
+    width: 2px;
+    height: 10px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+.mute:after {
+    top: 17px;
+    right: 5px;
+    height: 2px;
+    width: 10px;
+}

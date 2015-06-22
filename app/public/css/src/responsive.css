@@ -1,0 +1,397 @@
+@media only screen and (min-width : 320px) and (max-width : 480px) {
+    .logo {
+        font-size: 45px;
+    }
+
+    .logo-sticky {
+        font-size: 25px;
+        top: 6px;
+    }
+
+    .window .main .featured-movie {
+        height: 300px;
+    }
+
+    .window .main .featured-movie:after {
+        height: 300px;
+        font-size: 100px;
+        line-height: 300px;
+    }
+
+    .window .main .featured-movie .bottom-bar {
+        padding: 10px 20px;
+    }
+
+    .window .main .featured-movie .bottom-bar .title-container {
+        font-size: 16px;
+    }
+
+    .window .main .featured-movie .bottom-bar .right {
+        margin-top: 0;
+
+    }
+
+    .window .main .featured-movie .bottom-bar .right .stars {
+        font-size: 16px;
+        margin-right: 10px;
+    }
+
+    .window .main .movie-list .menu-bar {
+        height: 20px;
+    }
+
+    .window .main .movie-list .menu-bar .left {
+        display: none;
+    }
+
+    .window .main .movie-list .menu-bar .right {
+        margin-right: 30px;
+        position: relative;
+        bottom: 5px;
+    }
+
+    .window .side-bar {
+        width: 170px;
+    }
+
+    .side-bar-sticky {
+        top: 40px!important;
+    }
+
+    .side-bar-open .list {
+        width: 35%;
+    }
+
+    .side-bar-open .list > li {
+        margin-right: 15px!important;
+    }
+
+    .window .side-bar menu > ul > li > a {
+        font-size: 12px;
+    }
+
+    .window .side-bar .search-box {
+        padding: 10px;
+    }
+
+    .window .side-bar .search-box input {
+        width: 110px;
+    }
+
+    .window .side-bar .search-box .fa {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: #F94F6A;
+        transition-duration: .3s;
+        cursor: pointer;
+    }
+
+    .side-bar-open .list li {
+        margin-left: -10px!important;
+        width: 135px!important;
+        padding-bottom: 0;
+    }
+
+    .side-bar-open li:after {
+        height: 206px!important;
+        line-height: 206px!important;
+    }
+
+    .window .main .movie-list .list li:after {
+        height: 196px!important;
+        line-height: 196px!important;
+    }
+
+    .window .main .movie-list .list li {
+        margin-right: 8px;
+        padding-bottom: 0px;
+        width: 130px;
+    }
+
+    .window .main .movie-list .list li:after {
+        height: 198px;
+        line-height: 198px;
+    }
+
+    #lightboxTarget .movie-card {
+        padding: 30px 0;
+    }
+
+    #lightboxTarget .movie-card .cover {
+        display: none;
+    }
+
+    #lightboxTarget .movie-card .hero {
+        height: 245px;
+    }
+
+    #lightboxTarget .movie-card .container {
+        width: 90%;
+    }
+
+
+    #lightboxTarget .movie-card .column-left {
+        display: none;
+    }
+
+    #lightboxTarget .movie-card .details .bottom-bar .right {
+        font-size: 14px;
+    }
+
+    #lightboxTarget .movie-card .details .bottom-bar .title-container {
+        margin-left: 0;
+        font-size: 14px;
+    }
+
+    #lightboxTarget .movie-card .column-right {
+        padding-left: 0;
+        margin-left: 30px;
+        width: 85%;
+    }
+
+    #lightboxTarget .movie-card .description {
+        min-height: 245px;
+        font-size: 13px;
+        line-height: 15px;
+    }
+
+    #lightboxTarget .movie-card .button {
+        font-size: 16px;
+        width: 100%;
+        padding: 7px 0px;
+        left: 0;
+        bottom: 10px;
+        border-radius: 0!important;
+    }
+
+    #messageContainer {
+        width: 90%;
+    }
+
+    #messageContainer .content .step {
+        width: 20%;
+    }
+
+    #messageContainer .api-key input {
+        width: 245px;
+    }
+
+}
+@media only screen and (min-width : 480px) and (max-width : 690px) {
+    .window .main .featured-movie {
+        height: 300px;
+    }
+
+    .window .main .featured-movie:after {
+        height: 250px;
+        font-size: 150px;
+        line-height: 300px;
+    }
+
+    .window .main .featured-movie .bottom-bar {
+        padding: 15px 30px;
+    }
+
+    .window .main .featured-movie .bottom-bar .title-container {
+        font-size: 20px;
+    }
+
+    .window .main .featured-movie .bottom-bar .right {
+        margin-top: 0;
+    }
+
+    .window .main .featured-movie .bottom-bar .right .stars {
+        font-size: 20px;
+    }
+
+
+    .window .main .movie-list .list li,
+    .wrapper .list li {
+        margin-right: 15px;
+    }
+
+
+    #lightboxTarget .movie-card .hero {
+        height: 245px;
+    }
+
+
+    #lightboxTarget .movie-card .container {
+        width: 90%;
+    }
+
+    #lightboxTarget .movie-card .cover {
+        width: 140px;
+        top: 220px;
+    }
+
+    #lightboxTarget .movie-card .button {
+        font-size: 15px;
+        width: 120px;
+        bottom: 180px;
+    }
+
+    #lightboxTarget .movie-card .column-left {
+        padding-left: 50px;
+        padding-top: 130px;
+        width: 15%;
+    }
+
+    #lightboxTarget .movie-card .tag {
+        font-size: 12px;
+    }
+
+    #lightboxTarget .movie-card .column-right {
+        width: 70%;
+    }
+}
+@media only screen and (min-width : 690px) and (max-width : 1110px)  {
+    .window .main .featured-movie {
+        height: 300px;
+    }
+
+    .window .main .featured-movie:after {
+        height: 250px;
+        font-size: 150px;
+        line-height: 300px;
+    }
+
+    .window .main .featured-movie .bottom-bar {
+        padding: 15px 30px;
+    }
+
+    .window .main .featured-movie .bottom-bar .title-container {
+        font-size: 20px;
+    }
+
+    .window .main .featured-movie .bottom-bar .right {
+        margin-top: 0;
+    }
+
+    .window .main .featured-movie .bottom-bar .right .stars {
+        font-size: 20px;
+    }
+
+    .side-bar-open .list {
+        width: 71%;
+    }
+
+    .side-bar-open .list li {
+        margin-right: 7px!important;
+        width: 140px!important;
+        padding-bottom: 0;
+    }
+
+    .side-bar-open li:after {
+        height: 214px!important;
+        line-height: 214px!important;
+    }
+
+    .window .main .movie-list .list li {
+        margin-right: 7px;
+        width: 158px;
+        padding-bottom: 0;
+    }
+
+
+    .window .main .movie-list .list li:after {
+        height: 240px;
+        line-height: 240px;
+    }
+
+
+    #lightboxTarget .movie-card .container {
+        width: 90%;
+    }
+
+    #lightboxTarget .movie-card .hero {
+        height: 260px;
+    }
+
+    #lightboxTarget .movie-card .cover {
+        width: 140px;
+        top: 138px;
+    }
+
+    #lightboxTarget .movie-card .button {
+        font-size: 15px;
+        width: 120px;
+        bottom: 180px;
+    }
+
+    #lightboxTarget .movie-card .column-left {
+        padding-left: 50px;
+        padding-top: 130px;
+        width: 15%;
+    }
+
+    #lightboxTarget .movie-card .tag {
+        font-size: 12px;
+    }
+
+    #lightboxTarget .movie-card .column-right {
+        width: 70%;
+    }
+
+}
+
+
+@media only screen and (min-width : 1200px) and (max-width: 1600px)  {
+    .side-bar-open .list {
+        width: 77%;
+    }
+
+    .side-bar-open .list li {
+        margin-right: 10px!important;
+        width: 155px!important;
+        padding-bottom: 0;
+    }
+
+    .side-bar-open li:after {
+        height: 214px!important;
+        line-height: 214px!important;
+    }
+
+    .window .main .movie-list .list li {
+        margin-right: 9px;
+        width: 169px;
+        padding-bottom: 0;
+    }
+
+    .window .main .movie-list .list li:after {
+        height: 256px;
+        line-height: 256px;
+    }
+
+    #lightboxTarget .movie-card .container {
+        width: 70%;
+    }
+
+    #lightboxTarget .movie-card .cover {
+        width: 170px;
+    }
+
+    #lightboxTarget .movie-card .button {
+        width: 150px;
+        bottom: 194px;
+    }
+
+    #lightboxTarget .movie-card .column-left {
+        width: 19.5%;
+        padding-top: 120px;
+    }
+
+    #lightboxTarget .movie-card .tag {
+        font-size: 12px;
+    }
+
+    #lightboxTarget .movie-card .column-right {
+        width: 65%;
+    }
+}
+@media only screen and (min-width : 1224px) {
+    .window .main .featured-movie {
+        background-position-y: -150px;
+    }
+}
