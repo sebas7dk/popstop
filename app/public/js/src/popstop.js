@@ -223,7 +223,7 @@
         },
         getMovies:function(scroll) {
             //Show the spinner
-            $(windowMargin).toggleClass('loading');
+            $(windowMargin).addClass('loading');
 
             var $movieContainer = $(movieContainer);
             var type = $movieContainer.attr("data-type");
@@ -246,7 +246,7 @@
                 } else {
                     $movieContainer.html(output);
                 }
-                $(windowMargin).toggleClass('loading');
+                $(windowMargin).removeClass('loading');
                 loaded++;
             }
         },
