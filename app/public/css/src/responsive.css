@@ -59,7 +59,7 @@
     }
 
     .side-bar-open .list {
-        width: 35%;
+        width: 35%!important;
     }
 
     .side-bar-open .list > li {
@@ -112,6 +112,12 @@
     .window .main .movie-list .list li:after {
         height: 198px;
         line-height: 198px;
+    }
+
+    .spinner {
+        top: 30%;
+        height: 50px;
+        width: 50px;
     }
 
     #lightboxTarget .movie-card {
@@ -274,7 +280,7 @@
     }
 
     .side-bar-open .list {
-        width: 71%;
+        width: 71%!important;
     }
 
     .side-bar-open .list li {
@@ -339,7 +345,7 @@
 
 @media only screen and (min-width : 1200px) and (max-width: 1600px)  {
     .side-bar-open .list {
-        width: 77%;
+        width: 77%!important;
     }
 
     .side-bar-open .list li {

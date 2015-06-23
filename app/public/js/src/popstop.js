@@ -222,6 +222,9 @@
             }
         },
         getMovies:function(scroll) {
+            //Show the spinner
+            $(windowMargin).toggleClass('loading');
+
             var $movieContainer = $(movieContainer);
             var type = $movieContainer.attr("data-type");
             genre =  $movieContainer.attr("data-genre");
@@ -238,12 +241,12 @@
                 });
                 if(scroll === true) {
                     $movieContainer.append(output);
-                    $(spinner).hide(); //hide loading image once data is received
                     loaded++; //loaded group increment
                     loading = false;
                 } else {
                     $movieContainer.html(output);
                 }
+                $(windowMargin).toggleClass('loading');
                 loaded++;
             }
         },
@@ -280,10 +283,6 @@
                     output +='<li> <a class="genre" data-genre="'+ key +'">'+ key +' ('+ val +')</a></li>';
                 });
                 $genreList.html(output);
-
-                //var sideBarHeight = $(sideBar).height();
-                //$($movieContainer).css({'height':sideBarHeight});
-
             }
             $('body').toggleClass('side-bar-open');
         },
@@ -396,7 +395,6 @@
                if(loaded <= totalFiles && loading === false) //there's more data to load
                {
                   loading = true;
-                  $(spinner).show(); //show loading image
                   this.getMovies(true);
                }
             }

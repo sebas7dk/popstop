@@ -202,7 +202,7 @@
 
         createPlayer:function(){
             //Create a new div with the player controls
-            $(this.element).wrap('<div class="kinoPlayer" />');
+            $(this.element).wrap('<div class="PopStopPlayer" />');
             var $PopStopPlayer = $(".PopStopPlayer");
 
             var output = '<div class="holder">'
