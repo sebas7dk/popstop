@@ -15,7 +15,7 @@ class DBlite  {
     
     protected $response;
 
-    protected $path = 'app/database/movit.sqlite';
+    protected $path = 'app/database/popstop.sqlite';
     
      public function __construct()
     {         

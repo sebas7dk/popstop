@@ -238,10 +238,9 @@
                 if(scroll === true) {
                     $movieContainer.append(output);
                     $(spinner).hide(); //hide loading image once data is received
-                    loaded += response.total_files; //loaded group increment
+                    loaded++; //loaded group increment
                     loading = false;
                 } else {
-                    totalFiles = response.total_files;
                     $movieContainer.html(output);
                 }
                 loaded++;
