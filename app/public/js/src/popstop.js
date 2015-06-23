@@ -61,6 +61,14 @@
     function _reload() {
         location.reload();
     }
+    function _loader(show) {
+        if (show) {
+            //Show the spinner
+            $(windowMargin).addClass('loading');
+        } else {
+            $(windowMargin).removeClass('loading');
+        }
+    }
     Plugin.prototype = {
         init: function(){
                 $movieContainer = $(this.element);
@@ -167,6 +175,7 @@
             } else {
                 $(windowMargin).fadeIn(2000);
                 this.getFeatured();
+                _loader(true);
                 this.getMovies();
             }
 
@@ -222,9 +231,6 @@
             }
         },
         getMovies:function(scroll) {
-            //Show the spinner
-            $(windowMargin).addClass('loading');
-
             var $movieContainer = $(movieContainer);
             var type = $movieContainer.attr("data-type");
             genre =  $movieContainer.attr("data-genre");
@@ -232,7 +238,7 @@
             var data = {function : "getMovies", is_loaded : loaded, type: type, genre: genre};
             var response = _call(data, 'GET', false);
 
-            if (response) {
+            if (response.movies) {
                 var output = '';
                 $.each(response.movies, function(key, val){
                     output +='<li class="movie" movie-id="'+ val.movie_id +'">'
@@ -246,7 +252,7 @@
                 } else {
                     $movieContainer.html(output);
                 }
-                $(windowMargin).removeClass('loading');
+                _loader(false);
                 loaded++;
             }
         },
@@ -258,6 +264,7 @@
             $(sideBar).find('.sort-by li').removeClass('selected');
             $this.addClass('selected');
 
+            _loader();
             this.getMovies();
 
         },
@@ -266,8 +273,9 @@
             genre = $this.attr("data-genre");
             $(sideBar).find('#genresList li').removeClass('selected');
             $this.closest('li').addClass('selected');
-
             $(movieContainer).attr("data-genre", genre);
+
+            _loader(true);
             this.getMovies();
             this.closeLightBox();
         },
@@ -308,6 +316,7 @@
             } else if (value.length === 0){
                  loaded = 0;
                  loading = false;
+                 _loader(true);
                  this.getMovies();
              }
         },
@@ -395,6 +404,7 @@
                if(loaded <= totalFiles && loading === false) //there's more data to load
                {
                   loading = true;
+                  _loader(true);
                   this.getMovies(true);
                }
             }
