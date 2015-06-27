@@ -258,10 +258,11 @@ a {
     left: 0;
     bottom: 0;
     width: 250px;
+    height: 100%;
     background: #24282C;
-    min-height: 100%;
     color: #DDD;
 }
+
 
 .side-bar-sticky {
     position: fixed!important;
@@ -305,6 +306,7 @@ a {
 }
 .window .side-bar menu {
     padding-top: 20px;
+
 }
 .window .side-bar menu .separator {
     border-top: 1px solid #111111;
@@ -723,7 +725,7 @@ top: 0;
 #messageContainer {
   left: 50%;
   position: absolute;
-  top: 0;
+  top: 30%;
   width: 500px;
   font-size: 14px;
   -webkit-transform: translate(-50%, -50%);

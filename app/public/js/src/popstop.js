@@ -7,6 +7,7 @@
             this.element = element;
             this.loaded= "";
             this.loading="";
+            this.response="";
             this.logo ="";
             this.menuBar ="";
             this.genre="";
@@ -30,17 +31,50 @@
 
 
     }
-    function _call(data, type, async) {
-        var response = $.ajax({type: type, url: 'bootstrap.php', data: data, dataType: 'json',  async: async}).responseJSON;
-        if (!response.success) {
-              _error(response.error.message);
+    function _call(data, type, async, before_send) {
+        //var call = $.ajax({type: type, url: 'bootstrap.php', data: data, dataType: 'json',  async: async});
+
+        if (response) {
+            var call = $.ajax({
+                type: type,
+                dataType: 'json',
+                data: data,
+                url: 'bootstrap.php',
+                async: false,
+                beforeSend: function () {
+
+                    if (before_send != undefined) {
+                       switch(before_send) {
+                          case 'update':
+                               _update();
+                               break;
+                           case 'install':
+                               _install();
+                               break;
+                       }
+                    }
+                },
+                error: function (request) {
+                    var message = request.responseJSON;
+                    response = false;
+                    _error(message);
+
+                },
+                success: function() {
+                    $(messageContainer).html('');
+                }
+            }).responseJSON;
+
+            return call;
         }
-        return response.data;
+
+
+
     }
     function _error(message) {
         var title = '<i class="fa fa-exclamation-triangle"></i> Error';
-        var output ='<strong>Message:</strong> '+ message
-                   +'<div class="button step" id="updateAgain">Try Again</div>';
+        var output = '<strong>Message:</strong> ' + message
+            + '<div step-id="4" class="button step" id="installButton">Try Again</div>';
         _container(output, title);
 
         return false;
@@ -53,21 +87,28 @@
                 $titleHolder.html(title);
             }
             $(messageContent).html(content);
-            $(messageContainer).animate({
-                'top': '250px'
-            }, 1000);
         });
+    }
+    function _update() {
+        var output ='<p>Scanning for new content and fetching the information please wait...<p>'
+            +'<div class="loader"></div>';
+        var title = '<i class="fa fa-database"></i> Update';
+        _container(output, title);
+    }
+    function _install() {
+        var title = '<i class="fa fa-cube"></i> Installation';
+        var output ='<p>Fetching the movie information please wait..<p>'
+            +'<div class="progress">'
+            +'<span class="progress-val">0%</span>'
+            +'<span class="progress-bar">'
+            +'<span class="progress-in"></span>'
+            +'</span></div>'
+            +'<br><p>Remember to not close this window during the installation.</p>';
+
+        _container(output, title);
     }
     function _reload() {
         location.reload();
-    }
-    function _loader(show) {
-        if (show) {
-            //Show the spinner
-            $(windowMargin).addClass('loading');
-        } else {
-            $(windowMargin).removeClass('loading');
-        }
     }
     Plugin.prototype = {
         init: function(){
@@ -75,6 +116,7 @@
                 loaded = 0; //total loaded movie(s)
                 genres = 0;
                 loading = false;
+                response = true;
                 includesPath = "/app/public/templates/includes.html";
                 var self = this;
                 var $document = $(document);
@@ -162,23 +204,23 @@
         },
         isInstalled:function() {
             var data = {function : "isInstalled"};
-            var response = _call(data, 'GET', false);
+            var call = _call(data, 'GET', true);
 
-            totalFiles = response.total_files;
+            totalFiles = call.total_files;
 
-            if (!response.is_installed) {
-                this.installationProcess();
-            } else if(response.password) {
-                this.showLogin();
-            } else if(!response.is_updated) {
-                this.updateMovies();
-            } else {
-                $(windowMargin).fadeIn(2000);
-                this.getFeatured();
-                _loader(true);
-                this.getMovies();
+            if (response) {
+                if (!call.is_installed) {
+                    this.installationProcess();
+                } else if(call.password) {
+                    this.showLogin();
+                } else if(!call.is_updated) {
+                    this.updateMovies();
+                } else {
+                    $(windowMargin).fadeIn(2000);
+                    this.getFeatured();
+                    this.getMovies();
+                }
             }
-
         },
                 //getting contorl variables for future usage.
         getIDs:function() {
@@ -215,32 +257,35 @@
         },
         getFeatured:function() {
             var data = {function : "getFeaturedMovie", track : loaded, type: $(movieContainer).attr("data-type")};
-            var response = _call(data, 'GET', false);
+            var call = _call(data, 'GET', true);
 
             if (response) {
-                 var year = response.release_date.split('-')[0];
-                 var stars = this.showStars(response.stars);
+                 var year = call.release_date.split('-')[0];
+                 var stars = this.showStars(call.stars);
 
                  var output ='<div class="bottom-bar">'
-                            +'<div class="title-container"><b>'+ response.title +' ('+ year +')</b></div>'
+                            +'<div class="title-container"><b>'+ call.title +' ('+ year +')</b></div>'
                             +'<div class="right">'+ stars +'</div></div>';
 
-                $(featured).css('background-image', 'url(' + response.backdrop_path + ')')
-                            .attr('movie-id', response.movie_id)
+                $(featured).css('background-image', 'url(' + call.backdrop_path + ')')
+                            .attr('movie-id', call.movie_id)
                             .html(output);
             }
         },
         getMovies:function(scroll) {
+            //Show the spinner
+            $(windowMargin).addClass('loading');
+
             var $movieContainer = $(movieContainer);
             var type = $movieContainer.attr("data-type");
             genre =  $movieContainer.attr("data-genre");
             genre = (genre != 'Categories') ? genre : '';
             var data = {function : "getMovies", is_loaded : loaded, type: type, genre: genre};
-            var response = _call(data, 'GET', false);
+            var call = _call(data, 'GET', true);
 
-            if (response.movies) {
+            if (response) {
                 var output = '';
-                $.each(response.movies, function(key, val){
+                $.each(call.movies, function(key, val){
                     output +='<li class="movie" movie-id="'+ val.movie_id +'">'
                            +'<img src="' + val.poster_path + '" alt="'+ val.title +'" />'
                            +'</li>';
@@ -252,7 +297,7 @@
                 } else {
                     $movieContainer.html(output);
                 }
-                _loader(false);
+                $(windowMargin).removeClass('loading');
                 loaded++;
             }
         },
@@ -264,7 +309,6 @@
             $(sideBar).find('.sort-by li').removeClass('selected');
             $this.addClass('selected');
 
-            _loader();
             this.getMovies();
 
         },
@@ -273,17 +317,15 @@
             genre = $this.attr("data-genre");
             $(sideBar).find('#genresList li').removeClass('selected');
             $this.closest('li').addClass('selected');
-            $(movieContainer).attr("data-genre", genre);
 
-            _loader(true);
+            $(movieContainer).attr("data-genre", genre);
             this.getMovies();
             this.closeLightBox();
         },
         showGenres:function() {
             if (genres == 0) {
                 var data = {function : "getMovieGenres"};
-                var response = _call(data, 'GET', false);
-                genres = response;
+                genres = _call(data, 'GET', true);
                 var $genreList = $('#genresList');
 
                 var output = '<li class="selected"><a class="genre" data-genre="">Show All ('+ totalFiles +')</a></li>';
@@ -298,14 +340,14 @@
              var value = $(searchBox).val();
              if (value.length > 0)  {
                  var data = {function : "searchMovies", query : value};
-                 var response = _call(data, 'POST', false);
+                 var call = _call(data, 'POST', true);
 
                  loading = true;
-                 if (response == undefined || response == null || response.length == 0) {
+                 if (call == undefined || call == null || call.length == 0) {
                      $(movieContainer).html('<div class="no-results"><i class="fa fa-search"></i> Oops there are no search results for '+ value +'..</div>');
                  } else {
                     var output = '';
-                    $.each(response, function(key, val){
+                    $.each(call, function(key, val){
                             output +='<li class="movie" movie-id="'+ val.movie_id +'">'
                                    +'<img src="' + val.poster_path + '" alt="'+ val.title +'" />'
                                    +'</li>';
@@ -316,18 +358,17 @@
             } else if (value.length === 0){
                  loaded = 0;
                  loading = false;
-                 _loader(true);
                  this.getMovies();
              }
         },
         openLightBox:function($this) {
             var data = {function : "getMovieById", id :  $this.attr("movie-id")};
-            var response = _call(data, 'GET', false);
+            var call = _call(data, 'GET', true);
 
             if (response) {
-                var stars = this.showStars(response.stars);
-                var year = response.release_date.split('-')[0];
-                var genres = response.genres.split(',');
+                var stars = this.showStars(call.stars);
+                var year = call.release_date.split('-')[0];
+                var genres = call.genres.split(',');
 
                  $(lightBox).load(includesPath +' '+ lightBoxTarget,  function() {
                      var $backdropImage = $('.hero');
@@ -337,7 +378,7 @@
                      var $movieDetails = $('.details');
 
 
-                     var movieInfoOutput ='<b><span class="fa fa-clock-o"></span></b> ' + response.runtime + ' minutes<br>';
+                     var movieInfoOutput ='<b><span class="fa fa-clock-o"></span></b> ' + call.runtime + ' minutes<br>';
                      i = 0;
                      $.each(genres, function(index, genre) {
                          movieInfoOutput +='<span class="tag" data-genre="'+ genre +'">' + genre + '</span>';
@@ -347,13 +388,13 @@
                          i++
                      });
                      var movieDetailsOutput ='<div class="bottom-bar">'
-                         +'<div class="title-container"><b>'+ response.title +' ('+ year +')</b></div>'
+                         +'<div class="title-container"><b>'+ call.title +' ('+ year +')</b></div>'
                          +'<div class="right">'+ stars +'</div></div>';
 
-                     $(movieHolder).attr('data-id', response.movie_id);
-                     $backdropImage.css('background-image', 'url(' + response.cover_path + ')');
-                     $coverImage.html('<img src="' + response.poster_path + '" alt="cover" class="cover" />');
-                     $overview.html('<p>' + response.overview + '</p>');
+                     $(movieHolder).attr('data-id', call.movie_id);
+                     $backdropImage.css('background-image', 'url(' + call.cover_path + ')');
+                     $coverImage.html('<img src="' + call.poster_path + '" alt="cover" class="cover" />');
+                     $overview.html('<p>' + call.overview + '</p>');
                      /* show the output*/
                      $movieInfo.html(movieInfoOutput);
                      $movieDetails.html(movieDetailsOutput);
@@ -369,13 +410,13 @@
         },
        startMovie:function() {
             var data = {function : "playMovie", id : $(movieHolder).attr("data-id")};
-            var response = _call(data, 'GET', false);
+            var call = _call(data, 'GET', true);
 
              if (response) {
-                 $(movieHolder).html('<video><source src="'+ response.path +'"></video>');
+                 $(movieHolder).html('<video><source src="'+ call.path +'"></video>');
                     $('video').PopStopPlayer({
-                        'posterPath': response.poster_path,
-                        'title': response.title
+                        'posterPath': call.poster_path,
+                        'title': call.title
                     });
             }
         },
@@ -404,7 +445,6 @@
                if(loaded <= totalFiles && loading === false) //there's more data to load
                {
                   loading = true;
-                  _loader(true);
                   this.getMovies(true);
                }
             }
@@ -412,16 +452,16 @@
         confirmApiKey:function(key) {
             if(key.length > 0) {
                 data = {function : "confirmApiKey", key: key};
-                var response = _call(data, "POST", false);
+                var call = _call(data, "POST", true);
 
-                if(!response.status) {
+                if(!call.status) {
                     $(messageContent).find('input').css('border', '2px solid #F94F6A');
                     $(messageContent).find('.error').html('The API-KEY is not valid, make sure you insert a valid key and that the key is activated.')
                                .css({'color':'#F94F6A', 'font-weight':'bold'});
                 } else {
                     var data = {function : "saveApiKey", key: key};
-                    var response = _call(data, "POST", false);
-                    if (response.saved) {
+                    call = _call(data, "POST", true);
+                    if (call.saved) {
                         this.startInstallation(2);
                     }
 
@@ -474,113 +514,123 @@
 
        },
         startInstallation: function() {
-            $.ajax({
-                type: 'GET',
-                dataType: 'json',
-                data: {function : "installFiles"},
-                url: 'bootstrap.php',
-                beforeSend: function () {
-                    var output ='<p>Fetching the movie information please wait..<p>'
-                        +'<div class="progress">'
-                        +'<span class="progress-val">0%</span>'
-                        +'<span class="progress-bar">'
-                        +'<span class="progress-in"></span>'
-                        +'</span></div>'
-                        +'<br><p>Remember to not close this window during the installation.</p>';
 
-                    $(messageContent).html(output);
-                },
-                complete: function(data) {
-                    var response = data.responseJSON;
+            var before_send = 'install';
+            var data = {function : "installFiles"}
+            var call = _call(data, "POST", true, before_send);
 
-                    if(response.data.not_found) {
+            if (response) {
+                   if(call.not_found) {
                         clearInterval(progressBar);
-                        var files = response.data.files;
+                        var files = call.files;
                         var output ='<p>The script was not able to fetch the movie information for the following files:</p>'
                             +'<ul>';
                         for(var i = 0; i < files.length; i++){
                             output += '<li>'+ files[i].file +'</li>';
-                        }
-                        output +='</ul>'
-                        +'<p>Rename the file(s) or add the year of the movie to the file name.</p>'
-                        +'<div step-id="3" class="button step" id="installButton">Try Again</div>';
-
-                        $(messageContent).html(output);
                     }
+                    output +='</ul>'
+                    +'<p>Rename the file(s) or add the year of the movie to the file name.</p>'
+                    +'<div step-id="3" class="button step" id="installButton">Try Again</div>';
+
+                    $('div' + messageContent).html(output);
                 }
-            });
+            }
+            //$.ajax({
+            //    type: 'GET',
+            //    dataType: 'json',
+            //    data: {function : "installFiles"},
+            //    url: 'bootstrap.php',
+            //    beforeSend: function () {
+            //        var output ='<p>Fetching the movie information please wait..<p>'
+            //            +'<div class="progress">'
+            //            +'<span class="progress-val">0%</span>'
+            //            +'<span class="progress-bar">'
+            //            +'<span class="progress-in"></span>'
+            //            +'</span></div>'
+            //            +'<br><p>Remember to not close this window during the installation.</p>';
+            //
+            //        $(messageContent).html(output);
+            //    },
+            //    complete: function(data) {
+            //        var call = data.callJSON;
+            //
+            //        if(call.data.not_found) {
+            //            clearInterval(progressBar);
+            //            var files = call.data.files;
+            //            var output ='<p>The script was not able to fetch the movie information for the following files:</p>'
+            //                +'<ul>';
+            //            for(var i = 0; i < files.length; i++){
+            //                output += '<li>'+ files[i].file +'</li>';
+            //            }
+            //            output +='</ul>'
+            //            +'<p>Rename the file(s) or add the year of the movie to the file name.</p>'
+            //            +'<div step-id="3" class="button step" id="installButton">Try Again</div>';
+            //
+            //            $(messageContent).html(output);
+            //        }
+            //    }
+            //});
 
             progressBar = setInterval(function(){
                 var percentage ='';
                 /* query the completion percentage from the server */
                 var data = {function : "getInserted"};
-                var response = _call(data, "GET", false);
+                var call = _call(data, "GET", true);
 
-                percentage = Math.round((response.inserted / totalFiles) * 100);
+                percentage = Math.round((call.inserted / totalFiles) * 100);
 
                 /* update the progress bar width */
-                $(messageContent).find(".progress-in").css('width', percentage +'%');
+                $('div' + messageContent).find(".progress-in").css('width', percentage +'%');
                 /* and display the numeric value */
-                $(messageContent).find(".progress-val").html(percentage + '%');
+                $('div' + messageContent).find(".progress-val").html(percentage + '%');
 
                 /* test to see if the job has completed */
                 if(percentage >= 100) {
                     clearInterval(progressBar);
                     output ='<p>The installation has completed successfully</p>'
                            +'<div step-id="4" class="button step" id="installButton">Finish</div>';
-                    $(messageContent).html(output);
+                    $('div' + messageContent).html(output);
                 }
             }, 1000);
 
         },
         updateMovies: function() {
-            var output = '';
+            var before_send = 'update';
+            var data = {function : "updateFiles"}
+            var call = _call(data, "GET", true, before_send);
 
-            $.ajax({
-                type: 'GET',
-                dataType: 'json',
-                data: {function : "updateFiles"},
-                url: 'bootstrap.php',
-                beforeSend: function () {
-                    output ='<p>Scanning for new content and fetching the information please wait...<p>'
-                        +'<div class="loader"></div>';
-                    var title = '<i class="fa fa-database"></i> Update';
-                    _container(output, title);
-                },
-                complete: function(data) {
-                    var response = data.responseJSON;
-
-                    if(response.data.not_found) {
-                        var files = response.data.files;
-                        output ='<p>The script was not able to fetch information for the following file(s):</p>'
-                            +'<ul>';
-                        for(var i = 0; i < files.length; i++){
-                            output += '<li>'+ files[i].file +'</li>';
-                        }
-                        output +='</ul>'
-                        +'<p>Rename the file(s) or add the year of the movie to the file name.</p>'
-                        +'<div class="button step" id="updateAgain">Try Again</div>';
+            if (response) {
+                var output = '';
+                var title = '<i class="fa fa-database"></i> Update';
+                if(call.not_found) {
+                    var files = call.files;
+                    output ='<p>The script was not able to fetch information for the following file(s):</p>'
+                    +'<ul>';
+                    for(var i = 0; i < files.length; i++){
+                        output += '<li>'+ files[i].file +'</li>';
                     }
-
-                    if(response.data.updated) {
-                        output ='<p>The installation has completed successfully</p>'
-                            +'<div step-id="4" class="button step" id="installButton">Finish</div>';
-                    } else if (!response.data.not_found && !response.data.updated) {
-                        output ='<p>Everything is up to date and no new files are found.</p>'
-                            +'<div step-id="4" class="button step" id="installButton">Finish</div>';
-                    }
-                    $(messageContent).html(output);
-
+                    output +='</ul>'
+                    +'<p>Rename the file(s) or add the year of the movie to the file name.</p>'
+                    +'<div class="button step" id="updateAgain">Try Again</div>';
+                } else if(call.updated) {
+                    output ='<p>The installation has completed successfully</p>'
+                    +'<div step-id="4" class="button step" id="installButton">Finish</div>';
+                } else {
+                    output ='<p>Everything is up to date and no new files are found.</p>'
+                    +'<div step-id="4" class="button step" id="installButton">Finish</div>';
                 }
-            });
+                console.log(output);
+
+                   $(messageContent).html(output);
+            }
         },
         showSettings:function() {
             var data = {function : "getSettings"};
-            var response = _call(data, "GET", false);
+            var call = _call(data, "GET", true);
 
-            var password_checked = response.password ? 'checked' : '';
-            var auto_update_checked = response.auto_update != 0 ? 'checked' : '';
-            var batch = response.batch;
+            var password_checked = call.password ? 'checked' : '';
+            var auto_update_checked = call.auto_update != 0 ? 'checked' : '';
+            var batch = call.batch;
 
             var title = '<i class="fa fa-cog"></i> Settings';
             var output ='<form>'
@@ -626,8 +676,8 @@
             settings['auto_update'] = $autoUpdate.is(':checked') ? 1 : 0;
 
             var data = {function : "updateSettings", settings : settings};
-            var response = _call(data, "POST", false);
-            if (response.updated) {
+            var call = _call(data, "POST", true);
+            if (call.updated) {
                 _reload();
             }
 
@@ -646,9 +696,9 @@
 
             if (password) {
                 var data = {function : "verifyPassword", password : password};
-                var response = _call(data, "POST", false);
+                var call = _call(data, "POST", true);
 
-                if(response.correct) {
+                if(call.correct) {
                     _reload();
                     return false;
                 }
