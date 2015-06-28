@@ -1,28 +1,18 @@
 <?php
 class Response {
     function toJSON($params) {
-        if (is_array($params)) {
-            $response = [
-                    'success' => true,
-                    'data'        =>  $params
-                ];
 
-        } else {
-            $response = $this->error($params);
+        $error = (is_array($params) ? false : true);
+
+        if ($error) {
+            header('HTTP/1.1 400 Bad Request');
         }
-        $this->output($response);
-    }
 
-    private function error($params) {
-        return [
-                   'success' => false,
-                   'error' => ['message' => $params]
-       ];
-    }
-
-    private function output($response) {
         header('Content-type: application/json');
-        echo json_encode($response);
+        echo json_encode($params);
         exit;
     }
+
+
 }
+

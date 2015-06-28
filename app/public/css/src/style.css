@@ -629,12 +629,12 @@ top: 0;
 .spinner {
     display: none;
     position:fixed;
-    left: 45%;
-    top: 50%;
+    left: 44%;
+    bottom: 45%;
     z-index: 999;
     margin: 50px;
-    height: 80px;
-    width: 80px;
+    height: 100px;
+    width: 100px;
     animation: rotate 0.8s infinite linear;
     border: 8px solid #F94F6A;
     border-right-color: transparent;
