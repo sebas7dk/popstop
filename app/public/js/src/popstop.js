@@ -9,7 +9,6 @@
             this.loaded= "";
             this.loading="";
             this.logo ="";
-            this.success ="";
             this.menuBar ="";
             this.genre="";
             this.genres="";
@@ -33,7 +32,13 @@
 
     }
     function _call(data, type, async) {
-        return $.ajax({type: type, url: 'bootstrap.php', data: data, dataType: 'json'});
+        var ajax = $.ajax({type: type, url: 'bootstrap.php', data: data, dataType: 'json'});
+
+        ajax.fail(function(request){
+            _error(request.responseText);
+        });
+
+        return ajax;
     }
     function _error(message) {
         var title = '<i class="fa fa-exclamation-triangle"></i> Error';
@@ -51,10 +56,10 @@
                 $titleHolder.html(title);
             }
             $(messageContent).html(content);
-            $(messageContainer).animate({
-                'top': '250px'
-            }, 1000);
-        });
+            //$(messageContainer).animate({
+            //    'top': '250px'
+            //}, 1000);
+        }).fadeIn(2000);
     }
     function _reload() {
         location.reload();
@@ -65,7 +70,6 @@
                 loaded = 0; //total loaded movie(s)
                 genres = 0;
                 plugin = this;
-                success = true;
                 loading = false;
                 includesPath = "/app/public/templates/includes.html";
                 var $document = $(document);
@@ -172,7 +176,7 @@
 
 
         },
-                //getting contorl variables for future usage.
+                //getting control variables for future usage.
         getIDs:function() {
             logo = '.logo';
             menuBar = '.menu-bar';
@@ -350,6 +354,10 @@
                 });
             });
         },
+        closeLightBox:function() {
+            $(lightBoxTarget).css({opacity: 0, 'z-index': -10000});
+            $(lightBoxClose).css({top: -100});
+        },
        startMovie:function() {
             var data = {function : "playMovie", id : $(movieHolder).attr("data-id")};
             _call(data, 'GET', false).done(function(response) {
@@ -359,10 +367,6 @@
                     'title': response.title
                 });
             });
-        },
-        closeLightBox:function() {
-            $(lightBoxTarget).css({opacity: 0, 'z-index': -10000});
-            $(lightBoxClose).css({top: -100});
         },
        onScroll:function() {
             var documentHeight = $(document).height();
@@ -408,11 +412,9 @@
                 });
             }
             $('input').css('border', '2px solid #F94F6A');
-
         },
        installationProcess: function(step) {
            var output = '';
-
            switch (step) {
                case '1':
                    output ='<p>To fetch the movie information you need to have an <strong>API KEY</strong>, you can create a free account '
@@ -448,10 +450,7 @@
                        +'<div step-id="1" class="button step" id="installButton">Continue</div>';
                    _container(output, title);
            }
-
            $(messageContent).html(output);
-
-
        },
         startInstallation: function() {
             var title = '<i class="fa fa-cube"></i> Installation';
@@ -462,7 +461,6 @@
                 +'<span class="progress-in"></span>'
                 +'</span></div>'
                 +'<br><p>Remember to not close this window during the installation.</p>';
-
             _container(output, title);
 
             var data = {function : "installFiles"};

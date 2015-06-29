@@ -188,7 +188,7 @@ a {
 
 .window .main .movie-list .menu-bar #side-menu-toggle {
     position: relative;
-    bottom: 3px;
+    bottom: 1px;
 }
 .window .main .movie-list .menu-bar #side-menu-toggle {
     cursor: pointer;
@@ -235,7 +235,7 @@ a {
 
 .window .main .movie-list .menu-bar .settings {
     float: right;
-    font-size: 30px;
+    font-size: 35px;
     color: #F94F6A;
     margin-left: 10px;
     cursor: pointer;
@@ -305,6 +305,7 @@ a {
 }
 .window .side-bar menu {
     padding-top: 20px;
+    padding-bottom: 20px;
 }
 .window .side-bar menu .separator {
     border-top: 1px solid #111111;
@@ -723,12 +724,28 @@ top: 0;
 #messageContainer {
   left: 50%;
   position: absolute;
-  top: 0;
+  top: 30%;
   width: 500px;
   font-size: 14px;
   -webkit-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+    -webkit-animation: fadein 1s;
+    -moz-animation: fadein 1s;
+    animation: fadein 1s;
+}
+
+@-webkit-keyframes fadein {
+    from { opacity:0; }
+    to { opacity:1; }
+}
+@-moz-keyframes fadein {
+    from { opacity:0; }
+    to { opacity:1; }
+}
+@keyframes fadein {
+    from { opacity:0; }
+    to { opacity:1; }
 }
 
 #messageContainer a{

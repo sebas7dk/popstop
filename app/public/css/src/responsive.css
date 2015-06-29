@@ -5,7 +5,7 @@
 
     .logo-sticky {
         font-size: 25px;
-        top: 6px;
+        top: 8px;
     }
 
     .window .main .featured-movie {
@@ -37,7 +37,7 @@
     }
 
     .window .main .movie-list .menu-bar {
-        height: 20px;
+        height: 25px;
     }
 
     .window .main .movie-list .menu-bar .left {
@@ -51,12 +51,12 @@
     }
 
     .window .side-bar {
-        width: 170px;
+        width: 190px;
     }
 
     .window .side-bar #genresList {
-        height: 400px;
-        overflow-y: scroll;
+        height: 350px;
+        overflow-y: auto;
     }
 
     ::-webkit-scrollbar {
@@ -95,7 +95,7 @@
     }
 
     .window .side-bar .search-box input {
-        width: 110px;
+        width: 130px;
     }
 
     .window .side-bar .search-box .fa {
@@ -119,14 +119,14 @@
     }
 
     .window .main .movie-list .list li:after {
-        height: 196px!important;
-        line-height: 196px!important;
+        height: 204px!important;
+        line-height: 204px!important;
     }
 
     .window .main .movie-list .list li {
         margin-right: 8px;
         padding-bottom: 0px;
-        width: 130px;
+        width: 165px;
     }
 
     .window .main .movie-list .list li:after {
@@ -154,8 +154,8 @@
 
     #lightboxTarget .movie-card .container {
         width: 90%;
+        height: 90%;
     }
-
 
     #lightboxTarget .movie-card .column-left {
         display: none;
@@ -174,6 +174,11 @@
         padding-left: 0;
         margin-left: 30px;
         width: 85%;
+    }
+
+    #lightboxTarget .movie-card .column-right > p {
+        height: 200px;
+        overflow-y: auto;
     }
 
     #lightboxTarget .movie-card .description {
