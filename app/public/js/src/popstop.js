@@ -8,6 +8,7 @@
             this.plugin = this;
             this.loaded= "";
             this.loading="";
+            this.response="";
             this.logo ="";
             this.menuBar ="";
             this.genre="";
@@ -42,8 +43,8 @@
     }
     function _error(message) {
         var title = '<i class="fa fa-exclamation-triangle"></i> Error';
-        var output ='<strong>Message:</strong> '+ message
-                   +'<div class="button step" id="updateAgain">Try Again</div>';
+        var output = '<strong>Message:</strong> ' + message
+            + '<div step-id="4" class="button step" id="installButton">Try Again</div>';
         _container(output, title);
 
         success = false;
@@ -56,10 +57,26 @@
                 $titleHolder.html(title);
             }
             $(messageContent).html(content);
-            //$(messageContainer).animate({
-            //    'top': '250px'
-            //}, 1000);
-        }).fadeIn(2000);
+
+        });
+    }
+    function _update() {
+        var output ='<p>Scanning for new content and fetching the information please wait...<p>'
+            +'<div class="loader"></div>';
+        var title = '<i class="fa fa-database"></i> Update';
+        _container(output, title);
+    }
+    function _install() {
+        var title = '<i class="fa fa-cube"></i> Installation';
+        var output ='<p>Fetching the movie information please wait..<p>'
+            +'<div class="progress">'
+            +'<span class="progress-val">0%</span>'
+            +'<span class="progress-bar">'
+            +'<span class="progress-in"></span>'
+            +'</span></div>'
+            +'<br><p>Remember to not close this window during the installation.</p>';
+
+        _container(output, title);
     }
     function _reload() {
         location.reload();
@@ -71,6 +88,7 @@
                 genres = 0;
                 plugin = this;
                 loading = false;
+                response = true;
                 includesPath = "/app/public/templates/includes.html";
                 var $document = $(document);
                 var $window = $(window);
@@ -172,9 +190,6 @@
                      plugin.getMovies();
                  }
             });
-
-
-
         },
                 //getting control variables for future usage.
         getIDs:function() {
@@ -212,10 +227,8 @@
         getFeatured:function() {
             var data = {function : "getFeaturedMovie", track : loaded, type: $(movieContainer).attr("data-type")};
             _call(data, 'GET', false).done(function(response) {
-
                  var year = response.release_date.split('-')[0];
                  var stars = plugin.showStars(response.stars);
-
                  var output ='<div class="bottom-bar">'
                             +'<div class="title-container"><b>'+ response.title +' ('+ year +')</b></div>'
                             +'<div class="right">'+ stars +'</div></div>';
@@ -226,6 +239,10 @@
             });
         },
         getMovies:function(scroll) {
+          //Show the spinner
+            $(windowMargin).addClass('loading');
+
+            var $movieContainer = $(movieContainer);
             var type = $movieContainer.attr("data-type");
             genre =  $movieContainer.attr("data-genre");
             genre = (genre != 'Categories') ? genre : '';
@@ -267,8 +284,8 @@
             genre = $this.attr("data-genre");
             $(sideBar).find('#genresList li').removeClass('selected');
             $this.closest('li').addClass('selected');
-            $(movieContainer).attr("data-genre", genre);
 
+            $(movieContainer).attr("data-genre", genre);
             this.getMovies();
             this.closeLightBox();
         },
@@ -476,7 +493,6 @@
                     output +='</ul>'
                     +'<p>Rename the file(s) or add the year of the movie to the file name.</p>'
                     +'<div step-id="3" class="button step" id="installButton">Try Again</div>';
-
                     $(messageContent).html(output);
                 }
             });
@@ -537,7 +553,6 @@
         showSettings:function() {
             var data = {function : "getSettings"};
             _call(data, "GET", false).done(function(response) {
-
                 var password_checked = response.password ? 'checked' : '';
                 var auto_update_checked = response.auto_update != 0 ? 'checked' : '';
                 var batch = response.batch;
@@ -613,7 +628,6 @@
                     }
                 });
             }
-
             if (!password || !correct) {
                 $('#passwordInput').css('border', '2px solid #F94F6A');
                 return false;

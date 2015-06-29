@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
     <head>
         <title>PopStop</title>
@@ -8,9 +7,6 @@
          <link rel="stylesheet" href="/app/public/css/sheets/reset.min.css">
          <link rel="stylesheet" href="/app/public/css/src/player.css">
          <link rel="stylesheet" href="/app/public/css/src/responsive.css">
-         <script type="text/javascript" src="/app/public/js/jquery/jquery-2.1.4.min.js"></script>
-         <script type="text/javascript" src="/app/public/js/src/popstop.js"></script>
-         <script type="text/javascript" src="/app/public/js/src/player.js"></script>
     </head>
     <body>
         <div class="window-margin">
@@ -49,7 +45,12 @@
             <div class="spinner"></div>
         </div> <!-- window margin -->
     </body>
+    <script type="text/javascript" src="/app/public/js/jquery/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/app/public/js/src/popstop.js"></script>
+    <script type="text/javascript" src="/app/public/js/src/player.js"></script>
     <script type="text/javascript">
-        $('#movieContainer').PopStop();
+        $(function() {
+            $('#movieContainer').PopStop();
+        });
     </script>
 </html>

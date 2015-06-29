@@ -1,7 +1,6 @@
 <?php
 class Response {
     function toJSON($params) {
-
         $error = (is_array($params) ? false : true);
 
         if ($error) {

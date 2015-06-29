@@ -8,13 +8,13 @@ html, body
 }
 
 body {
-  background: #24282C;
-  font-family: 'Oswald', sans-serif;
-  color: #444;
+    background: #24282C;
+    font-family: 'Oswald', sans-serif;
+    color: #444;
 }
 
 a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 /* WINDOW
@@ -22,18 +22,18 @@ a {
 --------------------------- */
 
 .window-margin {
-  display:none;
-  max-width: 100%;
-  padding: 0px;
-  margin: auto;
+    display:none;
+    max-width: 100%;
+    padding: 0px;
+    margin: auto;
 }
 .window {
-  margin: auto;
-  border-radius: 0px;
-  background: #FFF;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    border-radius: 0px;
+    background: #FFF;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .window .main {
@@ -68,94 +68,94 @@ a {
 ---------------------------
 --------------------------- */
 .window .main .featured-movie {
-  position: relative;
-  height: 400px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  cursor: pointer;
+    position: relative;
+    height: 400px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
 }
 .window .main .featured-movie .cover {
-  width: 100%;
-  display: block;
+    width: 100%;
+    display: block;
 }
 .window .main .featured-movie .corner-title {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  text-transform: uppercase;
-  color: #FFF;
-  background: rgba(25, 25, 25, 0.3);
-  padding: 10px;
-  font-size: 13px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-transform: uppercase;
+    color: #FFF;
+    background: rgba(25, 25, 25, 0.3);
+    padding: 10px;
+    font-size: 13px;
 }
 .window .main .featured-movie .bottom-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px 30px;
-  background: rgba(10, 10, 10, 0.8);
-  color: #FFF;
-  overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 30px;
+    background: rgba(10, 10, 10, 0.8);
+    color: #FFF;
+    overflow: hidden;
 }
 .window .main .featured-movie .bottom-bar .title-container {
-  float: left;
-  font-weight: 100;
-  font-size: 40px;
+    float: left;
+    font-weight: 100;
+    font-size: 40px;
 }
 .window .main .featured-movie .bottom-bar .title-container .fa {
-  margin-right: 10px;
-  color: #FF3A3A;
+    margin-right: 10px;
+    color: #FF3A3A;
 }
 .window .main .featured-movie .bottom-bar .title-container b {
-  font-weight: 600;
+    font-weight: 600;
 }
 .window .main .featured-movie .bottom-bar .right {
-  float: right;
-  font-size: 14px;
-  margin-top: 14px;
+    float: right;
+    font-size: 14px;
+    margin-top: 14px;
 }
 .window .main .featured-movie .bottom-bar .right .stars {
-  float: left;
-  font-size: 30px;
-  color: #F0C236;
-  margin-right: 10px;
+    float: left;
+    font-size: 30px;
+    color: #F0C236;
+    margin-right: 10px;
 }
 
 .window .main .featured-movie:hover:after {
-  opacity: 1;
+    opacity: 1;
 }
 .window .main .featured-movie:after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 400px;
-  content: '\f144';
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  opacity: 0;
-  color: #F94F6A;
-  font-size: 200px;
-  display: block;
-  cursor: pointer;
-  line-height: 300px;
-  text-align: center;
-  font-family: FontAwesome;
-  font-style: normal;
-  font-weight: normal;
-  -webkit-font-smoothing: antialiased;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 400px;
+    content: '\f144';
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    opacity: 0;
+    color: #F94F6A;
+    font-size: 200px;
+    display: block;
+    cursor: pointer;
+    line-height: 300px;
+    text-align: center;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
 }
 /* MENU
 ---------------------------
 --------------------------- */
 .window .main .movie-list .menu-bar {
     height: 25px;
-  padding: 10px 0px 10px 0px;
-  background: #24282C;
-  color: #fff;
-  overflow: hidden;
-  box-shadow: 0 5px 5px -5px #333;
+    padding: 10px 0px 10px 0px;
+    background: #24282C;
+    color: #fff;
+    overflow: hidden;
+    box-shadow: 0 5px 5px -5px #333;
 }
 
 
@@ -179,10 +179,10 @@ a {
 
 
 .window .main .movie-list .menu-bar .left {
-  float: left;
-  font-size: 20px;
-  margin-left: 30px;
-  line-height: 30px;
+    float: left;
+    font-size: 20px;
+    margin-left: 30px;
+    line-height: 30px;
 
 }
 
@@ -375,70 +375,70 @@ a {
     cursor: pointer;
 }
 .window .main .movie-list .list li:hover:after {
-  opacity: 1;
+    opacity: 1;
 }
 
 .window .main .movie-list .list li:after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 278px;
-  content: '\f144';
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  opacity: 0;
-  color: #F94F6A;
-  font-size: 60px;
-  display: block;
-  cursor: pointer;
-  line-height: 278px;
-  text-align: center;
-  font-family: FontAwesome;
-  font-style: normal;
-  font-weight: normal;
-  -webkit-font-smoothing: antialiased;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 278px;
+    content: '\f144';
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    opacity: 0;
+    color: #F94F6A;
+    font-size: 60px;
+    display: block;
+    cursor: pointer;
+    line-height: 278px;
+    text-align: center;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
 }
 .window .main .movie-list .list li img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  margin: 0 auto 5px auto;
+    width: 100%;
+    max-height: 280px;
+    display: block;
+    margin: 0 auto 5px auto;
 }
 .window .main .movie-list .list li .title,
 .window .main .movie-list .list li .genre,
 .wrapper .list li .title,
 .wrapper .list li .genre{
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
 }
 .window .main .movie-list .list li .title,
 .wrapper .list li .title{
-  font-weight: bold;
-  font-size: 13px;
-  margin-bottom: 4px;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 4px;
 }
 .window .main .movie-list .list li .genre,
 .wrapper .list li .genre{
-  color: #999;
-  font-size: 12px;
+    color: #999;
+    font-size: 12px;
 }
 /* LIGHTBOX
 ---------------------------
 --------------------------- */
 #lightboxTarget {
-position: fixed;
-top: -100%;
-width: 100%;
-background: rgba(0,0,0,.7);
-opacity: 0;
--webkit-transition: opacity .5s ease-in-out;
--moz-transition: opacity .5s ease-in-out;
--o-transition: opacity .5s ease-in-out;
-transition: opacity .5s ease-in-out;
-overflow: hidden;
+    position: fixed;
+    top: -100%;
+    width: 100%;
+    background: rgba(0,0,0,.7);
+    opacity: 0;
+    -webkit-transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    -o-transition: opacity .5s ease-in-out;
+    transition: opacity .5s ease-in-out;
+    overflow: hidden;
 }
 
 #closeButton,
@@ -463,49 +463,49 @@ overflow: hidden;
 
 #closeButton:before,
 .lightbox-close:before {
-content: "";
-display: block;
-height: 30px;
-width: 1px;
-background: #F94F6A;
-position: absolute;
-left: 26px;
-top:10px;
--webkit-transform:rotate(45deg);
--moz-transform:rotate(45deg);
--o-transform:rotate(45deg);
-transform:rotate(45deg);
+    content: "";
+    display: block;
+    height: 30px;
+    width: 1px;
+    background: #F94F6A;
+    position: absolute;
+    left: 26px;
+    top:10px;
+    -webkit-transform:rotate(45deg);
+    -moz-transform:rotate(45deg);
+    -o-transform:rotate(45deg);
+    transform:rotate(45deg);
 }
 
 #closeButton:after,
 .lightbox-close:after {
-content: "";
-display: block;
-height: 30px;
-width: 1px;
-background: #F94F6A;
-position: absolute;
-left: 26px;
-top:10px;
--webkit-transform:rotate(-45deg);
--moz-transform:rotate(-45deg);
--o-transform:rotate(-45deg);
-transform:rotate(-45deg);
+    content: "";
+    display: block;
+    height: 30px;
+    width: 1px;
+    background: #F94F6A;
+    position: absolute;
+    left: 26px;
+    top:10px;
+    -webkit-transform:rotate(-45deg);
+    -moz-transform:rotate(-45deg);
+    -o-transform:rotate(-45deg);
+    transform:rotate(-45deg);
 }
 
 #lightboxTarget:target {
-opacity: 1;
-top: 0;
-bottom: 0;
+    opacity: 1;
+    top: 0;
+    bottom: 0;
 }
 
 
 #lightboxTarget:target .lightbox-close {
-top: 0;
+    top: 0;
 }
 
 #lightboxTarget .movie-card {
-  padding: 60px 0;
+    padding: 60px 0;
 }
 
 #lightboxTarget .movie-card .button {
@@ -523,31 +523,30 @@ top: 0;
 }
 
 #lightboxTarget .movie-card .container {
-  margin: 0 auto;
-  width: 50%;
-  height: 100%;
-  background: #F0F0ED;
-  border-radius: 5px;
-  position: relative;
+    margin: 0 auto;
+    width: 50%;
+    background: #F0F0ED;
+    border-radius: 5px;
+    position: relative;
 }
 
 #lightboxTarget .movie-card .hero {
-  height: 342px;
-  margin: 0;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  background-repeat:no-repeat;
+    height: 342px;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-repeat:no-repeat;
     background-size: cover;
 }
 
 #lightboxTarget .movie-card .cover {
-  position: absolute;
-  top: 160px;
-  left: 40px;
-  z-index: 2;
+    position: absolute;
+    top: 160px;
+    left: 40px;
+    z-index: 2;
 }
 
 #lightboxTarget .movie-card .details {
@@ -584,18 +583,18 @@ top: 0;
 }
 
 #lightboxTarget .movie-card .description {
-  bottom: 0px;
-  height: 300px;
-  font-size: 16px;
-  line-height: 26px;
+    bottom: 0px;
+    height: 300px;
+    font-size: 16px;
+    line-height: 26px;
 }
 
 #lightboxTarget .movie-card .column-left {
-  padding-left: 50px;
-  padding-top: 150px;
-  width: 20%;
-  float: left;
-  text-align: left;
+    padding-left: 50px;
+    padding-top: 150px;
+    width: 20%;
+    float: left;
+    text-align: left;
 }
 
 #lightboxTarget .movie-card .column-left b{
@@ -603,25 +602,25 @@ top: 0;
 }
 
 #lightboxTarget .movie-card .tag {
-  background: #44484B;
-  border-radius: 5px;
-  padding: 3px 8px;
-  font-size: 14px;
-  margin-right: 4px;
-  line-height: 35px;
-  cursor: pointer;
-  color: #fff;
+    background: #44484B;
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 14px;
+    margin-right: 4px;
+    line-height: 35px;
+    cursor: pointer;
+    color: #fff;
 }
 
 #lightboxTarget .movie-card .tag:hover {
-  background: #000;
+    background: #000;
 }
 
 #lightboxTarget .movie-card .column-right {
-  padding-top: 30px;
-  margin-left: 20px;
-  width: 70%;
-  float: left;
+    padding-top: 30px;
+    margin-left: 20px;
+    width: 70%;
+    float: left;
 }
 
 /* SPINNER & LOADER
@@ -764,29 +763,29 @@ top: 0;
 }
 
 #messageContainer .box {
-  background-color: #fff;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  min-height: 300px;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    min-height: 300px;
 }
 
 #messageContainer .top h1 {
-  color: #F94F6A;
-  font-weight: normal;
-  font-size: 1.5em;
-  text-align: center;
+    color: #F94F6A;
+    font-weight: normal;
+    font-size: 1.5em;
+    text-align: center;
 }
 
 #messageContainer .top {
-  padding: 10px;
+    padding: 10px;
 }
 
 #messageContainer .content {
-  background-color: #f9f9f9;
-  border-top: 1px solid #EEE;
-  color: #444;
-  padding: 25px 0 20px 25px;
-  text-align: start;
-  min-height: 200px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #EEE;
+    color: #444;
+    padding: 25px 0 20px 25px;
+    text-align: start;
+    min-height: 200px;
 }
 
 #messageContainer .content ul {
@@ -797,46 +796,46 @@ top: 0;
 
 
 #messageContainer .content ul li {
-  color: #444;
-  list-style: none;
-  font-size: 13px;
-  padding: 5px;
+    color: #444;
+    list-style: none;
+    font-size: 13px;
+    padding: 5px;
 }
 
 #messageContainer .content ul li:before {
-  color: #F94F6A;
-  content: "\f111";
-  font-family: FontAwesome;
-  padding-right: 5px;
+    color: #F94F6A;
+    content: "\f111";
+    font-family: FontAwesome;
+    padding-right: 5px;
 }
 
 #lightboxTarget .movie-card .button,
 #messageContainer .content .button {
-  border: 0 none;
-  border-radius: 2px 2px 2px 2px;
-  color: #FFFFFF;
-  cursor: pointer;
-  display: inline-block;
-  font-family: Arial,sans-serif;
-  font-weight: bold;
-  line-height: 20px;
-  margin-bottom: 0;
-  margin-top: 10px;
-  text-transform: none;
-  transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -webkit-transition: all 0.3s ease 0s;
-  text-align: center;
+    border: 0 none;
+    border-radius: 2px 2px 2px 2px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Arial,sans-serif;
+    font-weight: bold;
+    line-height: 20px;
+    margin-bottom: 0;
+    margin-top: 10px;
+    text-transform: none;
+    transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    text-align: center;
 }
 
 #messageContainer .content .step {
-  font-size: 12px;
-  background: none repeat scroll 0 0 #F94F6A;
-  width: 16.795%;
-  padding: 7px 10px;
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
+    font-size: 12px;
+    background: none repeat scroll 0 0 #F94F6A;
+    width: 16.795%;
+    padding: 7px 10px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
 }
 
 #messageContainer .content .progress {
@@ -1036,7 +1035,7 @@ top: 0;
     width: 300px;
     height: 40px;
     text-indent: 25px;
- }
+}
 
 .api-key .fa-key {
     position: absolute;
