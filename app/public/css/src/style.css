@@ -8,13 +8,17 @@ html, body
 }
 
 body {
-    background: #24282C;
     font-family: 'Oswald', sans-serif;
     color: #444;
 }
 
+
 a {
     text-decoration: none;
+}
+
+.container{
+    background: #24282C;
 }
 
 /* WINDOW
@@ -286,7 +290,7 @@ a {
     position: relative;
 }
 .window .side-bar .search-box input {
-    width: 170px;
+    width: 205px;
     border: 0;
     padding: 10px 20px;
     border-radius: 50px;
@@ -360,8 +364,8 @@ a {
 ---------------------------
 --------------------------- */
 .window .main .movie-list .list {
-    margin: 20px 20px 50px 25px;
     width: 100%;
+    margin-bottom: 20px;
 }
 .loading .window .main .movie-list .list{
     opacity: 0.3;
@@ -370,7 +374,7 @@ a {
 
 .window .main .movie-list .list li {
     display: inline-block;
-    margin-right: 21px;
+    margin: 21px 0px 0px 21px;
     position: relative;
     cursor: pointer;
 }
@@ -383,7 +387,7 @@ a {
     top: 0;
     left: 0;
     right: 0;
-    height: 278px;
+    height: 100%;
     content: '\f144';
     background: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
@@ -403,7 +407,6 @@ a {
     width: 100%;
     max-height: 280px;
     display: block;
-    margin: 0 auto 5px auto;
 }
 .window .main .movie-list .list li .title,
 .window .main .movie-list .list li .genre,
@@ -649,6 +652,7 @@ a {
 
 .loading .spinner {
     display: block;
+    z-index: 999999;
 }
 
 .loader,

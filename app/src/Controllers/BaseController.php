@@ -83,7 +83,12 @@ class BaseController {
 
             }
 
-            return ['is_installed' => $is_installed, 'total_files' => $total_files, 'is_updated' => $is_updated, 'password' => $password];
+            return [
+                        'is_installed' => $is_installed,
+                        'total_files' => $total_files,
+                        'is_updated' => $is_updated,
+                        'password' => $password
+                    ];
         }
 
 

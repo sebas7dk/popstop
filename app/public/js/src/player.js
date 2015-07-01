@@ -47,6 +47,14 @@
 		this.init();
 	}
 
+    function _loader() {
+        $player.on('loadstart', function (event) {
+            $('body').addClass('loading')
+        });
+        $player.on('canplay', function (event) {
+            $('body').removeClass('loading')
+        });
+    }
 
 	Plugin.prototype = {
 		init: function(){
@@ -59,6 +67,8 @@
             var self = this;
             this.createPlayer();
             this.getControls();
+            _loader();
+
 
             if(this.options.autoPlay === true) {
                 self.playerStatus();

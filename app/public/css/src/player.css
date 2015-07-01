@@ -7,6 +7,10 @@ video::-webkit-media-controls-enclosure {
     display:none !important;
 }
 
+.loading {
+
+}
+
 video {
     position: fixed;
     right: 0;
@@ -99,17 +103,20 @@ video {
 .info {
     position: absolute;
     left: 25%;
-    bottom: -50px;
+    bottom: -60px;
 }
 
 .info .title {
     color: #fff;
     font-weight: bold;
-    text-shadow: 2px 2px 2px #000;
     position: relative;
-    left: 135px;
-    bottom: 90px;
-    font-size: 30px;
+    left: 134px;
+    bottom: 94px;
+    font-size: 18px;
+    background-color: #279CEB;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 0px 5px 0px 5px;
 }
 .holder {
     height: 25%;

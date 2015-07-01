@@ -45,6 +45,8 @@ class MovieController extends BaseController {
           * @return array
           */
          public function getMovies($params) {
+
+                $batch = $this->getSettings()['batch'];
              
                 switch($params['type']) {
                     case "date":
@@ -59,7 +61,7 @@ class MovieController extends BaseController {
                 }
 
                 //get current starting point of records
-                $position = ($params['is_loaded'] * $this->batch);
+                $position = ($params['is_loaded'] * $batch);
                 $genre = (!empty($params['genre'])) ? $params['genre'] : '';
                 $this->db->bind(["position" => $position, "batch" => $this->batch, "genre" => "%$genre%"]);
 
@@ -67,7 +69,7 @@ class MovieController extends BaseController {
                 $movies =  $this->db->fetch("SELECT * FROM movies INNER JOIN files ON movies.movie_id = files.movie_id
                                              WHERE (',' || genres || ',') LIKE :genre $query LIMIT :position, :batch");
 
-                return ['movies' => $movies];
+                return ['movies' => $movies, 'batch' => $batch];
          }
          
          /**

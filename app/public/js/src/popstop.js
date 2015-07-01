@@ -32,7 +32,7 @@
 
 
     }
-    function _call(data, type, async) {
+    function _call(data, type) {
         var ajax = $.ajax({type: type, url: 'bootstrap.php', data: data, dataType: 'json'});
 
         ajax.fail(function(request){
@@ -58,25 +58,7 @@
             }
             $(messageContent).html(content);
 
-        });
-    }
-    function _update() {
-        var output ='<p>Scanning for new content and fetching the information please wait...<p>'
-            +'<div class="loader"></div>';
-        var title = '<i class="fa fa-database"></i> Update';
-        _container(output, title);
-    }
-    function _install() {
-        var title = '<i class="fa fa-cube"></i> Installation';
-        var output ='<p>Fetching the movie information please wait..<p>'
-            +'<div class="progress">'
-            +'<span class="progress-val">0%</span>'
-            +'<span class="progress-bar">'
-            +'<span class="progress-in"></span>'
-            +'</span></div>'
-            +'<br><p>Remember to not close this window during the installation.</p>';
-
-        _container(output, title);
+        }).addClass('container');
     }
     function _reload() {
         location.reload();
@@ -88,7 +70,6 @@
                 genres = 0;
                 plugin = this;
                 loading = false;
-                response = true;
                 includesPath = "/app/public/templates/includes.html";
                 var $document = $(document);
                 var $window = $(window);
@@ -176,7 +157,8 @@
         isInstalled:function() {
             var data = {function : "isInstalled"};
              _call(data, 'GET', false).done(function(response) {
-                   totalFiles = response.total_files;
+                 var $movieContainer = $(movieContainer);
+                 $movieContainer.attr('total', response.total_files);
 
                  if (!response.is_installed) {
                      plugin.installationProcess();
@@ -189,7 +171,7 @@
                      plugin.getFeatured();
                      plugin.getMovies();
                  }
-            });
+             });
         },
                 //getting control variables for future usage.
         getIDs:function() {
@@ -197,7 +179,7 @@
             menuBar = '.menu-bar';
             sideBar = '.side-bar';
             spinner = '.spinner';
-            featured = '.featured-movie'
+            featured = '.featured-movie';
             lightBox = '#lightBox';
             lightBoxTarget = '#lightboxTarget';
             lightBoxClose = '.lightbox-close';
@@ -244,6 +226,7 @@
 
             var $movieContainer = $(movieContainer);
             var type = $movieContainer.attr("data-type");
+
             genre =  $movieContainer.attr("data-genre");
             genre = (genre != 'Categories') ? genre : '';
 
@@ -260,14 +243,19 @@
                 });
                 if (scroll === true) {
                     $movieContainer.append(output);
-                    loaded++; //loaded group increment
                     loading = false;
                 } else {
                     $movieContainer.html(output);
                 }
+
+                loaded = (loaded == 0) ? response.batch : parseFloat(loaded) + parseFloat(response.batch);
+                 //loaded group increment
+                $movieContainer.attr('loaded', loaded);
                 $(windowMargin).removeClass('loading');
-                loaded++;
             });
+
+            loaded = $movieContainer.attr('loaded');
+            totalFiles = $movieContainer.attr('total');
         },
         sortBy: function($this) {
             type = $this.find('a').attr('data-type');
@@ -390,6 +378,10 @@
             var windowHeight = $(window).height();
             var windowTop = $(window).scrollTop();
             var menuTop = $(featured).height();
+            var sideBarHeight = $(sideBar).height();
+            var total = $(movieContainer).attr('total');
+            var loaded = $(movieContainer).attr('loaded');
+
 
             if (windowTop >= menuTop) {
                 $(menuBar).addClass('menu-bar-sticky');
@@ -399,11 +391,19 @@
                 $(sideBar).removeClass('side-bar-sticky');
                 $(menuBar).removeClass('menu-bar-sticky');
                 $(logo).removeClass('logo-sticky');
-              }
+            }
+
+            /* Set the height of the container to the sidebar height */
+           if($(sideBar).is(':visible')) {
+               $(movieContainer).css({'min-height':sideBarHeight});
+           } else {
+               $(movieContainer).css({'min-height': 0});
+           }
+
 
             if((windowTop + windowHeight) === documentHeight)  //user scrolled to bottom of the page?
             {
-               if(loaded <= totalFiles && loading === false) //there's more data to load
+               if(loaded <= total && loading === false) //there's more data to load
                {
                   loading = true;
                   plugin.getMovies(true);
