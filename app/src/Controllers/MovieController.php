@@ -61,9 +61,9 @@ class MovieController extends BaseController {
                 }
 
                 //get current starting point of records
-                $position = ($params['is_loaded'] * $batch);
+                $position = ($params['is_loaded']);
                 $genre = (!empty($params['genre'])) ? $params['genre'] : '';
-                $this->db->bind(["position" => $position, "batch" => $this->batch, "genre" => "%$genre%"]);
+                $this->db->bind(["position" => $position, "batch" => $batch, "genre" => "%$genre%"]);
 
 
                 $movies =  $this->db->fetch("SELECT * FROM movies INNER JOIN files ON movies.movie_id = files.movie_id

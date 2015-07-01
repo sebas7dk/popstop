@@ -47,7 +47,8 @@
             + '<div step-id="4" class="button step" id="installButton">Try Again</div>';
         _container(output, title);
 
-        success = false;
+        clearInterval(progressBar);
+        return false;
     }
     function _container(content, title) {
         $(windowMargin).hide();
@@ -172,6 +173,8 @@
                      plugin.getMovies();
                  }
              });
+
+            totalFiles = $movieContainer.attr('total');
         },
                 //getting control variables for future usage.
         getIDs:function() {
@@ -221,7 +224,7 @@
             });
         },
         getMovies:function(scroll) {
-          //Show the spinner
+            /*Show the spinner*/
             $(windowMargin).addClass('loading');
 
             var $movieContainer = $(movieContainer);
@@ -243,17 +246,15 @@
                 });
                 if (scroll === true) {
                     $movieContainer.append(output);
-                    loading = false;
                 } else {
                     $movieContainer.html(output);
                 }
 
+                /*loaded group increment*/
                 loaded = (loaded == 0) ? response.batch : parseFloat(loaded) + parseFloat(response.batch);
-                 //loaded group increment
                 $movieContainer.attr('loaded', loaded);
                 $(windowMargin).removeClass('loading');
             });
-
             loaded = $movieContainer.attr('loaded');
             totalFiles = $movieContainer.attr('total');
         },
@@ -268,12 +269,18 @@
 
         },
         getGenre:function($this) {
+            var $movieContainer =  $(movieContainer);
+            /* Change the total and loaded files*/
             loaded = 0;
+            $movieContainer.attr('loaded', loaded);
+            totalFiles = $this.attr("data-total");
+            $movieContainer.attr('total', totalFiles);
+
             genre = $this.attr("data-genre");
             $(sideBar).find('#genresList li').removeClass('selected');
             $this.closest('li').addClass('selected');
 
-            $(movieContainer).attr("data-genre", genre);
+            $movieContainer.attr("data-genre", genre);
             this.getMovies();
             this.closeLightBox();
         },
@@ -282,9 +289,9 @@
                 var data = {function : "getMovieGenres"};
                 var $genreList = $('#genresList');
                 _call(data, 'GET', false).done(function(response) {
-                    var output = '<li class="selected"><a class="genre" data-genre="">Show All (' + totalFiles + ')</a></li>';
+                    var output = '<li class="selected"><a class="genre" data-genre="" data-total="' + totalFiles + '">Show All (' + totalFiles + ')</a></li>';
                     $.each(response, function (key, val) {
-                        output += '<li> <a class="genre" data-genre="' + key + '">' + key + ' (' + val + ')</a></li>';
+                        output += '<li> <a class="genre" data-genre="' + key + '" data-total="' + val + '">' + key + ' (' + val + ')</a></li>';
                     });
                     $genreList.html(output);
                 });
@@ -379,8 +386,6 @@
             var windowTop = $(window).scrollTop();
             var menuTop = $(featured).height();
             var sideBarHeight = $(sideBar).height();
-            var total = $(movieContainer).attr('total');
-            var loaded = $(movieContainer).attr('loaded');
 
 
             if (windowTop >= menuTop) {
@@ -400,10 +405,9 @@
                $(movieContainer).css({'min-height': 0});
            }
 
-
             if((windowTop + windowHeight) === documentHeight)  //user scrolled to bottom of the page?
             {
-               if(loaded <= total && loading === false) //there's more data to load
+               if(loaded <= totalFiles) //there's more data to load
                {
                   loading = true;
                   plugin.getMovies(true);
@@ -502,7 +506,8 @@
                 var data = {function : "getInserted"};
                 _call(data, "GET", false).done(function(response) {
 
-                    percentage = Math.round((response.inserted / totalFiles) * 100);
+                    var total = $movieContainer.attr('total');
+                    percentage = Math.round((response.inserted / total) * 100);
 
                     /* update the progress bar width */
                     $(messageContent).find(".progress-in").css('width', percentage +'%');
@@ -522,7 +527,10 @@
         },
         updateMovies: function() {
              var output ='<p>Scanning for new content and fetching the information please wait...<p>'
+                +'<div class="progress">'
+                +'<span class="progress-bar">'
                 +'<div class="loader"></div>';
+                +'</span></div>'
                 var title = '<i class="fa fa-database"></i> Update';
                 _container(output, title);
 
@@ -547,7 +555,7 @@
                     output ='<p>Everything is up to date and no new files are found.</p>'
                     +'<div step-id="4" class="button step" id="installButton">Finish</div>';
                 }
-                $(messageContent).html(output);
+                //$(messageContent).html(output);
             });
         },
         showSettings:function() {
