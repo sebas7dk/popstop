@@ -47,6 +47,7 @@
             + '<div step-id="4" class="button step" id="installButton">Try Again</div>';
         _container(output, title);
 
+        /*Stop the progress bar*/
         clearInterval(progressBar);
         return false;
     }
@@ -159,7 +160,7 @@
             var data = {function : "isInstalled"};
              _call(data, 'GET', false).done(function(response) {
                  var $movieContainer = $(movieContainer);
-                 $movieContainer.attr('total', response.total_files);
+                 $movieContainer.attr('data-total', response.total_files);
 
                  if (!response.is_installed) {
                      plugin.installationProcess();
@@ -174,7 +175,8 @@
                  }
              });
 
-            totalFiles = $movieContainer.attr('total');
+            /*Get the total files*/
+            totalFiles = $movieContainer.attr('data-total');
         },
                 //getting control variables for future usage.
         getIDs:function() {
@@ -252,11 +254,11 @@
 
                 /*loaded group increment*/
                 loaded = (loaded == 0) ? response.batch : parseFloat(loaded) + parseFloat(response.batch);
-                $movieContainer.attr('loaded', loaded);
+                $movieContainer.attr('data-loaded', loaded);
                 $(windowMargin).removeClass('loading');
             });
-            loaded = $movieContainer.attr('loaded');
-            totalFiles = $movieContainer.attr('total');
+            loaded = $movieContainer.attr('data-loaded');
+            totalFiles = $movieContainer.attr('data-total');
         },
         sortBy: function($this) {
             type = $this.find('a').attr('data-type');
@@ -272,13 +274,13 @@
             var $movieContainer =  $(movieContainer);
             /* Change the total and loaded files*/
             loaded = 0;
-            $movieContainer.attr('loaded', loaded);
+            $movieContainer.attr('data-loaded', loaded);
             totalFiles = $this.attr("data-total");
-            $movieContainer.attr('total', totalFiles);
+            $movieContainer.attr('data-total', totalFiles);
 
             genre = $this.attr("data-genre");
             $(sideBar).find('#genresList li').removeClass('selected');
-            $this.closest('li').addClass('selected');
+            $(sideBar).find('#genresList li a[data-genre="' + genre + '"]').closest('li').addClass('selected');
 
             $movieContainer.attr("data-genre", genre);
             this.getMovies();
@@ -336,7 +338,9 @@
                     var $overview = $('.column-right');
                     var $movieDetails = $('.details');
 
-                    var movieInfoOutput = '<b><span class="fa fa-clock-o"></span></b> ' + response.runtime + ' minutes<br>';
+                    /*Left column with tags*/
+                    var movieInfoOutput = '<span class="runtime"><b><span class="fa fa-clock-o"></span></b> ' + response.runtime + ' minutes<br>'
+                                        + '</span><div class="tags">';
                     i = 0;
                     $.each(genres, function (index, genre) {
                         movieInfoOutput += '<span class="tag" data-genre="' + genre + '">' + genre + '</span>';
@@ -345,6 +349,8 @@
                         }
                         i++
                     });
+                    movieInfoOutput += '</div>';
+                    /*Right column with description*/
                     var movieDetailsOutput = '<div class="bottom-bar">'
                         + '<div class="title-container"><b>' + response.title + ' (' + year + ')</b></div>'
                         + '<div class="right">' + stars + '</div></div>';
@@ -487,6 +493,7 @@
             var data = {function : "installFiles"};
             _call(data, 'GET', false).done(function(response) {
                 if(response.not_found) {
+                    /*Stop the progress bar*/
                     clearInterval(progressBar);
                     var files = response.files;
                     var output ='<p>The script was not able to fetch the movie information for the following files:</p>'
@@ -506,7 +513,7 @@
                 var data = {function : "getInserted"};
                 _call(data, "GET", false).done(function(response) {
 
-                    var total = $movieContainer.attr('total');
+                    var total = $movieContainer.attr('data-total');
                     percentage = Math.round((response.inserted / total) * 100);
 
                     /* update the progress bar width */
@@ -555,7 +562,7 @@
                     output ='<p>Everything is up to date and no new files are found.</p>'
                     +'<div step-id="4" class="button step" id="installButton">Finish</div>';
                 }
-                //$(messageContent).html(output);
+                $(messageContent).html(output);
             });
         },
         showSettings:function() {

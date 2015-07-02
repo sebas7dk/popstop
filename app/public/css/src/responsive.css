@@ -56,42 +56,6 @@
 
     .window .side-bar #genresList {
         height: 350px;
-        overflow-y: auto;
-    }
-
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
-        border-radius: 8px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background-color: rgba(0,0,0,0.3);
-        height: 8px;
-    }
-
-    .window .side-bar #genresList {
-        height: 355px;
-        overflow-y: scroll;
-    }
-
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
-        border-radius: 8px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background-color: rgba(0,0,0,0.3);
-        height: 8px;
     }
 
     .side-bar-sticky {
@@ -173,6 +137,24 @@
     }
 
     #lightboxTarget .movie-card .column-left {
+        float: none;
+        padding-left: 0;
+        padding-top: 0;
+        height: 0;
+    }
+
+    #lightboxTarget .movie-card .column-left .tags {
+        position: absolute;
+        bottom: 50px;
+        left: 15px;
+    }
+
+    #lightboxTarget .movie-card .column-left .tags .tag {
+        font-size: 12px;
+    }
+
+    #lightboxTarget .movie-card .column-left .runtime,
+    #lightboxTarget .movie-card .column-left br {
         display: none;
     }
 
@@ -192,7 +174,7 @@
     }
 
     #lightboxTarget .movie-card .column-right > p {
-        height: 200px;
+        height: 230px;
         overflow-y: auto;
     }
 
@@ -346,6 +328,10 @@
         line-height: 214px!important;
     }
 
+    .window .side-bar #genresList {
+        height: 400px;
+    }
+
     .window .main .movie-list .list li:after {
         line-height: 240px;
     }
@@ -418,6 +404,11 @@
     .side-bar-open li:after {
         line-height: 214px!important;
     }
+
+    .window .side-bar #genresList {
+        height: 400px;
+    }
+
 
     .window .main .movie-list .list li:after {
         line-height: 256px;
