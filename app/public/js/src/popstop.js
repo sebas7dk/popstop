@@ -1,3 +1,9 @@
+/*
+ *  PopStop script to display the web application
+ *
+ *  Made by Sebastian de Kok
+ *  Under MIT License
+ */
 ;(function ( $, window, document, undefined ) {
     // default properties.
     var pluginName = "PopStop";
@@ -650,8 +656,7 @@
         }
     };
 
-
-    // A really lightweight plugin wrapper around the constructor,
+    
     // preventing against multiple instantiations
     $.fn[ pluginName ] = function ( options ) {
             return this.each(function() {

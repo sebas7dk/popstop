@@ -7,10 +7,6 @@ video::-webkit-media-controls-enclosure {
     display:none !important;
 }
 
-.loading {
-
-}
-
 video {
     position: fixed;
     right: 0;
@@ -53,6 +49,7 @@ video {
     top: -60px;
     left: 10px;
     z-index: 2147483647;
+    cursor: pointer;
 }
 
 #playerButton{
@@ -60,6 +57,7 @@ video {
     height: 100%;
     width: 35px;
     position: relative;
+    cursor: pointer;
 }
 #playerButton:hover{
     color: #F94F6A;
@@ -146,6 +144,7 @@ video {
     margin: 13px 10px;
     background-color: #000;
     position: relative;
+    cursor: pointer;
 }
 #played{
     width: 0;
@@ -153,6 +152,7 @@ video {
     background-color: #F94F6A;
     position: absolute;
     z-index: 3;
+    cursor: pointer;
 }
 #loadedBar{
     width: 0;
@@ -170,6 +170,7 @@ video {
     width: 35px;
     position: relative;
     overflow: hidden;
+    cursor: pointer;
 }
 #fullScreenButton:hover{
     color: #F94F6A;
@@ -198,6 +199,7 @@ video {
     height: 100%;
     background-color: #353535;
     position:relative;
+    cursor: pointer;
 }
 #volume:hover #volumeControl{
     bottom: 100%;
@@ -269,7 +271,7 @@ video {
     width: 50%;
     float: left;
     background-color: #353535;
-    cursor: default;
+    cursor: pointer;
     padding: 5px 6px;
     position: absolute;
     left: 9px;

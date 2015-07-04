@@ -61,6 +61,12 @@ a {
     color:#F94F6A;
 }
 
+.logo img {
+    height: 70px;
+    position: relative;
+    left: 10px;
+}
+
 .logo-sticky {
     font-size: 28px;
     margin-left: 15px;
@@ -68,6 +74,13 @@ a {
     position: fixed;
     z-index: 200
 }
+
+.logo-sticky img {
+    height: 25px;
+    left: 3px;
+}
+
+
 /* FEATURED MOVIE
 ---------------------------
 --------------------------- */
@@ -190,10 +203,6 @@ a {
 
 }
 
-.window .main .movie-list .menu-bar #side-menu-toggle {
-    position: relative;
-    bottom: 1px;
-}
 .window .main .movie-list .menu-bar #side-menu-toggle {
     cursor: pointer;
     padding: 10px 35px 16px 0px;
@@ -379,7 +388,7 @@ a {
 
 .window .main .movie-list .list li {
     display: inline-block;
-    margin: 21px 0px 0px 21px;
+    margin: 21px 0px 0px 24px;
     position: relative;
     cursor: pointer;
 }
@@ -946,6 +955,11 @@ a {
     position: relative;
     visibility: hidden;
 }
+
+body:not(:-moz-handler-blocked) #messageContainer form input[type="checkbox"] {
+    visibility: visible;
+}
+
 #messageContainer form input[type="checkbox"]:checked:before{
     -webkit-transition: all 0.5s;
     position: relative;

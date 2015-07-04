@@ -8,8 +8,14 @@
         top: 8px;
     }
 
+    .logo img {
+        height: 35px;
+        left: 5px;
+    }
+
     .window .main .featured-movie {
         height: 300px;
+        background-position: center center;
     }
 
     .window .main .featured-movie:after {
@@ -82,14 +88,6 @@
         width: 170px;
     }
 
-    .window .side-bar .search-box .fa {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        color: #F94F6A;
-        transition-duration: .3s;
-        cursor: pointer;
-    }
 
     .side-bar-open .list li {
         margin-left: -10px!important;
@@ -223,6 +221,7 @@
 @media only screen and (min-width : 480px) and (max-width : 690px) {
     .window .main .featured-movie {
         height: 300px;
+        background-position: center center;
     }
 
     .window .main .featured-movie:after {
@@ -247,10 +246,64 @@
         font-size: 20px;
     }
 
+    .window .side-bar {
+        width: 190px;
+    }
+
+
+    .window .side-bar .search-box input {
+        width: 170px;
+    }
+
+
+    .window .side-bar #genresList {
+        height: 200px;
+    }
+
+    .side-bar-sticky {
+        top: 40px!important;
+    }
+
+    .side-bar-open .list {
+        width: 65%!important;
+    }
+
+    .side-bar-open .list > li {
+        margin-right: 15px!important;
+    }
+
+    .window .side-bar menu > ul > li > a {
+        font-size: 12px;
+    }
+
+    .side-bar-open .list li {
+        margin-left: -10px!important;
+        width: 135px!important;
+        padding-bottom: 0;
+    }
+
+    .side-bar-open li:after {
+        line-height: 206px!important;
+    }
+
+    .window .main .movie-list .list li:after {
+        line-height: 204px!important;
+    }
 
     .window .main .movie-list .list li {
-        margin-right: 15px;
+        width: 145px;
     }
+
+    .window .main .movie-list .list li:after {
+        line-height: 198px;
+    }
+
+    .spinner {
+        top: 30%;
+        height: 50px;
+        width: 50px;
+    }
+
 
 
     #lightboxTarget .movie-card .hero {
@@ -290,6 +343,7 @@
 @media only screen and (min-width : 690px) and (max-width : 1110px)  {
     .window .main .featured-movie {
         height: 300px;
+        background-position: center center;
     }
 
     .window .main .featured-movie:after {

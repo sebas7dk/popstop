@@ -1,6 +1,8 @@
-<html>
-    <head>
-        <title>PopStop</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>PopStop - Stream Your Own Movie Collection</title>
+    <link href="app/public/images/favicon.png" rel="icon">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
          <link rel="stylesheet" href="/app/public/css/src/style.css">
@@ -10,7 +12,10 @@
     </head>
     <body>
         <div class="window-margin">
-            <div class="logo">PopStop</div>
+            <div class="logo">
+                <img src="app/public/images/logo.png">
+                PopStop
+            </div>
             <div class="window">
                 <div class="main">
                      <div class="featured-movie"></div> <!-- featured -->
@@ -20,7 +25,7 @@
                                          <a id="side-menu-toggle"><span></span></a>
                                          <label class="settings"><i class="fa fa-cog"></i></label>
                                      </div> <!-- right -->
-                             </div> <!-- title-bar -->
+                             </div> <!-- menu-bar -->
                              <div class="side-bar">
                                  <div class="search-box">
                                      <input type="text" id="searchBox" placeholder="Search..."/>
@@ -35,7 +40,7 @@
                                      <div class="separator"></div>
                                      <p class="menu-name">Genres</p>
                                      <ul id="genresList"></ul>
-                                 </menu>
+                                 </menu><!-- menu -->
                              </div>
                              <ul class="list" id="movieContainer" data-type="date" data-genre="" data-loaded="0"></ul>
                      </div> <!-- movie list -->

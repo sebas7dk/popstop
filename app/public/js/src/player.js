@@ -1,13 +1,9 @@
 /*
- *  jquery-boilerplate - v3.4.0
- *  A jump-start for jQuery plugins development.
- *  http://jqueryboilerplate.com
+ *  PopStop Player to play HTML5 videos
  *
- *  Made by Zeno Rocha
+ *  Made by Sebastian de Kok
  *  Under MIT License
  */
-// the semi-colon before function invocation is a safety net against concatenated
-// scripts and/or other plugins which may not be closed properly.
 ;(function ($, window, document, undefined) {
     	// default properties.
         var pluginName = "PopStopPlayer",
@@ -329,9 +325,9 @@
                  $player[0].requestFullscreen();
              } else if ($player[0].webkitRequestFullscreen) {
                  $player[0].webkitRequestFullscreen();
-             } else if (player[0].mozRequestFullScreen) {
+             } else if ($player[0].mozRequestFullScreen) {
                  $player[0].mozRequestFullScreen();
-             } else if (player[0].msRequestFullscreen) {
+             } else if ($player[0].msRequestFullscreen) {
                  $player[0].msRequestFullscreen();
              }
            }
