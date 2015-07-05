@@ -269,6 +269,7 @@
         sortBy: function($this) {
             type = $this.find('a').attr('data-type');
             loaded = 0;
+            $movieContainer.attr('data-loaded', loaded);
 
             $(movieContainer).attr("data-type", type);
             $(sideBar).find('.sort-by li').removeClass('selected');
@@ -396,8 +397,6 @@
             var windowHeight = $(window).height();
             var windowTop = $(window).scrollTop();
             var menuTop = $(featured).height();
-            var sideBarHeight = $(sideBar).height();
-
 
             if (windowTop >= menuTop) {
                 $(menuBar).addClass('menu-bar-sticky');
