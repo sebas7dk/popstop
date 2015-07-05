@@ -211,6 +211,7 @@
         top: 5px;
     }
 
+    .pause:before,
     .play:before {
         top: 10px;
     }

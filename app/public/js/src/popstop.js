@@ -385,10 +385,11 @@
        startMovie:function() {
             var data = {function : "playMovie", id : $(movieHolder).attr("data-id")};
             _call(data, 'GET', false).done(function(response) {
-                $(movieHolder).html('<video><source src="' + response.path + '"></video>');
+                $(movieHolder).html('<video autoplay="autoplay" ><source src="' + response.path + '"></video>');
                 $('video').PopStopPlayer({
                     'posterPath': response.poster_path,
-                    'title': response.title
+                    'title': response.title,
+                    'autoPlay': true
                 });
             });
         },

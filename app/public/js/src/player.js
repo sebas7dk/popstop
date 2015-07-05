@@ -8,7 +8,7 @@
     	// default properties.
         var pluginName = "PopStopPlayer",
                         defaults = {
-                        autoPlay : true,
+                        autoPlay : "",
                         posterPath : "",
                         title: ""
 
@@ -67,7 +67,7 @@
 
 
             if(this.options.autoPlay === true) {
-                self.playerStatus();
+                $player[0].play();
             }
 
             $player.on('loadedmetadata', function() {
