@@ -76,7 +76,7 @@
     }
 
     .side-bar-open .list {
-        width: 50%!important;
+        width: 43%!important;
     }
 
     .window .side-bar menu > ul > li > a {
@@ -97,7 +97,11 @@
     }
 
     .window .main .movie-list .list li {
-        margin: 4px;
+        max-width: 145px;
+    }
+
+    .window .main .movie-list .list li:after {
+        line-height: 220px;
     }
 
     .spinner {
