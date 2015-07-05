@@ -293,15 +293,14 @@
             this.closeLightBox();
         },
         showGenres:function() {
-            if (genres == 0) {
+            if ($('ul#genresList li').length == 0) {
                 var data = {function : "getMovieGenres"};
-                var $genreList = $('#genresList');
                 _call(data, 'GET', false).done(function(response) {
                     var output = '<li class="selected"><a class="genre" data-genre="" data-total="' + totalFiles + '">Show All (' + totalFiles + ')</a></li>';
                     $.each(response, function (key, val) {
                         output += '<li> <a class="genre" data-genre="' + key + '" data-total="' + val + '">' + key + ' (' + val + ')</a></li>';
                     });
-                    $genreList.html(output);
+                    $('#genresList').html(output);
                 });
             }
             $('body').toggleClass('side-bar-open');
@@ -410,13 +409,6 @@
                 $(logo).removeClass('logo-sticky');
             }
 
-            /* Set the height of the container to the sidebar height */
-           if($(sideBar).is(':visible')) {
-               $(movieContainer).css({'min-height':sideBarHeight});
-           } else {
-               $(movieContainer).css({'min-height': 0});
-           }
-
             if((windowTop + windowHeight) === documentHeight)  //user scrolled to bottom of the page?
             {
                if(loaded <= totalFiles) //there's more data to load
@@ -438,7 +430,7 @@
                         var data = {function: "saveApiKey", key: key};
                         _call(data, "POST", false).done(function(response) {
                             if (response.saved) {
-                                plugin.startInstallation(2);
+                                plugin.startInstallation(3);
                             }
                         });
                     }
@@ -450,16 +442,16 @@
            var output = '';
            switch (step) {
                case '1':
-                   output ='<p>To fetch the movie information you need to have an <strong>API KEY</strong>, you can create a free account '
+                   output ='<p>To fetch the movie information from the TMDB api you need to have a <strong>key</strong>, you can create a free account '
                        +'<a href="https://www.themoviedb.org/account/signup" target="_blank">here.</a> </p>'
                        +'<p><div class="api-key"> <span class="fa fa-key"></span> <input placeholder="API-KEY"></div></p>'
                        +'<p class="error"></p>'
                        +'<div step-id="2" class="button step" id="confirmKey">Confirm</div>';
                    break;
                case '2':
-                   output ='<p>There are <strong>'+ totalFiles +'</strong> files in the content folder ready to be installed. </p>'
-                       +'<p>The installation might take a while depending on the number of files, during the installation do not close this window.</p>'
-                       +'<div step-id="3" class="button step" id="installButton">Install</div>';
+                   output ='<p>We have detected <strong>'+ totalFiles +'</strong> files in the content directory.'
+                       +'The next step will fetch the movie information for each file, depending on the number of files this might take a while.'
+                       +'<div step-id="3" class="button step" id="installButton">continue</div>';
                    break;
                case '3':
                    plugin.startInstallation();
@@ -468,18 +460,26 @@
                   _reload();
                    break;
                case '5':
-                   output ='<p>This will remove all the movie information stored in the database. this action cannot be undone.</p>'
+                   output ='<p>Are you sure you want to clear the database and do a rescan of the content directory?</p>'
+                       +'<p>This action can\'t\ be undone.</p>'
+                       +'<div step-id="4" class="button step" id="installButton" style="left:10px">Go Back</div>'
                        +'<div step-id="3" class="button step" id="installButton">Confirm</div>';
                    break;
                case '6':
+                   output ='<p>Hooray the script has finished successfully! It\'s\ time to grab some popcorn and enjoy your movie collection.</p>'
+                        +'<div step-id="4" class="button step" id="installButton">Finish</div>';
+                   break;
+               case '7':
                    plugin.updateMovies();
                    break;
                default:
+                   console.log(step)
                    var title = '<i class="fa fa-cube"></i> Installation';
-                   output ='<p>Before you continue the installation check if you have done the following:</p>'
-                       +'<ul><li>Added your movies to the content folder</li>'
-                       +'<li>Made sure the database folder is writable</li>'
-                       +'<li>Renamed your movies</li></ul>'
+                   output ='<p>Before you can stream your movies we first have to locate them and fetch the movie information.'
+                       +' If you have done everything on the list below you can go to the next step.</p>'
+                       +'<ul><li>Add your movies to the content Directory. Copy them over or even better create a symlink.</li>'
+                       +'<li>Make sure the <code>app/database</code> folder is writable.</li>'
+                       +'<li>Rename your files with the title of the movie, for better results add the year of the movie. </li></ul>'
                        +'<div step-id="1" class="button step" id="installButton">Continue</div>';
                    _container(output, title);
            }
@@ -493,7 +493,7 @@
                 +'<span class="progress-bar">'
                 +'<span class="progress-in"></span>'
                 +'</span></div>'
-                +'<br><p>Remember to not close this window during the installation.</p>';
+                +'<br><br><p>Don\'t\ close this window and wait until the script is finished.</p>';
             _container(output, title);
 
             var data = {function : "installFiles"};
@@ -508,8 +508,9 @@
                         output += '<li>'+ files[i].file +'</li>';
                     }
                     output +='</ul>'
-                    +'<p>Rename the file(s) or add the year of the movie to the file name.</p>'
-                    +'<div step-id="3" class="button step" id="installButton">Try Again</div>';
+                    +'<p>Rename the file(s) or add the year of the movie to the file name and try again.</p>'
+                    +'<div step-id="3" class="button step" id="installButton" style="left:10px">Try Again</div>'
+                    +'<div step-id="6" class="button step" id="installButton">Skip</div>';
                     $(messageContent).html(output);
                 }
             });
@@ -530,9 +531,7 @@
                     /* test to see if the job has completed */
                     if(percentage >= 100) {
                         clearInterval(progressBar);
-                        output ='<p>The installation has completed successfully</p>'
-                               +'<div step-id="4" class="button step" id="installButton">Finish</div>';
-                        $(messageContent).html(output);
+                        plugin.installationProcess('6');
                     }
                 });
             }, 1000);
@@ -542,8 +541,9 @@
              var output ='<p>Scanning for new content and fetching the information please wait...<p>'
                 +'<div class="progress">'
                 +'<span class="progress-bar">'
-                +'<div class="loader"></div>';
+                +'<div class="loader"></div>'
                 +'</span></div>'
+                +'<br><br><p>Don\'t\ close this window and wait until the script is finished.</p>';
                 var title = '<i class="fa fa-database"></i> Update';
                 _container(output, title);
 
@@ -557,15 +557,15 @@
                         output += '<li>'+ files[i].file +'</li>';
                     }
                     output +='</ul>'
-                    +'<p>Rename the file(s) or add the year of the movie to the file name.</p>'
-                    +'<div class="button step" id="updateAgain">Try Again</div>';
+                    +'<p>Rename the file(s) or add the year of the movie to the file name and try again.</p>'
+                    +'<div step-id="3" class="button step" id="installButton" style="left:10px">Try Again</div>'
+                    +'<div step-id="6" class="button step" id="installButton">Skip</div>';
                 }
 
                 if(response.updated) {
-                    output ='<p>The installation has completed successfully</p>'
-                    +'<div step-id="4" class="button step" id="installButton">Finish</div>';
+                    plugin.installationProcess('6');
                 } else if (!response.not_found && !response.updated) {
-                    output ='<p>Everything is up to date and no new files are found.</p>'
+                    output ='<p>The script hasn\'t\ found any new files in the content directory. Everything is up-to-date.</p>'
                     +'<div step-id="4" class="button step" id="installButton">Finish</div>';
                 }
                 $(messageContent).html(output);
@@ -586,7 +586,7 @@
                     + '<label><span>Batch per page </span><input id="batchInput" type="text" value="' + batch + '"/></label>'
                     + '</form>'
                     + '<div step-id="5" class="button setting install" id="installButton"><i class="fa fa-cube"></i> Re-Install</div>'
-                    + '<div step-id="6" class="button setting update" id="installButton"><i class="fa fa-database"></i> Update</div>'
+                    + '<div step-id="7" class="button setting update" id="installButton"><i class="fa fa-database"></i> Update</div>'
                     + '<div class="button step" id="saveSettings">Save & Exit</div>';
                 _container(output, title);
             });

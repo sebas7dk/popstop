@@ -35,14 +35,10 @@ a {
     margin: auto;
     border-radius: 0px;
     background: #FFF;
-    overflow: hidden;
     position: relative;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.window .main {
-    overflow: hidden;
-}
 /* LOGO
 ---------------------------
 --------------------------- */
@@ -68,7 +64,7 @@ a {
 }
 
 .logo-sticky {
-    font-size: 28px;
+    font-size: 25px;
     margin-left: 15px;
     top: 8px;
     position: fixed;
@@ -78,6 +74,7 @@ a {
 .logo-sticky img {
     height: 25px;
     left: 3px;
+    top: 3px;
 }
 
 
@@ -166,7 +163,7 @@ a {
 /* MENU
 ---------------------------
 --------------------------- */
-.window .main .movie-list .menu-bar {
+.window .main .menu-bar {
     height: 25px;
     padding: 10px 0px 10px 0px;
     background: #24282C;
@@ -183,11 +180,11 @@ a {
     top: 0px
 }
 
-.window .main .movie-list .menu-bar .left .bold {
+.window .main .menu-bar .left .bold {
     font-weight: bold;
     cursor: pointer;
 }
-.window .main .movie-list .menu-bar .right {
+.window .main .menu-bar .right {
     float: right;
     margin-right: 40px;
     position: relative;
@@ -195,7 +192,7 @@ a {
 }
 
 
-.window .main .movie-list .menu-bar .left {
+.window .main .menu-bar .left {
     float: left;
     font-size: 20px;
     margin-left: 30px;
@@ -203,13 +200,13 @@ a {
 
 }
 
-.window .main .movie-list .menu-bar #side-menu-toggle {
+.window .main .menu-bar #side-menu-toggle {
     cursor: pointer;
     padding: 10px 35px 16px 0px;
 }
-.window .main .movie-list .menu-bar #side-menu-toggle span,
-.window .main .movie-list .menu-bar #side-menu-toggle span:before,
-.window .main .movie-list .menu-bar #side-menu-toggle span:after {
+.window .main .menu-bar #side-menu-toggle span,
+.window .main .menu-bar #side-menu-toggle span:before,
+.window .main .menu-bar #side-menu-toggle span:after {
     cursor: pointer;
     border-radius: 1px;
     height: 5px;
@@ -219,34 +216,34 @@ a {
     display: block;
     content: '';
 }
-.window .main .movie-list .menu-bar #side-menu-toggle span:before {
+.window .main .menu-bar #side-menu-toggle span:before {
     top: -10px;
 }
-.window .main .movie-list .menu-bar #side-menu-toggle span:after {
+.window .main .menu-bar #side-menu-toggle span:after {
     bottom: -10px;
 }
 
-.window .main .movie-list .menu-bar #side-menu-toggle span,
-.window .main .movie-list .menu-bar #side-menu-toggle span:before,
-.window .main .movie-list .menu-bar #side-menu-toggle span:after {
+.window .main .menu-bar #side-menu-toggle span,
+.window .main .menu-bar #side-menu-toggle span:before,
+.window .main .menu-bar #side-menu-toggle span:after {
     transition: all 500ms ease-in-out;
 }
-.window .main .movie-list .menu-bar #side-menu-toggle.active span {
+.window .main .menu-bar #side-menu-toggle.active span {
     background-color: transparent;
 }
-.window .main .movie-list .menu-bar #side-menu-toggle.active span:before,
-.window .main .movie-list .menu-bar #side-menu-toggle.active span:after {
+.window .main .menu-bar #side-menu-toggle.active span:before,
+.window .main .menu-bar #side-menu-toggle.active span:after {
     top: 0;
 }
-.window .main .movie-list .menu-bar #side-menu-toggle.active span:before {
+.window .main .menu-bar #side-menu-toggle.active span:before {
     transform: rotate(45deg);
 }
-.window .main .movie-list .menu-bar #side-menu-toggle.active span:after {
+.window .main .menu-bar #side-menu-toggle.active span:after {
     transform: rotate(-45deg);
 }
 
 
-.window .main .movie-list .menu-bar .settings {
+.window .main .menu-bar .settings {
     float: right;
     font-size: 35px;
     color: #F94F6A;
@@ -254,10 +251,11 @@ a {
     cursor: pointer;
 }
 
-.window .main .movie-list .no-results {
+.window .main .no-results {
     color: #279CEB;
     font-size: 20px;
     font-weight: bold;
+    margin: 30px 0px;
 }
 
 /* SIDE-MENU
@@ -266,13 +264,10 @@ a {
 .window .side-bar {
     display: none;
     float: left;
-    position: relative;
-    top: 0;
     left: 0;
     bottom: 0;
     width: 250px;
     background: #24282C;
-    min-height: 100%;
     color: #DDD;
 }
 
@@ -286,20 +281,21 @@ a {
 }
 .side-bar-open .list {
     float: right;
-    width: 84%!important;
+    width: 86%!important;
 }
 
 .side-bar-open .list > li {
-    margin-right: 12px!important;
+    margin: 6px!important;
 }
 
 .window .side-bar .search-box {
     background: #373D41;
     padding: 20px;
+    margin-bottom: 20px;
     position: relative;
 }
 .window .side-bar .search-box input {
-    width: 205px;
+    width: 165px;
     border: 0;
     padding: 10px 20px;
     border-radius: 50px;
@@ -317,7 +313,7 @@ a {
     cursor: pointer;
 }
 .window .side-bar menu {
-    padding-top: 20px;
+    background: #24282C;;
     padding-bottom: 20px;
 }
 .window .side-bar menu .separator {
@@ -371,15 +367,28 @@ a {
 }
 
 .window .side-bar #genresList {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 /* MOVIE CONTAINER
 ---------------------------
 --------------------------- */
+.movie-list {
+    position: relative;
+    height: 100%;
+    margin-bottom: 10px;
+}
+
 .window .main .movie-list .list {
-    width: 100%;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    font-size: 0;
+    display: -ms-flexbox;
+    -ms-flex-wrap: wrap;
+    -ms-flex-direction: column;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+    display: -webkit-box;
+    display: flex;
 }
 .loading .window .main .movie-list .list{
     opacity: 0.3;
@@ -387,10 +396,13 @@ a {
 }
 
 .window .main .movie-list .list li {
-    display: inline-block;
-    margin: 21px 0px 0px 24px;
     position: relative;
+    -webkit-box-flex: auto;
+    -ms-flex: auto;
+    flex: auto;
     cursor: pointer;
+    max-width: 190px;
+    margin: 8px 11px;
 }
 .window .main .movie-list .list li:hover:after {
     opacity: 1;
@@ -418,9 +430,11 @@ a {
     -webkit-font-smoothing: antialiased;
 }
 .window .main .movie-list .list li img {
+    position: relative;
     width: 100%;
-    max-height: 280px;
+    max-height: 290px;
     display: block;
+    cursor: pointer;
 }
 .window .main .movie-list .list li .title,
 .window .main .movie-list .list li .genre,
@@ -721,14 +735,14 @@ a {
 ---------------------------
 --------------------------- */
 #messageContainer {
-  left: 50%;
-  position: absolute;
-  top: 30%;
-  width: 500px;
-  font-size: 14px;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+    left: 50%;
+    position: absolute;
+    top: 30%;
+    width: 500px;
+    font-size: 14px;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     -webkit-animation: fadein 1s;
     -moz-animation: fadein 1s;
     animation: fadein 1s;
@@ -809,6 +823,7 @@ a {
     padding-right: 5px;
 }
 
+.demo-popup .button,
 #lightboxTarget .movie-card .button,
 #messageContainer .content .button {
     border: 0 none;
@@ -1050,6 +1065,15 @@ body:not(:-moz-handler-blocked) #messageContainer form input[type="checkbox"] {
     font-size: 15px;
     z-index: 99;
 }
+
+#messageContainer code {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+}
+
 /* SCROLLBAR
 ---------------------------
 --------------------------- */

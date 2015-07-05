@@ -1,198 +1,189 @@
 <?php
-
 /**
- * Description of KinoController
+ * PopStop is a PHP script that let's you stream your
+ * movie collection to your browser.
  *
- * @author sebastian
+ * This software is distributed under the MIT License
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * Visit http://www.popstop.io for more information
+ *
+ * @author Sebastian de Kok
  */
 class BaseController {
-    
-        /**
-        * The API-key
-        *
-        * @var string
-        */
-       protected $scan;
-
-        /**
-         * The API-key
-         *
-         * @var string
-         */
-       protected $response;
-
-        /**
-         * Stored Session Id
-         *
-         * @var string
-         */
-        protected $tmdb;
-       
-        /**
-        * Stored Session Id
-        *
-        * @var string
-        */
-       protected $db;
-
-
-        protected $cost = 6;
-
-    protected $cookie_name = 'movit_cookie';
-
-                 /**
-        * Stored Session Id
-        *
-        * @var string
-        */
-       protected $batch = 18;
-       
-         /**
-         * Constructs the new object. Requires a cache path to be given.
-         */
-        public function __construct()
-        {
-            $this->scan = new Scan;
-            $this->response = new Response;
-            $this->db = new DBlite();
-        }
-
-
-        public function isInstalled() {
-            $is_installed = false;
-            $is_updated = true;
-            $password = false;
-
-            $total_files = $this->getTotalFiles();
-
-            if(filesize(getcwd() . "/" . $this->db->getPath()) > 0) {
-                $settings = $this->getSettings();
-                $total_movies = $this->getInserted()['inserted'];
-
-                if(!empty($settings['password']) && !$this->cookies('get')) {
-                    $password = true;
-                }
-
-                if($total_files > $total_movies && $settings['auto_update'] ) {
-                    $is_updated = false;
-                }
-
-                if($total_movies > 0) {
-                    $is_installed = true;
-                }
-
-            }
-
-            return [
-                        'is_installed' => $is_installed,
-                        'total_files' => $total_files,
-                        'is_updated' => $is_updated,
-                        'password' => $password
-                    ];
-        }
-
-
-        /**
-         * Get all the movie files and count the total
-         *
-         * @param array $params
-         * @return array
-         */
-        public function confirmApiKey($params) {
-            $tmdb = new TMDB($params['key']);
-            $confirm = $tmdb->getStatuscode();
-
-            if(!empty($confirm['status_code']) && $confirm['status_code'] === 7) {
-                $status = false;
-            } else {
-                $status = true;
-            }
-
-            return ['status' =>  $status];
-
-        }
-
-        /**
-         * Get all the movie files and count the total
-         *
-         * @param array $params
-         * @return array
-         */
-        public function saveApiKey($params) {
-
-            $this->createTables();
-
-            $settings = [
-                'api_key' => $params['key'],
-                'batch' => $this->batch,
-                'auto_update' => 1,
-            ];
-
-            $this->db->insert('settings', $settings);
-
-            return ['saved' =>  true];
-
-        }
-
-
-        /**
-         * Get all the movie files and count the total
-         *
-         * @param array $params
-         * @return array
-         */
-        public function getTotalFiles() {
-
-            return count($this->scan->files());
-
-        }
-
-        /**
-         * Get all the movie files and count the total
-         *
-         * @param array $params
-         * @return array
-         */
-        public function getInserted() {
-            $result = $this->db->fetch('SELECT COUNT(*) AS total FROM movies', true);
-
-            return ['inserted' =>  $result['total']];
-
-        }
-
-        /**
-         * Get all the movie files and count the total
-         *
-         * @param array $params
-         * @return array
-         */
-        public function getSettings() {
-            return $this->db->fetch('SELECT * FROM settings', true);
-        }
-
-        /**
-         * Get all the movie files and count the total
-         *
-         * @param array $params
-         * @return array
-         */
-        public function updateSettings($params) {
-
-            foreach($params['settings'] as $column => $value) {
-                if($column == 'password') {
-                    $value = $this->bCrypt($value);
-                    $this->cookies('delete');
-                }
-
-                $this->db->bind(["value" => $value]);
-                $this->db->update("UPDATE settings SET $column = :value");
-            }
-
-            return ['updated' =>  true];
-        }
 
     /**
-     * Get all the movie files and count the total
+     * @var string|array
+     */
+    protected $response;
+
+    /**
+     * @var \TMDB
+     */
+    protected $tmdb;
+
+    /**
+     * @var string
+     */
+    protected $cookie_name = 'popit_cookie';
+
+    /**
+     * @var int
+     */
+    protected $batch = 18;
+
+    /**
+     * @var int
+     */
+    protected $cost = 8;
+
+    /**
+     * @var int
+     */
+    protected $auto_update = 0;
+
+
+    public function __construct() {
+        /** @var \Scan $scan */
+        $this->scan = new Scan;
+        /** @var \Response $scan */
+        $this->response = new Response;
+        /** @var \DBlite $scan */
+        $this->db = new DBlite();
+    }
+
+    /**
+     * Check if the database exist and if
+     * it has to be updated.
+     *
+     * @return array
+     */
+    public function isInstalled() {
+        $is_installed = false;
+        $is_updated = true;
+        $password = false;
+
+        $total_files = $this->getTotalFiles();
+
+        if(filesize(getcwd() . "/" . $this->db->getPath()) > 0) {
+            $settings = $this->getSettings();
+            $total_movies = $this->getInserted()['inserted'];
+
+            if(!empty($settings['password']) && !$this->cookies('get')) {
+                $password = true;
+            }
+            if($total_files > $total_movies && $settings['auto_update'] ) {
+                $is_updated = false;
+            }
+            if($total_movies > 0) {
+                $is_installed = true;
+            }
+        }
+        return [
+            'is_installed' => $is_installed,
+            'total_files' => $total_files,
+            'is_updated' => $is_updated,
+            'password' => $password
+        ];
+    }
+
+
+    /**
+     * Check if the inserted key is valid
+     *
+     * @param array $params
+     * @return array
+     */
+    public function confirmApiKey($params) {
+        $tmdb = new TMDB($params['key']);
+        $confirm = $tmdb->getStatuscode();
+
+        if(!empty($confirm['status_code']) && $confirm['status_code'] === 7) {
+            $status = false;
+        } else {
+            $status = true;
+        }
+
+        return ['status' =>  $status];
+
+    }
+
+    /**
+     * Store the key in the database
+     *
+     * @param array $params
+     * @return array
+     */
+    public function saveApiKey($params) {
+
+        $this->createTables();
+
+        $settings = [
+            'api_key' => $params['key'],
+            'batch' => $this->batch,
+            'auto_update' => $this->auto_update,
+        ];
+
+        $this->db->insert('settings', $settings);
+
+        return ['saved' =>  true];
+
+    }
+
+
+    /**
+     * Count all the movie files in the content folder
+     *
+     * @return int
+     */
+    public function getTotalFiles() {
+        return count($this->scan->files());
+    }
+
+    /**
+     * Count all the movies in the database
+     *
+     * @return array
+     */
+    public function getInserted() {
+        $result = $this->db->fetch('SELECT COUNT(*) AS total FROM movies', true);
+
+        return ['inserted' =>  $result['total']];
+
+    }
+
+    /**
+     * Fetch the settings from the database
+     *
+     * @return array
+     */
+    public function getSettings() {
+        return $this->db->fetch('SELECT * FROM settings', true);
+    }
+
+    /**
+     * Update the settings in the database
+     *
+     * @param array $params
+     * @return array
+     */
+    public function updateSettings($params) {
+
+        foreach($params['settings'] as $column => $value) {
+            if($column == 'password') {
+                $value = $this->bCrypt($value);
+                $this->cookies('delete');
+            }
+
+            $this->db->bind(["value" => $value]);
+            $this->db->update("UPDATE settings SET $column = :value");
+        }
+
+        return ['updated' =>  true];
+    }
+
+    /**
+     * Verify if the password is equal to the password in the database
      *
      * @param array $params
      * @return array
@@ -211,36 +202,35 @@ class BaseController {
     }
 
     /**
-      * Insert all the listed movies in the directories
-      *
-      * @param array $params
-      * @return array
-      */
-     public function installFiles()
-     {
+     * Insert all the movie files in the content folder
+     *
+     * @return array
+     */
+    public function installFiles()
+    {
         $this->resetTables();
 
         $not_found = [];
         foreach($this->scan->files() as $file) {
-              $movie = $this->getMovieByFileName($file);
-              if ($movie) {
-                  $data = $this->createArraysToInsert($movie, $file);
-                  $this->db->insert('movies', $data['movie']);
-                  $this->db->insert('files', $data['file']);
-                  sleep(1);
-              } else {
-                  $not_found[] = ["file" => $file['name']];
-              }
+            $movie = $this->getMovieByFileName($file);
+            if ($movie) {
+                $data = $this->createArraysToInsert($movie, $file);
+                $this->db->insert('movies', $data['movie']);
+                $this->db->insert('files', $data['file']);
+                sleep(1);
+            } else {
+                $not_found[] = ["file" => $file['name']];
+            }
         }
         if ($not_found) {
             $not_found_response = ['not_found' => true, 'files' => $not_found];
         }
 
-         return (isset($not_found_response)) ? $not_found_response : ['installed' => true];
-     }
+        return (isset($not_found_response)) ? $not_found_response : ['installed' => true];
+    }
 
     /**
-     * Insert all the listed movies in the directories
+     * Update the movies in the database
      *
      * @return array
      */
@@ -276,10 +266,10 @@ class BaseController {
     }
 
     /**
-     * Insert all the listed movies in the directories
+     * Fetch the movie information from the TMDB api
      *
-     * @param array $params
-     * @return array
+     * @param array $file
+     * @return array|boolean
      */
     private function getMovieByFileName($file) {
 
@@ -299,10 +289,12 @@ class BaseController {
 
         return (isset($movie)) ? $movie : false;
     }
+
     /**
-     * Insert all the listed movies in the directories
+     * Prepare an array with all the data for insertion
      *
-     * @param array $params
+     * @param array $info
+     * @param array $file
      * @return array
      */
     private function createArraysToInsert(array $info, array $file) {
@@ -335,14 +327,13 @@ class BaseController {
         return ['movie' => $movie, 'file' => $file];
     }
 
-      /**
-      * Create a new table in the database to store the movies
-      *
-      * @return void
-      */
-     private function createTables()
-     {
-            $this->db->query("
+    /**
+     * Create the tables in the database
+     *
+     * @return void
+     */
+    private function createTables() {
+        $this->db->query("
                  CREATE VIRTUAL TABLE IF NOT EXISTS movies USING fts4 (
                        movie_id,
                        title,
@@ -376,23 +367,22 @@ class BaseController {
                        batch INTEGER
                 );
             ");
-     }
+    }
 
     /**
-     * Get all the movie files and count the total
+     * TRUNCATE the database tables
      *
-     * @param array $params
-     * @return array
+     * @return void
      */
     protected function resetTables() {
         $this->db->query('DELETE FROM movies; DELETE FROM files');
     }
 
     /**
-     * Get all the movie files and count the total
+     * Create a string with all the movie genres
      *
-     * @param array $params
-     * @return array
+     * @param array $genresArray
+     * @return string
      */
     protected function getGenres($genresArray) {
 
@@ -405,26 +395,26 @@ class BaseController {
     }
 
     /**
-     * Get all the movie files and count the total
+     * Create a string with all the movie cast
      *
-     * @param array $params
-     * @return array
+     * @param array $castArray
+     * @return string
      */
     protected function getCasts($castArray) {
 
         $casts = [];
         foreach($castArray as $cast) {
-            $casts[] = $casts["name"];
+            $casts[] = $cast["name"];
         }
 
         return implode(",", $casts);
     }
 
     /**
-     * Get all the movie files and count the total
+     * Calculate a five star rating from the vote average
      *
-     * @param array $params
-     * @return array
+     * @param int $vote_average
+     * @return string
      */
     protected function calculateStars($vote_average) {
         $rating = ($vote_average / 2);
@@ -439,10 +429,10 @@ class BaseController {
 
 
     /**
-     * Get all the movie files and count the total
+     * Encrypt the password string
      *
-     * @param array $params
-     * @return array
+     * @param string $password
+     * @return string
      */
     protected function bCrypt($password)
     {
@@ -453,6 +443,12 @@ class BaseController {
         return crypt($password, $hash_format);
     }
 
+    /**
+     * GET|SET|DELETE a cookie
+     *
+     * @param string $action
+     * @return string|void
+     */
     protected function cookies($action) {
         switch($action) {
             case 'get':
@@ -468,6 +464,4 @@ class BaseController {
         }
 
     }
-
-
 }

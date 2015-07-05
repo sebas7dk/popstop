@@ -13,6 +13,12 @@
         left: 5px;
     }
 
+    .logo-sticky img {
+        height: 25px;
+        left: 3px;
+        top: 3px;
+    }
+
     .window .main .featured-movie {
         height: 300px;
         background-position: center center;
@@ -58,10 +64,11 @@
 
     .window .side-bar {
         width: 190px;
+        height: 100%;
     }
 
     .window .side-bar #genresList {
-        height: 350px;
+        height: 300px;
     }
 
     .side-bar-sticky {
@@ -69,11 +76,7 @@
     }
 
     .side-bar-open .list {
-        width: 39%!important;
-    }
-
-    .side-bar-open .list > li {
-        margin-right: 15px!important;
+        width: 50%!important;
     }
 
     .window .side-bar menu > ul > li > a {
@@ -85,36 +88,23 @@
     }
 
     .window .side-bar .search-box input {
-        width: 170px;
+        width: 130px;
     }
 
-
-    .side-bar-open .list li {
-        margin-left: -10px!important;
-        width: 135px!important;
-        padding-bottom: 0;
-    }
-
-    .side-bar-open li:after {
-        line-height: 206px!important;
-    }
-
-    .window .main .movie-list .list li:after {
-        line-height: 204px!important;
+    .window .side-bar .search-box .fa {
+        top: 20px;
+        right: 20px;
     }
 
     .window .main .movie-list .list li {
-        width: 145px;
-    }
-
-    .window .main .movie-list .list li:after {
-        line-height: 198px;
+        margin: 4px;
     }
 
     .spinner {
         top: 30%;
         height: 50px;
         width: 50px;
+        left: 30%;
     }
 
     #lightboxTarget .movie-card {
@@ -217,6 +207,10 @@
         top: 5px;
     }
 
+    .play:before {
+        top: 10px;
+    }
+
 }
 @media only screen and (min-width : 480px) and (max-width : 690px) {
     .window .main .featured-movie {
@@ -248,13 +242,21 @@
 
     .window .side-bar {
         width: 190px;
+        height: 100%;
     }
 
+    .window .side-bar .search-box {
+        padding: 10px;
+    }
 
     .window .side-bar .search-box input {
-        width: 170px;
+        width: 130px;
     }
 
+    .window .side-bar .search-box .fa {
+        top: 20px;
+        right: 20px;
+    }
 
     .window .side-bar #genresList {
         height: 200px;
@@ -276,35 +278,11 @@
         font-size: 12px;
     }
 
-    .side-bar-open .list li {
-        margin-left: -10px!important;
-        width: 135px!important;
-        padding-bottom: 0;
-    }
-
-    .side-bar-open li:after {
-        line-height: 206px!important;
-    }
-
-    .window .main .movie-list .list li:after {
-        line-height: 204px!important;
-    }
-
-    .window .main .movie-list .list li {
-        width: 145px;
-    }
-
-    .window .main .movie-list .list li:after {
-        line-height: 198px;
-    }
-
     .spinner {
         top: 30%;
         height: 50px;
         width: 50px;
     }
-
-
 
     #lightboxTarget .movie-card .hero {
         height: 245px;
@@ -372,22 +350,9 @@
         width: 71%!important;
     }
 
-    .side-bar-open .list li {
-        margin-right: 7px!important;
-        width: 140px!important;
-        padding-bottom: 0;
-    }
-
-    .side-bar-open li:after {
-        line-height: 214px!important;
-    }
 
     .window .side-bar #genresList {
         height: 400px;
-    }
-
-    .window .main .movie-list .list li:after {
-        line-height: 240px;
     }
 
 

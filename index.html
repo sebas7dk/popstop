@@ -5,10 +5,15 @@
     <link href="app/public/images/favicon.png" rel="icon">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-         <link rel="stylesheet" href="/app/public/css/src/style.css">
-         <link rel="stylesheet" href="/app/public/css/sheets/reset.min.css">
-         <link rel="stylesheet" href="/app/public/css/src/player.css">
-         <link rel="stylesheet" href="/app/public/css/src/responsive.css">
+        <!-- CSS -->
+        <link rel="stylesheet" href="/app/public/css/sheets/style.min.css">
+        <link rel="stylesheet" href="/app/public/css/sheets/reset.min.css">
+        <link rel="stylesheet" href="/app/public/css/sheets/player.min.css">
+        <link rel="stylesheet" href="/app/public/css/sheets/responsive.min.css">
+        <!-- JS -->
+        <script type="text/javascript" src="/app/public/js/jquery/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="/app/public/js/scripts/popstop.min.js"></script>
+        <script type="text/javascript" src="/app/public/js/scripts/player.min.js"></script>
     </head>
     <body>
         <div class="window-margin">
@@ -19,30 +24,30 @@
             <div class="window">
                 <div class="main">
                      <div class="featured-movie"></div> <!-- featured -->
-                     <div class="movie-list">
-                             <div class="menu-bar">
-                                     <div class="right">
-                                         <a id="side-menu-toggle"><span></span></a>
-                                         <label class="settings"><i class="fa fa-cog"></i></label>
-                                     </div> <!-- right -->
-                             </div> <!-- menu-bar -->
-                             <div class="side-bar">
-                                 <div class="search-box">
-                                     <input type="text" id="searchBox" placeholder="Search..."/>
-                                     <p class="fa fa-search"></p>
-                                 </div>
-                                 <menu>
-                                     <ul class="sort-by">
-                                         <li class="selected"><a data-type="date">Latest</a></li>
-                                         <li><a data-type="rating">Best Rated</a></li>
-                                         <li><a data-type="popular">Most Popular</a></li>
-                                     </ul>
-                                     <div class="separator"></div>
-                                     <p class="menu-name">Genres</p>
-                                     <ul id="genresList"></ul>
-                                 </menu><!-- menu -->
+                         <div class="menu-bar">
+                                 <div class="right">
+                                     <a id="side-menu-toggle"><span></span></a>
+                                     <label class="settings"><i class="fa fa-cog"></i></label>
+                                 </div> <!-- right -->
+                         </div> <!-- menu-bar -->
+                    <div class="movie-list">
+                         <div class="side-bar">
+                             <div class="search-box">
+                                 <input type="text" id="searchBox" placeholder="Search..."/>
+                                 <p class="fa fa-search"></p>
                              </div>
-                             <ul class="list" id="movieContainer" data-type="date" data-genre="" data-loaded="0"></ul>
+                             <menu>
+                                 <ul class="sort-by">
+                                     <li class="selected"><a data-type="date">Latest</a></li>
+                                     <li><a data-type="rating">Best Rated</a></li>
+                                     <li><a data-type="popular">Most Popular</a></li>
+                                 </ul>
+                                 <div class="separator"></div>
+                                 <p class="menu-name">Genres</p>
+                                 <ul id="genresList"></ul>
+                             </menu><!-- menu -->
+                         </div>
+                         <ul class="list" id="movieContainer" data-type="date" data-genre="" data-loaded="0"></ul>
                      </div> <!-- movie list -->
                  </div> <!-- main -->
             </div> <!-- window -->
@@ -50,9 +55,6 @@
             <div class="spinner"></div>
         </div> <!-- window margin -->
     </body>
-    <script type="text/javascript" src="/app/public/js/jquery/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="/app/public/js/src/popstop.js"></script>
-    <script type="text/javascript" src="/app/public/js/src/player.js"></script>
     <script type="text/javascript">
         $(function() {
             $('#movieContainer').PopStop();

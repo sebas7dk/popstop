@@ -1,61 +1,71 @@
 <?php
-
 /**
- * Description of DBlite
+ * PopStop is a PHP script that let's you stream your
+ * movie collection to your browser.
  *
- * @author sebastian
+ * This software is distributed under the MIT License
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * Visit http://www.popstop.io for more information
+ *
+ * @author Sebastian de Kok
  */
 class DBlite  {
 
-
+    /** @var \PDO $db  */
     protected $db;
-    
-    # @array, The parameters of the SQL query
+
+    /** @var  array $parameters */
     protected $parameters;
-    
+
+    /** @var  \Response $response */
     protected $response;
 
+    /** @var string $path */
     protected $path = 'app/database/popstop.sqlite';
-    
-     public function __construct()
-    {         
+
+    public function __construct()
+    {
+        /** @var \Repsonse $response */
         $this->response = new Response;
         try {
+            /** @var \PDO $db */
             $this->db = new \PDO('sqlite:' . $this->path);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {
             // sqlite3 throws an exception when it is unable to connect
-             $this->response->toJSON("Unable to connect to the database");
+            $this->response->toJSON("Unable to connect to the database");
         }
     }
 
+    /**
+     * Return the path of the database file
+     *
+     * @return string
+     */
     public function getPath() {
         return $this->path;
     }
 
     /**
-     * Prepare and send a query returning the PDOStatement
+     * Prepare the parameters for binding
      *
-     * @param string $query query string
-     * @param array $params query parameters
-     * @return object|null
+     * @param array  parameters
+     * @return void
      */
-    public function bind($params)
-    {	
+    public function bind($params) {
         foreach ($params as $key => $value) {
             $this->parameters[sizeof($this->parameters)] = [":" .$key => utf8_encode($value)];
         }
     }
 
     /**
-     * Prepare and send a query returning the PDOStatement
+     * Bind the parameters
      *
-     * @param string $query query string
-     * @param array $params query parameters
-     * @return object|null
+     * @param \PDO $sth
+     * @return \PDO $sth
      */
-    public function bindParams($sth)
-    {
+    public function bindParams($sth) {
         if(!empty($this->parameters)) {
             foreach($this->parameters as $param)
             {
@@ -64,64 +74,55 @@ class DBlite  {
                 $sth->bindParam($params[0],$params[1], PDO::PARAM_STR);
             }
         }
-
         return $sth;
     }
 
 
     /**
-     * Prepare and send a query returning the PDOStatement
+     * Execute a query
      *
-     * @param string $query query string
-     * @param array $params query parameters
-     * @return object|null
+     * @param string $query
+     * @return void
      */
-    public function query($query)
-    {
-         try {
-             $this->db->exec($query);
+    public function query($query) {
+        try {
+            $this->db->exec($query);
         } catch (\PDOException $e) {
             $this->response->toJSON($e->getMessage());
         }
-            
     }
-    
+
     /**
-     * Fetch all query result rows
+     * Fetch a single or multiple rows
      *
-     * @param string $query query string
-     * @param array $params query parameters
-     * @param int $column the optional column to return
+     * @param string $query
+     * @param boolean $single
+     * @param boolean $fetch_key_pair
      * @return array
      */
-    public function fetch($query, $single = false, $fetch_key_pair = false)
-    {
-         try {   
+    public function fetch($query, $single = false, $fetch_key_pair = false) {
+        try {
             $sth = $this->db->prepare($query);
             $sth = $this->bindParams($sth);
             $sth->execute();
-            
+
         } catch(\PDOException $e) {
-                    $this->response->toJSON($e->getMessage());                   
+            $this->response->toJSON($e->getMessage());
         }
         //Reset the parameters
         $this->parameters = [];
         $fetch = ($fetch_key_pair) ? PDO::FETCH_KEY_PAIR : 0;
 
         return ($single) ? $sth->fetch($fetch) : $sth->fetchAll($fetch);
-            
-            
     }
 
     /**
-     * Prepare and send a query returning the PDOStatement
+     * Execute an update query
      *
-     * @param string $query query string
-     * @param array $params query parameters
-     * @return object|null
+     * @param string $query
+     * @return void
      */
-    public function update($query)
-    {
+    public function update($query) {
         try {
             $sth = $this->db->prepare($query);
             $sth = $this->bindParams($sth);
@@ -129,18 +130,16 @@ class DBlite  {
         } catch (\PDOException $e) {
             $this->response->toJSON($e->getMessage());
         }
-
     }
-    
+
     /**
-     * Insert a row into the database
+     * Insert data into the database
      *
-     * @param string $table name
+     * @param string $table
      * @param array $data
      * @return boolean
      */
-    public function insert($table, array $data)
-    {
+    public function insert($table, array $data) {
         $prepare = [];
         foreach($data as $key => $value ) {
             $prepare[':'.$key] = $value;
@@ -153,13 +152,12 @@ class DBlite  {
                                         VALUES (" . implode(', ',array_keys($prepare)) . ")
                                     ");
 
-           $sth->execute($prepare);
+            $sth->execute($prepare);
 
         } catch(\PDOException $e) {
             $this->response->toJSON($e->getMessage());
         }
 
         return $sth;
-  
     }
 }
