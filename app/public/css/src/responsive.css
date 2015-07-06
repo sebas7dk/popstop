@@ -6,6 +6,7 @@
     .logo-sticky {
         font-size: 25px;
         top: 8px;
+        margin-left: 0;
     }
 
     .logo img {
@@ -48,16 +49,16 @@
         margin-right: 10px;
     }
 
-    .window .main .movie-list .menu-bar {
+    .window .main .menu-bar {
         height: 25px;
     }
 
-    .window .main .movie-list .menu-bar .left {
+    .window .main .menu-bar .left {
         display: none;
     }
 
-    .window .main .movie-list .menu-bar .right {
-        margin-right: 20px;
+    .window .main .menu-bar .right {
+        margin-right: 10px;
         position: relative;
         bottom: 5px;
     }
@@ -74,10 +75,12 @@
     .window .main .movie-list .list > li {
         margin: 2%;
         max-width: none;
+        width: 46%;
     }
 
     .side-bar-open .list > li {
         margin: 2%!important;
+        width: 100%!important;
     }
 
     .side-bar-sticky {
@@ -163,12 +166,12 @@
     }
 
     #lightboxTarget .movie-card .column-right > p {
-        height: 230px;
+        height: 137px;
         overflow-y: auto;
     }
 
     #lightboxTarget .movie-card .description {
-        min-height: 245px;
+        height: 260px;
         font-size: 13px;
         line-height: 15px;
     }

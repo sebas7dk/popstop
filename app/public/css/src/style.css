@@ -263,7 +263,8 @@ a {
 --------------------------- */
 .window .side-bar {
     display: none;
-    float: left;
+    position: absolute;
+    top: 0;
     left: 0;
     bottom: 0;
     width: 250px;
@@ -281,10 +282,6 @@ a {
 }
 .side-bar-open .list {
     margin-left: 250px;
-}
-
-.side-bar-open .list > li {
-    margin: 8px 10px!important;
 }
 
 .window .side-bar .search-box {
@@ -374,6 +371,7 @@ a {
 --------------------------- */
 .movie-list {
     width: 100%;
+    position: relative;
 }
 
 .window .main .movie-list .list {
@@ -393,6 +391,7 @@ a {
 }
 
 .window .main .movie-list .list li {
+    height: 100%;
     position: relative;
     -webkit-box-flex: auto;
     -ms-flex: auto;

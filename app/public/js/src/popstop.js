@@ -398,6 +398,7 @@
             var windowHeight = $(window).height();
             var windowTop = $(window).scrollTop();
             var menuTop = $(featured).height();
+            var sideBarHeight = $(sideBar).height();
 
             if (windowTop >= menuTop) {
                 $(menuBar).addClass('menu-bar-sticky');
@@ -407,6 +408,12 @@
                 $(sideBar).removeClass('side-bar-sticky');
                 $(menuBar).removeClass('menu-bar-sticky');
                 $(logo).removeClass('logo-sticky');
+            }
+
+            if($(menuBar).is(':visible')) {
+               $(movieContainer).css({'min-height':sideBarHeight});
+            } else {
+                $(movieContainer).css({'min-height':0});
             }
 
             if((windowTop + windowHeight) === documentHeight)  //user scrolled to bottom of the page?
