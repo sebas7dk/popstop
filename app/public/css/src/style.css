@@ -277,15 +277,14 @@ a {
 }
 
 .side-bar-open .side-bar {
-    display: block;
+    display: block;;
 }
 .side-bar-open .list {
-    float: right;
-    width: 86%!important;
+    margin-left: 250px;
 }
 
 .side-bar-open .list > li {
-    margin: 6px!important;
+    margin: 8px 10px!important;
 }
 
 .window .side-bar .search-box {
@@ -374,13 +373,10 @@ a {
 ---------------------------
 --------------------------- */
 .movie-list {
-    position: relative;
-    height: 100%;
-    margin-bottom: 10px;
+    width: 100%;
 }
 
 .window .main .movie-list .list {
-    margin-top: 10px;
     font-size: 0;
     display: -ms-flexbox;
     -ms-flex-wrap: wrap;
@@ -389,6 +385,7 @@ a {
     flex-flow: row wrap;
     display: -webkit-box;
     display: flex;
+    display:-webkit-flex;
 }
 .loading .window .main .movie-list .list{
     opacity: 0.3;
@@ -401,7 +398,7 @@ a {
     -ms-flex: auto;
     flex: auto;
     cursor: pointer;
-    max-width: 190px;
+    max-width: 250px;
     margin: 8px 11px;
 }
 .window .main .movie-list .list li:hover:after {
@@ -432,7 +429,7 @@ a {
 .window .main .movie-list .list li img {
     position: relative;
     width: 100%;
-    max-height: 290px;
+    height: 100%;
     display: block;
     cursor: pointer;
 }
@@ -574,6 +571,7 @@ a {
 }
 
 #lightboxTarget .movie-card .cover {
+    width: 185px;
     position: absolute;
     top: 160px;
     left: 40px;

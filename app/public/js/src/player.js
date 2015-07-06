@@ -6,7 +6,7 @@
  */
 ;(function ($, window, document, undefined) {
     	// default properties.
-        var pluginName = "PopStopPlayer",
+        var selfName = "PopStopPlayer",
                         defaults = {
                         autoPlay : "",
                         posterPath : "",
@@ -15,11 +15,12 @@
 
         };
 
-	// plugin constructor.
-	function Plugin(element,options){
+	// self constructor.
+	function self(element,options){
 		this.element = element;
 		this.options = $.extend({},defaults,options);
         this.$player ="";
+        this.self =""
         this.$movieTitle = "";
         this.$moviePoster = "";
         this.totalTime ="";
@@ -44,15 +45,17 @@
 	}
 
     function _loader() {
-        $player.on('loadstart', function (event) {
+        $player.on('loadstart', function () {
             $('body').addClass('loading')
+            this.showControls('pause');
         });
-        $player.on('canplay', function (event) {
+        $player.on('canplay', function () {
             $('body').removeClass('loading')
+            this.showControls('play');
         });
     }
 
-	Plugin.prototype = {
+	self.prototype = {
 		init: function(){
             $player = $(this.element);
             fullScreenStatus = false;
@@ -60,14 +63,14 @@
             movieTitle = this.options.title;
             var timeDrag = false;
             var volumeDrag = false;
-            var self = this;
+            self = this;
             this.createPlayer();
             this.getControls();
             _loader();
 
 
             if(this.options.autoPlay === true) {
-                $player[0].play();
+                self.playerStatus();
             }
 
             $player.on('loadedmetadata', function() {
@@ -347,10 +350,10 @@
 
     };
     // preventing against multiple instantiations
-    $.fn[ pluginName ] = function ( options ) {
+    $.fn[ selfName ] = function ( options ) {
         return this.each(function() {
-            if (!$.data( this, "plugin_" + pluginName)) {
-                $.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
+            if (!$.data( this, "self_" + selfName)) {
+                $.data( this, "self_" + selfName, new self( this, options ) );
             }
         });
     };

@@ -307,7 +307,7 @@ class BaseController {
             'budget' => $info['budget'],
             'revenue' => $info['revenue'],
             'runtime' => $info['runtime'],
-            'poster_path' => $this->tmdb->getImageUrl($info['poster_path'], 'w185'),
+            'poster_path' => $this->tmdb->getImageUrl($info['poster_path'], 'w342'),
             'backdrop_path' => $this->tmdb->getImageUrl($info['backdrop_path'], 'original'),
             'cover_path' => $this->tmdb->getImageUrl($info['backdrop_path'], 'w1280'),
             'release_date' => $info['release_date'],

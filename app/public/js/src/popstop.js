@@ -385,7 +385,7 @@
        startMovie:function() {
             var data = {function : "playMovie", id : $(movieHolder).attr("data-id")};
             _call(data, 'GET', false).done(function(response) {
-                $(movieHolder).html('<video autoplay="autoplay" ><source src="' + response.path + '"></video>');
+                $(movieHolder).html('<video autoplay="autoplay"><source src="' + response.path + '"></video>');
                 $('video').PopStopPlayer({
                     'posterPath': response.poster_path,
                     'title': response.title,
@@ -563,10 +563,12 @@
                 }
 
                 if(response.updated) {
-                    plugin.installationProcess('6');
+                    output ='<p>Your movies have been added to the database successfully!</p>'
+                        +'<p>You can turn the auto-update function on and off in the settings menu.</p>'
+                        +'<div step-id="4" class="button step" id="installButton">Finish</div>';
                 } else if (!response.not_found && !response.updated) {
                     output ='<p>The script hasn\'t\ found any new files in the content directory. Everything is up-to-date.</p>'
-                    +'<div step-id="4" class="button step" id="installButton">Finish</div>';
+                        +'<div step-id="4" class="button step" id="installButton">Finish</div>';
                 }
                 $(messageContent).html(output);
             });

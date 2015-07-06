@@ -67,16 +67,21 @@
         height: 100%;
     }
 
-    .window .side-bar #genresList {
-        height: 300px;
+    .side-bar-open .list {
+        margin-left: 190px;
+    }
+
+    .window .main .movie-list .list > li {
+        margin: 2%;
+        max-width: none;
+    }
+
+    .side-bar-open .list > li {
+        margin: 2%!important;
     }
 
     .side-bar-sticky {
         top: 40px!important;
-    }
-
-    .side-bar-open .list {
-        width: 43%!important;
     }
 
     .window .side-bar menu > ul > li > a {
@@ -94,14 +99,6 @@
     .window .side-bar .search-box .fa {
         top: 20px;
         right: 20px;
-    }
-
-    .window .main .movie-list .list li {
-        max-width: 145px;
-    }
-
-    .window .main .movie-list .list li:after {
-        line-height: 220px;
     }
 
     .spinner {
@@ -250,6 +247,20 @@
         height: 100%;
     }
 
+    .side-bar-open .list {
+        margin-left: 190px;
+    }
+
+    .window .main .movie-list .list > li {
+        margin: 2%;
+        max-width: none;
+    }
+
+    .side-bar-open .list > li {
+        margin: 2%!important;
+    }
+
+
     .window .side-bar .search-box {
         padding: 10px;
     }
@@ -263,20 +274,9 @@
         right: 20px;
     }
 
-    .window .side-bar #genresList {
-        height: 200px;
-    }
 
     .side-bar-sticky {
         top: 40px!important;
-    }
-
-    .side-bar-open .list {
-        width: 65%!important;
-    }
-
-    .side-bar-open .list > li {
-        margin-right: 15px!important;
     }
 
     .window .side-bar menu > ul > li > a {
@@ -351,15 +351,6 @@
         font-size: 20px;
     }
 
-    .side-bar-open .list {
-        width: 71%!important;
-    }
-
-
-    .window .side-bar #genresList {
-        height: 400px;
-    }
-
 
     #lightboxTarget .movie-card .container {
         width: 90%;
@@ -415,29 +406,6 @@
 
 
 @media only screen and (min-width : 1200px) and (max-width: 1600px)  {
-    .side-bar-open .list {
-        width: 77%!important;
-    }
-
-    .side-bar-open .list li {
-        margin-right: 10px!important;
-        width: 155px!important;
-        padding-bottom: 0;
-    }
-
-    .side-bar-open li:after {
-        line-height: 214px!important;
-    }
-
-    .window .side-bar #genresList {
-        height: 400px;
-    }
-
-
-    .window .main .movie-list .list li:after {
-        line-height: 256px;
-    }
-
     #lightboxTarget .movie-card .container {
         width: 70%;
     }
@@ -477,10 +445,5 @@
         left: 110px;
         bottom: 85px;
         font-size: 14px;
-    }
-}
-@media only screen and (min-width : 1224px) {
-    .window .main .featured-movie {
-        background-position-y: -150px;
     }
 }
