@@ -6,7 +6,7 @@
  */
 ;(function ($, window, document, undefined) {
     	// default properties.
-        var selfName = "PopStopPlayer",
+        var pluginName = "PopStopPlayer",
                         defaults = {
                         autoPlay : "",
                         posterPath : "",
@@ -16,7 +16,7 @@
         };
 
 	// self constructor.
-	function self(element,options){
+	function Plugin(element,options){
 		this.element = element;
 		this.options = $.extend({},defaults,options);
         this.$player ="";
@@ -46,16 +46,20 @@
 
     function _loader() {
         $player.on('loadstart', function () {
-            $('body').addClass('loading')
-            this.showControls('pause');
+            $('body').addClass('loading');
+            self.showControls('show', true);
         });
         $player.on('canplay', function () {
-            $('body').removeClass('loading')
-            this.showControls('play');
+            $('body').removeClass('loading');
+            self.showControls('hide', false);
         });
     }
-
-	self.prototype = {
+    function _destroy() {
+        //Destroy the plugin instance
+        $.data(this, 'plugin_' + pluginName, null);
+        $('.PopStopPlayer').remove();
+    }
+	Plugin.prototype = {
 		init: function(){
             $player = $(this.element);
             fullScreenStatus = false;
@@ -86,7 +90,7 @@
                      $progressBar.css("width", self.toPercentage($player[0].currentTime,$player[0].duration) + "%");
              });
             $player.on("ended", function () {
-                    $movieHolder.html('');
+                    _destroy();
              });
             $volumeControl.mousedown(function(e) {
                     //Adjust the dragged volume level
@@ -140,8 +144,7 @@
                 self.fullscreenToggle();
             });
             $closeButton.on('click', function(){
-                //Hide the player
-                $movieHolder.html('');
+                _destroy();
             });
             $controlsholder.hover(
                 //Show or hide the controls
@@ -189,7 +192,7 @@
             $controlsholder = $('.holder');
         },
 
-        showControls:function(status) {
+        showControls:function(status, start) {
             //Show or hide the controls depending on the status
             switch (status) {
                 case 'show':
@@ -198,7 +201,7 @@
                     }
                     break;
                 case 'hide':
-                    $playerControls.delay(200).animate({bottom: '-200px'}, 1500);
+                    $playerControls.delay(2000).animate({bottom: '-200px'}, 1500);
                     break;
                 case 'play':
                     $closeButton.animate({top: '-60px'});
@@ -350,10 +353,10 @@
 
     };
     // preventing against multiple instantiations
-    $.fn[ selfName ] = function ( options ) {
+    $.fn[ pluginName ] = function ( options ) {
         return this.each(function() {
-            if (!$.data( this, "self_" + selfName)) {
-                $.data( this, "self_" + selfName, new self( this, options ) );
+            if (!$.data( this, "plugin_" + pluginName)) {
+                $.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
             }
         });
     };
