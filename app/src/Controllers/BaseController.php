@@ -214,10 +214,13 @@ class BaseController {
         foreach($this->scan->files() as $file) {
             $movie = $this->getMovieByFileName($file);
             if ($movie) {
-                $data = $this->createArraysToInsert($movie, $file);
-                $this->db->insert('movies', $data['movie']);
-                $this->db->insert('files', $data['file']);
-                sleep(1);
+                $movie_exists = $this->checkIfFileExists($movie['id']);
+                if(!$movie_exists) {
+                    $data = $this->createArraysToInsert($movie, $file);
+                    $this->db->insert('movies', $data['movie']);
+                    $this->db->insert('files', $data['file']);
+                    sleep(1);
+                }
             } else {
                 $not_found[] = ["file" => $file['name']];
             }
@@ -271,7 +274,7 @@ class BaseController {
      * @param array $file
      * @return array|boolean
      */
-    private function getMovieByFileName($file) {
+    protected function getMovieByFileName($file) {
 
         $search = $file['search_name'];
         if(preg_match('/(19|20)[0-9][0-9]/', $search, $match)) {
@@ -291,13 +294,26 @@ class BaseController {
     }
 
     /**
+     * Count all the movies in the database
+     *
+     * @return array
+     */
+    protected function checkIfFileExists($id) {
+        $this->db->bind(["id" => $id]);
+        $file = $this->db->fetch("SELECT * FROM files WHERE movie_id = :id", true);
+
+        return $file;
+
+    }
+
+    /**
      * Prepare an array with all the data for insertion
      *
      * @param array $info
      * @param array $file
      * @return array
      */
-    private function createArraysToInsert(array $info, array $file) {
+    protected function createArraysToInsert(array $info, array $file) {
 
         $movie = [
             'movie_id' => $info['id'],
