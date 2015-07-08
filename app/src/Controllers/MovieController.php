@@ -73,7 +73,8 @@ class MovieController extends BaseController {
         $movies =  $this->db->fetch("SELECT * FROM movies INNER JOIN files ON movies.movie_id = files.movie_id
                                              WHERE (',' || genres || ',') LIKE :genre $query LIMIT :position, :batch");
 
-        return ['movies' => $movies, 'batch' => $batch];
+
+        return ['movies' => $movies, 'batch' => $batch, 'total_files' => count($movies)];
     }
 
     /**

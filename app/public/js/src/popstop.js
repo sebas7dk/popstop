@@ -78,6 +78,7 @@
                 genres = 0;
                 plugin = this;
                 loading = false;
+                totalFiles = 0;
                 includesPath = "/app/public/templates/includes.html";
                 var $document = $(document);
                 var $window = $(window);
@@ -165,8 +166,8 @@
         isInstalled:function() {
             var data = {function : "isInstalled"};
              _call(data, 'GET', false).done(function(response) {
-                 var $movieContainer = $(movieContainer);
-                 $movieContainer.attr('data-total', response.total_files);
+                 //var $movieContainer = $(movieContainer);
+                 //$movieContainer.attr('data-total', response.total_files);
 
                  if (!response.is_installed) {
                      plugin.installationProcess();
@@ -180,9 +181,6 @@
                      plugin.getMovies();
                  }
              });
-
-            /*Get the total files*/
-            totalFiles = $movieContainer.attr('data-total');
         },
                 //getting control variables for future usage.
         getIDs:function() {
@@ -260,7 +258,7 @@
 
                 /*loaded group increment*/
                 loaded = (loaded == 0) ? response.batch : parseFloat(loaded) + parseFloat(response.batch);
-                $movieContainer.attr('data-loaded', loaded);
+                $movieContainer.attr({'data-loaded': loaded, 'data-total': response.total_files});
                 $(windowMargin).removeClass('loading');
             });
             loaded = $movieContainer.attr('data-loaded');
@@ -282,8 +280,6 @@
             /* Change the total and loaded files*/
             loaded = 0;
             $movieContainer.attr('data-loaded', loaded);
-            totalFiles = $this.attr("data-total");
-            $movieContainer.attr('data-total', totalFiles);
 
             genre = $this.attr("data-genre");
             $(sideBar).find('#genresList li').removeClass('selected');
