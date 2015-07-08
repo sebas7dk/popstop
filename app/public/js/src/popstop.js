@@ -78,7 +78,6 @@
                 genres = 0;
                 plugin = this;
                 loading = false;
-                totalFiles = 0;
                 includesPath = "/app/public/templates/includes.html";
                 var $document = $(document);
                 var $window = $(window);
@@ -117,7 +116,7 @@
                 $('#side-menu-toggle').on('click', function() {
                     var $this = $(this);
                     $this.toggleClass('active');
-                    plugin.showGenres();
+                    $('body').toggleClass('side-bar-open');
 
                 });
 
@@ -166,8 +165,8 @@
         isInstalled:function() {
             var data = {function : "isInstalled"};
              _call(data, 'GET', false).done(function(response) {
-                 //var $movieContainer = $(movieContainer);
-                 //$movieContainer.attr('data-total', response.total_files);
+                 var $movieContainer = $(movieContainer);
+                 $movieContainer.attr('data-total', response.total_files);
 
                  if (!response.is_installed) {
                      plugin.installationProcess();
@@ -179,8 +178,12 @@
                      $(windowMargin).fadeIn(2000);
                      plugin.getFeatured();
                      plugin.getMovies();
+                     plugin.showGenres();
                  }
              });
+
+            /*Get the total files*/
+            totalFiles = $movieContainer.attr('data-total');
         },
                 //getting control variables for future usage.
         getIDs:function() {
@@ -258,7 +261,7 @@
 
                 /*loaded group increment*/
                 loaded = (loaded == 0) ? response.batch : parseFloat(loaded) + parseFloat(response.batch);
-                $movieContainer.attr({'data-loaded': loaded, 'data-total': response.total_files});
+                $movieContainer.attr('data-loaded', loaded);
                 $(windowMargin).removeClass('loading');
             });
             loaded = $movieContainer.attr('data-loaded');
@@ -280,6 +283,8 @@
             /* Change the total and loaded files*/
             loaded = 0;
             $movieContainer.attr('data-loaded', loaded);
+            totalFiles = $this.attr("data-total");
+            $movieContainer.attr('data-total', totalFiles);
 
             genre = $this.attr("data-genre");
             $(sideBar).find('#genresList li').removeClass('selected');
@@ -300,7 +305,6 @@
                     $('#genresList').html(output);
                 });
             }
-            $('body').toggleClass('side-bar-open');
         },
         onSearch:function() {
              var value = $(searchBox).val();
@@ -345,7 +349,8 @@
                                         + '</span><div class="tags">';
                     i = 0;
                     $.each(genres, function (index, genre) {
-                        movieInfoOutput += '<span class="tag" data-genre="' + genre + '">' + genre + '</span>';
+                        var total = $(sideBar).find('#genresList li a[data-genre="' + genre + '"]').attr('data-total');
+                        movieInfoOutput += '<span class="tag" data-genre="' + genre + '" data-total="'+ total +'">' + genre + '</span>';
                         if (i % 2) {
                             movieInfoOutput += '<br>';
                         }
