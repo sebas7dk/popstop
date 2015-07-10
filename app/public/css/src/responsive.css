@@ -66,6 +66,13 @@
     .window .side-bar {
         width: 190px;
         height: 100%;
+
+    }
+
+    .window .side-bar  #genresList{
+        height: 245px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .side-bar-open .list {
@@ -254,13 +261,25 @@
         margin-left: 190px;
     }
 
+    .window .side-bar {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+
+    }
+
+    .side-bar-open .list {
+        margin-left: 190px;
+    }
+
     .window .main .movie-list .list > li {
         margin: 2%;
         max-width: none;
+        width: 46%;
     }
 
     .side-bar-open .list > li {
         margin: 2%!important;
+        width: 100%!important;
     }
 
 

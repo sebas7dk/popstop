@@ -137,7 +137,7 @@ class BaseController {
      * @return int
      */
     public function getTotalFiles() {
-        return count($this->scan->files());
+        return count($this->scan->getFiles());
     }
 
     /**
@@ -211,7 +211,7 @@ class BaseController {
         $this->resetTables();
 
         $not_found = [];
-        foreach($this->scan->files() as $file) {
+        foreach($this->scan->getFiles() as $file) {
             $movie = $this->getMovieByFileName($file);
             if ($movie) {
                 $movie_exists = $this->checkIfFileExists($movie['id']);
@@ -243,7 +243,7 @@ class BaseController {
 
         $not_found = [];
         $count = 0;
-        foreach($this->scan->files() as $file) {
+        foreach($this->scan->getFiles() as $file) {
             if(!in_array($file['target'], array_values($path))) {
                 $movie = $this->getMovieByFileName($file);
                 if ($movie) {
@@ -336,7 +336,8 @@ class BaseController {
 
         $file = [
             'movie_id' => $info['id'],
-            'path' => $file['target'],
+            'path' => $file['path'],
+            'target' => $file['target'],
             'created_at' => $file['date']
         ];
 
@@ -372,6 +373,7 @@ class BaseController {
                 CREATE TABLE IF NOT EXISTS files (
                        movie_id INTEGER,
                        path VARCHAR,
+                       target VARCHAR,
                        created_at DATETIME
                 );
 

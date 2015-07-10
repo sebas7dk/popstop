@@ -270,6 +270,7 @@ a {
     width: 250px;
     background: #24282C;
     color: #DDD;
+    float: left;
 }
 
 .side-bar-sticky {
@@ -398,7 +399,7 @@ a {
     flex: auto;
     cursor: pointer;
     max-width: 250px;
-    margin: 8px 11px;
+    margin: 8px 10px;
 }
 .window .main .movie-list .list li:hover:after {
     opacity: 1;
@@ -415,10 +416,10 @@ a {
     border-radius: 5px;
     opacity: 0;
     color: #F94F6A;
-    font-size: 60px;
+    font-size: 100px;
     display: block;
     cursor: pointer;
-    line-height: 278px;
+    line-height: 350px;
     text-align: center;
     font-family: FontAwesome;
     font-style: normal;
@@ -459,7 +460,7 @@ a {
     position: fixed;
     top: -100%;
     width: 100%;
-    background: rgba(0,0,0,.7);
+    background: rgba(0,0,0,.9);
     opacity: 0;
     -webkit-transition: opacity .5s ease-in-out;
     -moz-transition: opacity .5s ease-in-out;
@@ -474,8 +475,8 @@ a {
     width:50px;
     height:50px;
     box-sizing: border-box;
-    background: #353535;
-    color: #F94F6A;
+    background: #F94F6A;
+    color: #FFFFFF;
     text-decoration: none;
     position: absolute;
     top: -20px;
@@ -488,13 +489,18 @@ a {
     cursor: pointer;
 }
 
+#closeButton:hover,
+.lightbox-close:hover {
+    background: #279CEB;
+}
+
 #closeButton:before,
 .lightbox-close:before {
     content: "";
     display: block;
     height: 30px;
     width: 1px;
-    background: #F94F6A;
+    background: #FFFFFF;
     position: absolute;
     left: 26px;
     top:10px;
@@ -510,7 +516,7 @@ a {
     display: block;
     height: 30px;
     width: 1px;
-    background: #F94F6A;
+    background: #FFFFFF;
     position: absolute;
     left: 26px;
     top:10px;
@@ -546,7 +552,7 @@ a {
 }
 
 #lightboxTarget .movie-card .button:hover {
-    background: none repeat scroll 0 0 #279CEB;
+    background: #279CEB;
 }
 
 #lightboxTarget .movie-card .container {
@@ -820,9 +826,7 @@ a {
     padding-right: 5px;
 }
 
-.demo-popup .button,
-#lightboxTarget .movie-card .button,
-#messageContainer .content .button {
+.button {
     border: 0 none;
     border-radius: 2px 2px 2px 2px;
     color: #FFFFFF;
@@ -848,6 +852,10 @@ a {
     position: absolute;
     right: 10px;
     bottom: 10px;
+}
+
+#messageContainer .content .step:hover {
+    background: #279CEB;
 }
 
 #messageContainer .content .progress {
@@ -907,7 +915,12 @@ a {
     padding: 5px;
     margin: 10px;
     position: absolute;
-    bottom: 10px;
+    bottom: 0px;
+}
+
+#messageContainer .setting:hover  {
+    background: #F94F6A;
+
 }
 
 #messageContainer .install  {
@@ -1079,15 +1092,15 @@ body:not(:-moz-handler-blocked) #messageContainer form input[type="checkbox"] {
     width: 8px;
 }
 
-#lightboxTarget .movie-card .column-right > p::-webkit-scrollbar,
+#lightboxTarget .movie-card .column-right > p::-webkit-scrollbar-track,
 .window .side-bar #genresList::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
-    border-radius: 8px;
+    border-radius: 0px;
+    background: #cbcbcb;
 }
 
-#lightboxTarget .movie-card .column-right > p::-webkit-scrollbar,
+#lightboxTarget .movie-card .column-right > p::-webkit-scrollbar-thumb,
 .window .side-bar #genresList::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background-color: rgba(0,0,0,0.3);
+    background-color: #F94F6A;
     height: 8px;
 }

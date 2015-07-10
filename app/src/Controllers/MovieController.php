@@ -128,4 +128,15 @@ class MovieController extends BaseController {
 
         return array_count_values($array);
     }
+
+    /**
+     * Get the movie file location to play in the browser
+     *
+     * @param array $params
+     * @return array
+     */
+    public function getMovieSubtitles($params) {
+
+        return $this->scan->getSubtitles($params['path']);
+    }
 }

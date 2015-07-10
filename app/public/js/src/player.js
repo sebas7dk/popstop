@@ -10,7 +10,8 @@
                         defaults = {
                         autoPlay : "",
                         posterPath : "",
-                        title: ""
+                        title: "",
+                        basePath: ""
 
 
         };
@@ -21,6 +22,9 @@
 		this.options = $.extend({},defaults,options);
         this.$player ="";
         this.self =""
+        this.textTrack ="";
+        this.textTrackcounter = "";
+        this.currentText = "";
         this.$movieTitle = "";
         this.$moviePoster = "";
         this.totalTime ="";
@@ -39,6 +43,8 @@
         this.$closeButton ="";
         this.$movieHolder = "";
         this.$playerControls = "";
+        this.subtitleMenuButton = "";
+        this.subtitleMenu = "";
         this.$controlsholder = "";
 
 		this.init();
@@ -67,10 +73,17 @@
             movieTitle = this.options.title;
             var timeDrag = false;
             var volumeDrag = false;
+            textTrack = [];
+            textTrackCounter = 0;
+            subtitles = {};
+            currentText = [];
             self = this;
             this.createPlayer();
             this.getControls();
+            this.getSubtitles();
             _loader();
+
+            console.log(this.options.basePath);
 
 
             if(this.options.autoPlay === true) {
@@ -82,13 +95,23 @@
                    $totalTime.html(self.timeFormat($player[0].duration));
                    //Show the current volume level
                    $currentVolume.css("height", $player[0].volume * 100 + "%");
-             });
-            $player.on("timeupdate", function () {
+            });
+            $player.on("timeupdate", function() {
+                     var currentTime = $player[0].currentTime;
+                     var duration = $player[0].duration;
+                     var bufferEnd =  $player[0].buffered.end(0);
                      //Show the played & buffered time
-                     $loadedBar.css("width", self.toPercentage($player[0].buffered.end(0),$player[0].duration) + "%");
-                     $playedTime.text(self.timeFormat($player[0].currentTime));
-                     $progressBar.css("width", self.toPercentage($player[0].currentTime,$player[0].duration) + "%");
-             });
+                     $loadedBar.css("width", self.toPercentage(bufferEnd,duration) + "%");
+                     $playedTime.text(self.timeFormat(currentTime));
+                     $progressBar.css("width", self.toPercentage(currentTime,duration) + "%");
+
+                    if ($('#subtitleDisplay').find('li').hasClass('selected')){
+                        self.setSubtitles(self.timeFormat(currentTime));
+                    }
+            });
+            $player.on("seeked", function() {
+                    textTrackCounter = 0;
+            });
             $player.on("ended", function () {
                     _destroy();
              });
@@ -137,6 +160,12 @@
             $volumeIcon.on('click', function(){
                 //Mute the volume
                 self.muteSound();
+            });
+            $(document).on('click', '.subtitle-item', function(){
+                var $this = $(this);
+                var path = $this.find('span').attr('data-path');
+                $this.addClass('selected');
+                self.showSubTitles(path);
             });
 
             $fullScreenButton.on('click', function(){
@@ -190,18 +219,20 @@
             $movieHolder = $('#movieHolder');
             $playerControls = $('#controls');
             $controlsholder = $('.holder');
+            $subtitleMenu = $('#subtitleMenu');
+            $subtitleDisplay = $('#subtitleDisplay');
         },
 
-        showControls:function(status, start) {
+        showControls:function(status) {
             //Show or hide the controls depending on the status
             switch (status) {
                 case 'show':
-                    if ($playerControls.css('bottom') !== '60px') {
-                        $playerControls.animate({bottom: '60px'}, 1500);
+                    if ($playerControls.css('opacity') !== '1') {
+                        $playerControls.animate({opacity: 1}, 1500);
                     }
                     break;
                 case 'hide':
-                    $playerControls.delay(2000).animate({bottom: '-200px'}, 1500);
+                    //$playerControls.delay(2000).animate({bottom: '-200px'}, 1500);
                     break;
                 case 'play':
                     $closeButton.animate({top: '-60px'});
@@ -218,21 +249,21 @@
             var $PopStopPlayer = $(".PopStopPlayer");
 
             var output = '<div class="holder">'
-                        +'<div id="controls"><div class="info">'
-                        +'<div class="poster" style="background-image: url('+ moviePoster +')"></div><div class="title">'+ movieTitle +'</div></div>'
-                        +'<div class="control-bar">'
-                        +'<div class="play" id="playerButton"></div>'
-                        +'<div id="playingTime">00:00</div>'
+                        +'<div id="controls"><div class="control-bar">'
                         +'<div id="progressBar"><div id="played"></div><div id="loadedBar"></div></div>'
-                        +'<div id="totalTime">00:00</div>'
-                        +'<div id="volume">'
+                        +'<ul class="left"><li><div class="play" id="playerButton"></div></li>'
+                        +'<li><span id="playingTime">00:00 / <span id="totalTime">00:00</span></li></ul>'
+                        +'<ul class="right"><li><div id="volume">'
                         +'<div id="volumeIcon" class="volume-max"><span></span></div>'
                         +'<div id="volumeControl">'
                         +'<div id="volumePosition">'
-                        +'<div id="currentVolume"></div>'
-                        +' </div></div></div>'
-                        +'<div id="fullScreenButton"><span></span></div></div>'
-                        +'</div></div></div><span id="closeButton"></span>';
+                        +'<div id="currentVolume"></div></div></div></div></li>'
+                        +'<li><div id="subtitleMenu">'
+                        +'<div id="subtitleMenuIcon"></div><div id="subtitleDisplay"></div></div></li>'
+                        +'<li><div id="fullScreenButton"><span></span></div></li></ul>'
+                        +'</div></div></div>'
+                        +'<div id="subtitleHolder"></div>'
+                        +'<span id="closeButton"></span>';
             $PopStopPlayer.append(output);
         },
         updateVolume:function(yPosition) {
@@ -348,9 +379,86 @@
             minutes = (minutes >= 10) ? minutes : "0" + minutes;
             seconds = Math.floor(seconds % 60);
             seconds = (seconds >= 10) ? seconds : "0" + seconds;
-            return minutes + ":" + seconds;
-        }
+            var format = minutes + ":" + seconds;
 
+            if (format.replace(/:/g,"").length == 4) {
+                format = '00:' + format;
+            }
+
+            return format;
+        },
+        getSubtitles:function() {
+            var data = {function : "getMovieSubtitles", path : this.options.basePath};
+            $.ajax({type: 'GET', url: 'bootstrap.php', data:data}).done(function(response) {
+                var output = '<ul>';
+                $.each(response, function (key, val) {
+                    output += '<li class="subtitle-item"><label><input type="checkbox" class="subtitle-check">'
+                            +'<span data-path="' + val.path + '">' + val.name + '</span></label</li>';
+                });
+                output += '</ul>';
+                $subtitleDisplay.html(output);
+            });
+        },
+        showSubTitles:function(path) {
+            var st, n, i, o, t, is, os;
+            var text = $.ajax({type: 'GET', url: path, async: false}).responseText;
+            //textTrack[i] = this.parseSRT(subtitle);
+            //textTrackCounter[i]=0;
+            srt = text.replace(/\r\n|\r|\n/g, '\n');
+            srt = this.strip(srt);
+            var srt_ = srt.split('\n\n');
+            var count = 0;
+            for(s in srt_) {
+                st = srt_[s].split('\n');
+                if(st.length >=2) {
+                    n = st[0];
+                    i = this.strip(st[1].split(' --> ')[0]);
+                    o = this.strip(st[1].split(' --> ')[1]);
+                    t = st[2];
+                    if(st.length > 2) {
+                        for(j=3; j<st.length;j++)
+                            t += '\n'+st[j];
+                    }
+                    is = this.toSeconds(i);
+                    os = this.toSeconds(o);
+                    subtitles[count] = {i:i, o: o, t: t};
+                    count++;
+                }
+            }
+            console.log(subtitles);
+        },
+        setSubtitles:function(currentTime) {
+            var subtitle = '';
+            var start = subtitles[textTrackCounter].i.split(',')[0];
+            var end = '';
+
+            for (s in subtitles) {
+                end = subtitles[textTrackCounter].o.split(',')[0];
+                if(end < currentTime) {
+                    textTrackCounter++;
+                } else {
+                    break;
+                }
+            }
+
+            if (currentTime > start  &&  currentTime < end) {
+                subtitle = subtitles[textTrackCounter].t;
+                $('#subtitleHolder').html('<p>' + subtitle + '</p>');
+                textTrackCounter++;
+            } else if(end < currentTime) {
+                $('#subtitleHolder').html('');
+            }
+
+        },
+        toSeconds:function(t) {
+            tc1 = t.split(',');
+            tc2 = tc1[0].split(':');
+            secs = Math.floor(tc2[0]*60*60) + Math.floor(tc2[1]*60) + Math.floor(tc2[2]);
+            return secs;
+        },
+        strip:function(s) {
+            return s.replace(/^\s+|\s+$/g,"");
+        }
     };
     // preventing against multiple instantiations
     $.fn[ pluginName ] = function ( options ) {

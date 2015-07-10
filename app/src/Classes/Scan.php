@@ -31,11 +31,12 @@ class Scan {
      * Filter the files with a movie extension
      * @return array
      */
-    public function files() {
+    public function getFiles() {
         $content = [];
         foreach ($this->getIterator() as $item) {
             if (in_array($item->getExtension() , $this->filter) ) {
                 $content[] = [
+                    "path"        => $item->getPath(),
                     "target"      => strstr($item->getPathname(), 'content'),
                     "search_name" => $item->getBasename('.' . $item->getExtension()),
                     "name"        => $item->getBasename(),
@@ -45,17 +46,34 @@ class Scan {
                 ];
             }
         }
-        return  $content;
+        return $content;
+    }
+
+    public function getSubtitles($path) {
+        $subtitles = [];
+        foreach ($this->getIterator($path) as $item) {
+            if($item->getExtension() == 'srt') {
+                $subtitles[] = [
+                    'name' => $item->getBasename('.' . $item->getExtension()),
+                    'path' => strstr($item->getPathname(), 'content')
+                ];
+            }
+        }
+        return $subtitles;
     }
 
     /**
      * Index the all the files in the directory and sub directories
      * @return RecursiveDirectoryIterator
      */
-    private function getIterator () {
-
+    protected function getIterator($directory = null) {
         // some flags to filter . and .. and follow symlinks
         $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS;
+
+        //Iterate only this directory
+        if($directory) {
+            return new \RecursiveDirectoryIterator($directory, $flags);
+        }
         // create a simple recursive directory iterator
         $iterator = new \RecursiveDirectoryIterator($this->directory, $flags);
         $recursive = new \RecursiveIteratorIterator($iterator);

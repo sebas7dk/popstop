@@ -250,8 +250,8 @@
                 var output = '';
                 $.each(response.movies, function (key, val) {
                     output += '<li class="movie" movie-id="' + val.movie_id + '">'
-                    + '<img src="' + val.poster_path + '" alt="' + val.title + '" />'
-                    + '</li>';
+                           + '<img src="' + val.poster_path + '" alt="' + val.title + '" />'
+                           + '</li>';
                 });
                 if (scroll === true) {
                     $movieContainer.append(output);
@@ -380,46 +380,52 @@
             });
         },
         closeLightBox:function() {
-            $(lightBoxTarget).css({opacity: 0, 'z-index': -10000});
-            $(lightBoxClose).css({top: -100});
+            $(lightBoxTarget).remove();
         },
        startMovie:function() {
             var data = {function : "playMovie", id : $(movieHolder).attr("data-id")};
             _call(data, 'GET', false).done(function(response) {
-                $(movieHolder).html('<video autoplay="autoplay"><source src="' + response.path + '"></video>');
+                $(movieHolder).html('<video autoplay="autoplay"><source src="' + response.target + '"></video>');
                 $('video').PopStopPlayer({
                     'posterPath': response.poster_path,
                     'title': response.title,
-                    'autoPlay': true
+                    'autoPlay': true,
+                    'basePath': response.path
                 });
             });
         },
        onScroll:function() {
+            var $menuBar = $(menuBar);
+            var $sideBar = $(sideBar);
+            var $logo = $(logo);
+            var $movieContainer = $(movieContainer);
+            /** Get the height of the elements */
             var documentHeight = $(document).height();
             var windowHeight = $(window).height();
             var windowTop = $(window).scrollTop();
             var menuTop = $(featured).height();
             var sideBarHeight = $(sideBar).height();
 
+
             if (windowTop >= menuTop) {
-                $(menuBar).addClass('menu-bar-sticky');
-                $(sideBar).addClass('side-bar-sticky');
-                $(logo).addClass('logo-sticky');
+                $menuBar.addClass('menu-bar-sticky');
+                $sideBar.addClass('side-bar-sticky');
+                $logo.addClass('logo-sticky');
             } else if (windowTop < menuTop) {
-                $(sideBar).removeClass('side-bar-sticky');
-                $(menuBar).removeClass('menu-bar-sticky');
-                $(logo).removeClass('logo-sticky');
+                $sideBar.removeClass('side-bar-sticky');
+                $menuBar.removeClass('menu-bar-sticky');
+                $logo.removeClass('logo-sticky');
             }
 
-            if($(menuBar).is(':visible')) {
-               $(movieContainer).css({'min-height':sideBarHeight});
+            if($menuBar.is(':visible')) {
+               $movieContainer.css({'min-height':sideBarHeight});
             } else {
-                $(movieContainer).css({'min-height':0});
+                $movieContainer.css({'min-height':0});
             }
 
             if((windowTop + windowHeight) === documentHeight)  //user scrolled to bottom of the page?
             {
-               if(loaded <= totalFiles) //there's more data to load
+               if(parseFloat(loaded) <= parseFloat(totalFiles)) //there's more data to load
                {
                   loading = true;
                   plugin.getMovies(true);
