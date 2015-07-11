@@ -21,6 +21,15 @@ video {
     overflow: hidden;
 }
 
+.holder {
+    height: 25%;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 2147483647;
+}
+
 /* CONTROLS
 ---------------------------
 --------------------------- */
@@ -46,7 +55,7 @@ video {
 
 #controls .right {
     float: right;
-    margin-top: 2px;
+    margin-top: 4px;
     margin-right: 10px;
 }
 
@@ -62,30 +71,31 @@ video {
 }
 
 #playerButton,
-#playingTime,
-#totalTime,
 #fullScreenButton,
+#movieInfo,
 #volume,
 #subtitleMenu
 {
     display: inline;
     padding: 10px 0 0 10px;
-    width: 35px;
+    width: 30px;
     height: 35px;
     background: none;
     color: #FFFFFF;
 }
 
 #subtitleHolder {
-    position: absolute;
-    left: 0;
-    bottom: -200px;
+    max-width: 50%;
+    position: fixed;
+    left: 25%;
+    bottom: 50px;
     z-index: 9999999;
+    opacity: 0;
 }
 
 #subtitleHolder p{
-    font-size: 50px;
-    line-height: 55px;
+    font-size: 40px;
+    line-height: 44px;
     font-weight: bold;
     color: #FFFFFF;
     background: rgba(25, 25, 25, 0.3);
@@ -103,7 +113,7 @@ video {
 #playerButton{
     float: left;
     height: 100%;
-    width: 35px;
+    width: 30px;
     position: relative;
     cursor: pointer;
 }
@@ -114,78 +124,59 @@ video {
 .pause:before,
 .play:before {
     content:'\f144';
-    font-size: 35px;
+    font-size: 30px;
     font-family: FontAwesome;
 }
 
 
 .pause:before {
-    font-size: 30px;
+    font-size: 25px;
     content:'\f04c';
 
 }
 
+
 /* INFORMATION
 ---------------------------
 --------------------------- */
-.info .poster {
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 120px;
-    height: 120px;
-    line-height: 200px;
-    border-radius: 50%; /* the magic */
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border: 5px solid #353535;
-
-}
-
-.info {
-    position: absolute;
-    left: 25%;
-    bottom: -60px;
-}
-
-.info .title {
-    color: #fff;
+#movieInfo {
+    color: #279CEB;
     font-weight: bold;
     position: relative;
-    left: 134px;
-    bottom: 94px;
-    font-size: 18px;
-    background-color: #279CEB;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    padding: 0px 5px 0px 5px;
+    left: 30px;
+    top: 12px;
+    font-size: 16px;
 }
-.holder {
-    height: 25%;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    z-index: 2147483647;
+
+#movieInfo .stars {
+    display: inline;
+    color: #F0C236;
+    margin-left: 5px;
 }
-/* PROGRESSBAR
----------------------------
---------------------------- */
-#playingTime,
-#totalTime{
+
+.time-holder {
+    display: inline;
+    padding: 10px 0 0 20px;
+    height: 35px;
+    color: #FFFFFF;
+}
+
+.time-holder span{
     position: relative;
     top: 12px;
-    height: 100%;
     font-size: 16px;
     cursor: default;
     text-align: center;
 }
 
+/* PROGRESSBAR
+---------------------------
+--------------------------- */
 
 #progressBar{
     position: absolute;
     left: 0;
     right: 0;
-    width: auto;
     top: -10px;
     cursor: pointer;
 }
@@ -197,10 +188,11 @@ video {
     z-index: 3;
     cursor: pointer;
 }
+
 #loadedBar{
     width: 0;
     height: 10px;
-    background-color: #2B2627;
+    background-color: #777777;
     position: absolute;
     z-index: 2;
 }
@@ -209,11 +201,11 @@ video {
 --------------------------- */
 #subtitleMenu {
     float: left;
+    width: 25px;
 }
 
 #subtitleMenuIcon{
     position: relative;
-    overflow: hidden;
     cursor: pointer;
 }
 #subtitleMenuIcon:hover{
@@ -221,13 +213,13 @@ video {
 }
 #subtitleMenuIcon:before {
     content:'\f013';
-    font-size: 30px;
+    font-size: 25px;
     font-family: FontAwesome;
 }
 
 #subtitleMenu:hover #subtitleDisplay{
     bottom: 50px;
-    right: 25px;
+    right: 23px;
     opacity: 1;
     -webkit-transition: bottom 0s ease 0s;
     -moz-transition: bottom 0s ease 0s;
@@ -238,15 +230,12 @@ video {
 }
 
 #subtitleDisplay{
-    min-height: 60px;
     min-width: 85px;
     background-color: #353535;
-    padding: 5px 6px;
     position: fixed;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    margin-bottom: 6px;
     opacity: 0;
     z-index: 9999;
 }
@@ -266,12 +255,19 @@ video {
 }
 
 
-#subtitleDisplay ul li{
+#subtitleDisplay ul > li{
     list-style-type:none;
     display: block;
     text-align: center;
+    padding: 3px 3px;
+    cursor: pointer;
+    z-index: 999;
+}
+
+#subtitleDisplay ul > li > label{
     cursor: pointer;
 }
+
 #subtitleDisplay .selected {
     background: #279CEB;
 }
@@ -284,6 +280,7 @@ video {
 ---------------------------
 --------------------------- */
 #fullScreenButton{
+    width: 25px;
     float: left;
     position: relative;
     cursor: pointer;
@@ -293,7 +290,7 @@ video {
 }
 #fullScreenButton:before {
     content:'\f0b2';
-    font-size: 30px;
+    font-size: 25px;
     font-family: FontAwesome;
 }
 /* VOLUME
@@ -301,6 +298,7 @@ video {
 --------------------------- */
 #volume{
     float: left;
+    width: 25px;
 }
 
 #volumeIcon{
@@ -323,7 +321,7 @@ video {
 }
 
 #volumeIcon:before{
-    font-size: 30px;
+    font-size: 25px;
     font-family: FontAwesome;
 }
 

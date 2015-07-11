@@ -192,6 +192,20 @@
         border-radius: 0!important;
     }
 
+    .lightbox-close {
+        width: 35px;
+        height: 35px;
+        top: -15px;
+        right: -10px;
+    }
+
+    .lightbox-close:before,
+    .lightbox-close:after {
+        height: 25px;
+        left: 18px;
+        top: 5px;
+    }
+
     #messageContainer {
         width: 90%;
         font-size: 13px;
@@ -206,22 +220,29 @@
     }
 
     .control-bar {
-        width: 90%;
-        right: 5%;
+        width: 100%;
+        bottom: 31px;
+        height: 40px;
+        position: absolute;
     }
 
-    .info .poster, .info .title {
+    .time-holder {
+        padding: 10px 0 0 10px;
+    }
+
+    .time-holder span{
+        font-size: 14px;
+    }
+
+    #movieInfo {
         display: none;
     }
 
-    #fullScreenButton, #PlayerButton {
-        top: 5px;
+    #volume:hover #volumeControl,
+    #subtitleMenu:hover #subtitleDisplay{
+        bottom: 75px;
     }
 
-    .pause:before,
-    .play:before {
-        top: 10px;
-    }
 
 }
 @media only screen and (min-width : 480px) and (max-width : 690px) {

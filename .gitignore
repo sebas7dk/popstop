@@ -5,6 +5,7 @@
 *.mpeg
 *.mov
 *.mp4
+*.srt
 
 # Logs and databases #
 ######################

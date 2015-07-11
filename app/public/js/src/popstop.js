@@ -389,6 +389,8 @@
                 $('video').PopStopPlayer({
                     'posterPath': response.poster_path,
                     'title': response.title,
+                    'year' : response.release_date.split('-')[0],
+                    'stars' : plugin.showStars(response.stars),
                     'autoPlay': true,
                     'basePath': response.path
                 });
