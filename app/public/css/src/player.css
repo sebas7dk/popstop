@@ -90,7 +90,7 @@ video {
     left: 25%;
     bottom: 50px;
     opacity: 0;
-    z-index: 2147483646;
+    z-index: 2147483650;
 }
 
 #subtitleHolder p{
@@ -132,9 +132,7 @@ video {
 .pause:before {
     font-size: 25px;
     content:'\f04c';
-
 }
-
 
 /* INFORMATION
 ---------------------------
@@ -190,7 +188,7 @@ video {
 }
 
 #loadedBar{
-    width: 0;
+    width: 100%;
     height: 10px;
     background-color: #777777;
     position: absolute;

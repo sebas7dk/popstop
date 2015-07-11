@@ -102,7 +102,7 @@
                 var duration = $player[0].duration;
                 var bufferEnd =  $player[0].buffered.end(0);
                 //Show the played & buffered time
-                $loadedBar.css("width", self.toPercentage(bufferEnd,duration) + "%");
+                //$loadedBar.css("width", self.toPercentage(bufferEnd,duration) + "%");
                 $playedTime.text(self.timeFormat(currentTime));
                 $progressBar.css("width", self.toPercentage(currentTime,duration) + "%");
 
@@ -235,7 +235,7 @@
                     }
                     break;
                 case 'hide':
-                    $playerControls.delay(2000).animate({bottom: '-200px'}, 1500);
+                    $playerControls.delay(2000).animate({opacity: 0}, 1500);
                     break;
                 case 'play':
                     $closeButton.animate({top: '-60px'});
