@@ -235,7 +235,7 @@
                     }
                     break;
                 case 'hide':
-                    //$playerControls.delay(2000).animate({bottom: '-200px'}, 1500);
+                    $playerControls.delay(2000).animate({bottom: '-200px'}, 1500);
                     break;
                 case 'play':
                     $closeButton.animate({top: '-60px'});

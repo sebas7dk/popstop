@@ -89,8 +89,8 @@ video {
     position: fixed;
     left: 25%;
     bottom: 50px;
-    z-index: 9999999;
     opacity: 0;
+    z-index: 2147483646;
 }
 
 #subtitleHolder p{

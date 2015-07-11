@@ -394,6 +394,10 @@
         font-size: 20px;
     }
 
+    .window .main .movie-list .list li {
+        max-width: 240px;
+    }
+
 
     #lightboxTarget .movie-card .container {
         width: 90%;
