@@ -247,11 +247,19 @@ class BaseController {
             if(!in_array($file['target'], array_values($path))) {
                 $movie = $this->getMovieByFileName($file);
                 if ($movie) {
-                    $data = $this->createArraysToInsert($movie, $file);
-                    $this->db->insert('movies', $data['movie']);
-                    $this->db->insert('files', $data['file']);
-                    sleep(1);
-                    $count++;
+                    $movie_exists = $this->checkIfFileExists($movie['id']);
+                    if(!$movie_exists) {
+                        $data = $this->createArraysToInsert($movie, $file);
+                        $this->db->insert('movies', $data['movie']);
+                        $this->db->insert('files', $data['file']);
+                        sleep(1);
+                        $count++;
+                    } else {
+                        $this->db->insert('files', [
+                            'path' => $file['path'],
+                            'target' => $file['target']
+                        ]);
+                    }
                 } else {
                     $not_found[] = ["file" => $file['name']];
                 }

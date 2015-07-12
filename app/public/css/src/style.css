@@ -548,7 +548,7 @@ a {
     padding: 7px 10px;
     position: absolute;
     left: 40px;
-    bottom: 171px;
+    bottom: 184px;
 }
 
 #lightboxTarget .movie-card .button:hover {
@@ -577,6 +577,7 @@ a {
 
 #lightboxTarget .movie-card .cover {
     width: 185px;
+    height: 265px;
     position: absolute;
     top: 160px;
     left: 40px;
@@ -625,7 +626,7 @@ a {
 
 #lightboxTarget .movie-card .column-left {
     padding-left: 50px;
-    padding-top: 150px;
+    padding-top: 125px;
     width: 20%;
     float: left;
     text-align: left;

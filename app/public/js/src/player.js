@@ -24,9 +24,7 @@
         this.options = $.extend({},defaults,options);
         this.$player ="";
         this.self =""
-        this.currentText ="";
-        this.subtitleCounter = "";
-        this.currentText = "";
+        this.subtitles = "";
         this.$movieTitle = "";
         this.$moviePoster = "";
         this.totalTime ="";
@@ -47,7 +45,9 @@
         this.$playerControls = "";
         this.subtitleMenuButton = "";
         this.subtitleMenu = "";
-        this.$controlsholder = "";
+        this.subtitleDisplay = "";
+        this.subtitleHolder = "";
+        this.$controlsHolder = "";
 
         this.init();
     }
@@ -77,10 +77,7 @@
             movieRating = this.options.stars;
             var timeDrag = false;
             var volumeDrag = false;
-            currentText = '';
-            subtitleCounter = 0;
-            subtitles = {};
-            currentText = [];
+            subtitleEnd = 0;
             self = this;
             this.createPlayer();
             this.getControls();
@@ -106,12 +103,11 @@
                 $playedTime.text(self.timeFormat(currentTime));
                 $progressBar.css("width", self.toPercentage(currentTime,duration) + "%");
 
-                if ($('#subtitleDisplay').find('li').hasClass('selected')){
-                    self.setSubtitles(self.timeFormat(currentTime));
+                if ($subtitleDisplay.find('li').hasClass('selected')){
+                    self.setSubtitles(currentTime);
+                } else {
+                    $subtitleHolder.css('opacity', 0);
                 }
-            });
-            $player.on("seeked", function() {
-                subtitleCounter = 0;
             });
             $player.on("ended", function () {
                 _destroy();
@@ -170,7 +166,7 @@
             $closeButton.on('click', function(){
                 _destroy();
             });
-            $controlsholder.hover(
+            $controlsHolder.hover(
                 //Show or hide the controls
                 function () {
                     self.showControls('show');
@@ -185,9 +181,9 @@
                 var path = $this.find('span').attr('data-path');
 
                 if($this.hasClass('selected')) {
-                    $('#subtitleDisplay').find('li').removeClass('selected');
+                    $subtitleDisplay.find('li').removeClass('selected');
                 } else {
-                    $this.addClass('selected');
+                    $this.toggleClass('selected');
                     self.showSubTitles(path);
                 }
             });
@@ -221,9 +217,10 @@
             $closeButton = $("#closeButton");
             $movieHolder = $('#movieHolder');
             $playerControls = $('#controls');
-            $controlsholder = $('.holder');
+            $controlsHolder = $('.holder');
             $subtitleMenu = $('#subtitleMenu');
             $subtitleDisplay = $('#subtitleDisplay');
+            $subtitleHolder = $('#subtitleHolder');
         },
 
         showControls:function(status) {
@@ -410,65 +407,63 @@
                 $subtitleDisplay.html(output);
             });
         },
-        showSubTitles:function(path) {
-            var st, srt, n, i, o, t;
-            var text = $.ajax({type: 'GET', url: path, async: false}).responseText;
-            srt = text.replace(/\r\n|\r|\n/g, '\n');
-            srt = this.stripText(srt);
-            var srt_ = srt.split('\n\n');
-            var count = 0;
-            for(s in srt_) {
-                st = srt_[s].split('\n');
-                if(st.length >=2) {
-                    n = st[0];
-                    i = this.stripText(st[1].split(' --> ')[0]);
-                    o = this.stripText(st[1].split(' --> ')[1]);
-                    t = st[2];
-                    if(st.length > 2) {
-                        for(j=3; j<st.length;j++)
-                            t += '\n'+st[j];
+        showSubTitles:function(url) {
+            var srt = $.ajax({type: 'GET', url: url, async: false}).responseText;
+            /* Strip the subtitle and split by line */
+            srt = $.trim(srt.replace(/\r\n|\r|\n/g, '\n')).split('\n\n');
+            subtitles = new Array(srt.length);
+
+            for (var i=0; i<srt.length; i++) {
+                string = srt[i].split('\n');
+                if(string.length >= 2) {
+                    var number = string[0];
+                    var split = string[1].split(' --> ');
+                    var start = this.toSeconds($.trim(split[0]));
+                    var end = this.toSeconds($.trim(split[1]));
+                    var text = string[2];
+                    if(string.length > 2) {
+                        for(var count = 3; count < string.length; count++) {
+                            text += '<br />' + string[count];
+                        }
                     }
-                    subtitles[count] = {i:i, o: o, t: t};
-                    count++;
+                    subtitles[i]={
+                        start : start,
+                        end : end,
+                        text : text
+                    };
                 }
             }
+
         },
         setSubtitles:function(currentTime) {
-            var start = subtitles[subtitleCounter].i.split(',')[0];
-            var end = '';
-
-            for (s in subtitles) {
-                end = subtitles[subtitleCounter].o.split(',')[0];
-                if(end < currentTime) {
-                    subtitleCounter++;
-                } else {
+            /* Hide the subtitles */
+            if (subtitleEnd < currentTime) {
+                $subtitleHolder.css('opacity', 0);
+            }
+            var subtitle;
+            for (var i=0; i<subtitles.length; i++) {
+                /* Find the next subtitle */
+                if(subtitles[i].end > currentTime) {
+                    subtitle = i;
                     break;
                 }
             }
-
-            if (currentTime > start  &&  currentTime < end) {
-                /** The time of the subtitles to be displayed */
-                var totalTime = this.toSeconds(end) - this.toSeconds(start);
-                subtitle = subtitles[subtitleCounter].t;
-                if(currentText !== subtitle) {
-                    $('#subtitleHolder').html('<p>'+ subtitle +'</p>').css('opacity', 1);
-                    currentText = subtitle;
-                    setTimeout(function(){
-                        $('#subtitleHolder').css('opacity', 0);
-                    }, totalTime * 1000);
-                    subtitleCounter++;
+            if(subtitle >= 0) {
+                /* Show the subtitle if it's in the time range */
+                if(currentTime > subtitles[subtitle].start && currentTime < subtitles[subtitle].end) {
+                        $subtitleHolder.html('<p>'+ subtitles[subtitle].text +'</p>').css('opacity', 1);
+                        subtitleEnd = subtitles[subtitle].end;
                 }
             }
-
         },
-        toSeconds:function(t) {
-            tc1 = t.split(',');
-            tc2 = tc1[0].split(':');
-            secs = Math.floor(tc2[0]*60*60) + Math.floor(tc2[1]*60) + Math.floor(tc2[2]);
-            return secs;
-        },
-        stripText:function(s) {
-            return s.replace(/^\s+|\s+$/g,"");
+        toSeconds:function(time) {
+            var seconds = 0.0;
+            if(time) {
+                var part = time.split(':');
+                for(i= 0; i < part.length; i++)
+                    seconds = seconds * 60 + parseFloat(part[i].replace(',', '.'))
+            }
+            return seconds;
         }
     };
     // preventing against multiple instantiations

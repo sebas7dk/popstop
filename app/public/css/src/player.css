@@ -34,7 +34,7 @@ video {
 ---------------------------
 --------------------------- */
 .control-bar{
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
@@ -88,7 +88,7 @@ video {
     max-width: 50%;
     position: fixed;
     left: 25%;
-    bottom: 50px;
+    bottom: 100px;
     opacity: 0;
     z-index: 2147483650;
 }
@@ -217,7 +217,7 @@ video {
 
 #subtitleMenu:hover #subtitleDisplay{
     bottom: 50px;
-    right: 23px;
+    right: 20px;
     opacity: 1;
     -webkit-transition: bottom 0s ease 0s;
     -moz-transition: bottom 0s ease 0s;
