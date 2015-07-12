@@ -255,10 +255,12 @@ class BaseController {
                         sleep(1);
                         $count++;
                     } else {
-                        $this->db->insert('files', [
-                            'path' => $file['path'],
-                            'target' => $file['target']
-                        ]);
+//                        $this->db->bind([
+//                            "target" => $file['target'],
+//                            "path" => $file['path'],
+//                            "movie_id" => $movie['id'],
+//                        ]);
+//                        $this->db->update("UPDATE files SET target = :target, path = :path  WHERE movie_id = :movie_id");
                     }
                 } else {
                     $not_found[] = ["file" => $file['name']];
@@ -375,7 +377,8 @@ class BaseController {
                        vote_average,
                        vote_count,
                        genres,
-                       stars
+                       stars,
+                       resume_at
                  );
 
                 CREATE TABLE IF NOT EXISTS files (

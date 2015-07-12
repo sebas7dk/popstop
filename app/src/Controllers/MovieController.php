@@ -139,4 +139,18 @@ class MovieController extends BaseController {
 
         return $this->scan->getSubtitles($params['path']);
     }
+
+    /**
+     * Get the movie file location to play in the browser
+     *
+     * @param array $params
+     * @return array
+     */
+    public function saveCurrentTime($params) {
+        $this->db->bind([
+            "current_at" => $params['current_time'],
+            "movie_id" => $params['movie_id']
+        ]);
+        $this->db->update("UPDATE movies SET resume_at = :current_at WHERE movie_id = :movie_id");
+    }
 }

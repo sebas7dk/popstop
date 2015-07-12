@@ -10,29 +10,30 @@
 
     // plugin constructor.
     function Plugin(element){
-            this.element = element;
-            this.plugin = this;
-            this.loaded= "";
-            this.loading="";
-            this.response="";
-            this.logo ="";
-            this.menuBar ="";
-            this.genre="";
-            this.genres="";
-            this.spinner ="";
-            this.featured ="";
-            this.lightBox="";
-            this.lightBoxTarget ="";
-            this.lightBoxClose ="";
-            this.searchBox ="";
-            this.includesPath="";
-            this.totalFiles="";
-            this.messageContainer="";
-            this.messageContent="";
-            this.progressBar="";
-            this.movieHolder="";
-            this.movieCard="";
-            this.windowMargin="";
+            this.element = element,
+            this.plugin,
+            this.loaded,
+            this.loading,
+            this.response,
+            this.logo,
+            this.menuBar,
+            this.genre,
+            this.genres,
+            this.spinner,
+            this.featured,
+            this.lightBox,
+            this.playNow,
+            this.lightBoxTarget,
+            this.lightBoxClose,
+            this.searchBox,
+            this.includesPath,
+            this.totalFiles,
+            this.messageContainer,
+            this.messageContent,
+            this.progressBar,
+            this.movieHolder,
+            this.movieCard,
+            this.windowMargin;
 
             this.init();
 
@@ -103,7 +104,7 @@
                     plugin.closeLightBox();
 
                 });
-                $document.on('click', '.play-now', function() {
+                $document.on('click', playNow, function() {
                     plugin.startMovie();
 
                 });
@@ -118,6 +119,12 @@
                     $this.toggleClass('active');
                     $('body').toggleClass('side-bar-open');
 
+                    var sideBarHeight = $(sideBar).height();
+                    if($(sideBar).is(':visible')) {
+                        $(movieContainer).css({'min-height':sideBarHeight});
+                    } else {
+                        $(movieContainer).css({'min-height':0});
+                    }
                 });
 
                 $(searchBox).on('keyup', function(){
@@ -193,6 +200,7 @@
             spinner = '.spinner';
             featured = '.featured-movie';
             lightBox = '#lightBox';
+            playNow = '#playNow';
             lightBoxTarget = '#lightboxTarget';
             lightBoxClose = '.lightbox-close';
             movieHolder = '#movieHolder';
@@ -241,8 +249,6 @@
 
             genre =  $movieContainer.attr("data-genre");
             genre = (genre != 'Categories') ? genre : '';
-
-            $(windowMargin).addClass('loading');
 
             var data = {function : "getMovies", is_loaded : loaded, type: type, genre: genre};
             _call(data, 'GET', false).done(function(response) {
@@ -369,6 +375,11 @@
                     /* show the output*/
                     $movieInfo.html(movieInfoOutput);
                     $movieDetails.html(movieDetailsOutput);
+
+                    if (response.resume_at !== null) {
+                        $(playNow).html('<i class="fa fa-play-circle"></i> RESUME');
+                    }
+
                     /* display the lightbox */
                     $(lightBoxTarget).css({
                         'opacity': '1',
@@ -387,11 +398,13 @@
             _call(data, 'GET', false).done(function(response) {
                 $(movieHolder).html('<video autoplay="autoplay"><source src="' + response.target + '"></video>');
                 $('video').PopStopPlayer({
+                    'movieId' : response.movie_id,
                     'posterPath': response.poster_path,
                     'title': response.title,
                     'year' : response.release_date.split('-')[0],
                     'stars' : plugin.showStars(response.stars),
                     'autoPlay': true,
+                    'resumeTime': (response.resume_at === null) ? 0 : response.resume_at,
                     'basePath': response.path
                 });
             });
@@ -400,14 +413,11 @@
             var $menuBar = $(menuBar);
             var $sideBar = $(sideBar);
             var $logo = $(logo);
-            var $movieContainer = $(movieContainer);
             /** Get the height of the elements */
             var documentHeight = $(document).height();
             var windowHeight = $(window).height();
             var windowTop = $(window).scrollTop();
             var menuTop = $(featured).height();
-            var sideBarHeight = $(sideBar).height();
-
 
             if (windowTop >= menuTop) {
                 $menuBar.addClass('menu-bar-sticky');
@@ -417,12 +427,6 @@
                 $sideBar.removeClass('side-bar-sticky');
                 $menuBar.removeClass('menu-bar-sticky');
                 $logo.removeClass('logo-sticky');
-            }
-
-            if($menuBar.is(':visible')) {
-               $movieContainer.css({'min-height':sideBarHeight});
-            } else {
-                $movieContainer.css({'min-height':0});
             }
 
             if((windowTop + windowHeight) === documentHeight)  //user scrolled to bottom of the page?
@@ -489,7 +493,6 @@
                    plugin.updateMovies();
                    break;
                default:
-                   console.log(step)
                    var title = '<i class="fa fa-cube"></i> Installation';
                    output ='<p>Before you can stream your movies we first have to locate them and fetch the movie information.'
                        +' If you have done everything on the list below you can go to the next step.</p>'

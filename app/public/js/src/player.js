@@ -8,46 +8,49 @@
     // default properties.
     var pluginName = "PopStopPlayer",
         defaults = {
+            movieId : "",
             autoPlay : "",
+            resumeTime : "",
             posterPath : "",
             title: "",
             year: "",
             stars : "",
-            basePath: ""
+            basePath : ""
 
 
         };
 
     // self constructor.
     function Plugin(element,options){
-        this.element = element;
-        this.options = $.extend({},defaults,options);
-        this.$player ="";
-        this.self =""
-        this.subtitles = "";
-        this.$movieTitle = "";
-        this.$moviePoster = "";
-        this.totalTime ="";
-        this.$progressBar="";
-        this.$playedTime="";
-        this.$currentVolume ="";
-        this.$playerButton ="";
-        this.$volumeIcon ="";
-        this.$volumeControl ="";
-        this.$progressControl ="";
-        this.$normalScreenButton ="";
-        this.buffer ="";
-        this.$fullScreenButton ="";
-        this.fullScreenStatus ="";
-        this.updatedTime ="";
-        this.$closeButton ="";
-        this.$movieHolder = "";
-        this.$playerControls = "";
-        this.subtitleMenuButton = "";
-        this.subtitleMenu = "";
-        this.subtitleDisplay = "";
-        this.subtitleHolder = "";
-        this.$controlsHolder = "";
+        this.element = element,
+        this.options = $.extend({},defaults,options),
+        this.$player,
+        this.self,
+        this.subtitles,
+        this.movieId,
+        this.$movieTitle,
+        this.$moviePoster,
+        this.totalTime,
+        this.$progressBar,
+        this.$playedTime,
+        this.$currentVolume,
+        this.$playerButton,
+        this.$volumeIcon,
+        this.$volumeControl,
+        this.$progressControl,
+        this.$normalScreenButton,
+        this.buffer,
+        this.$fullScreenButton,
+        this.fullScreenStatus,
+        this.updatedTime,
+        this.$closeButton,
+        this.$movieHolder,
+        this.$playerControls,
+        this.subtitleMenuButton,
+        this.subtitleMenu,
+        this.subtitleDisplay,
+        this.subtitleHolder,
+        this.$controlsHolder;
 
         this.init();
     }
@@ -63,6 +66,10 @@
         });
     }
     function _destroy() {
+        var currentTime = $player[0].currentTime;
+        var data = {function : "saveCurrentTime", current_time : currentTime, movie_id : movieId};
+        $.ajax({type: 'POST', url: 'bootstrap.php', data: data, dataType: 'json'});
+
         //Destroy the plugin instance
         $.data(this, 'plugin_' + pluginName, null);
         $('.PopStopPlayer').remove();
@@ -71,6 +78,7 @@
         init: function(){
             $player = $(this.element);
             fullScreenStatus = false;
+            movieId = this.options.movieId;
             moviePoster = this.options.posterPath;
             movieTitle = this.options.title;
             movieYear = this.options.year;
@@ -83,6 +91,10 @@
             this.getControls();
             this.getSubtitles();
             _loader();
+
+            if(this.options.resumeTime.length > 0) {
+                $player[0].currentTime = this.options.resumeTime;
+            }
 
             if(this.options.autoPlay === true) {
                 self.playerStatus();
@@ -199,6 +211,10 @@
                         _destroy();
                         break;
                 }
+            });
+
+            $(window).on('beforeunload', function(){
+                _destroy();
             });
         },
         getControls:function() {
@@ -379,18 +395,15 @@
         },
         timeFormat:function (seconds){
             //Calculate the time in minutes and seconds
-            var minutes = Math.floor(seconds / 60);
-            var seconds = Math.floor(seconds % 60);
-
-            minutes = (minutes >= 10) ? minutes : "0" + minutes;
-            seconds = (seconds >= 10) ? seconds : "0" + seconds;
-            var format = minutes + ":" + seconds;
-
-            if (format.replace(/:/g,"").length == 4) {
-                format = '00:' + format;
-            }
-
-            return format;
+            var hours = Math.floor(seconds/3600); //Get whole hours
+            hours = (hours < 10 ? '0' + hours : hours);
+            seconds -= hours*3600;
+            var minutes = Math.floor(seconds/60); //Get remaining minutes
+            minutes = (minutes < 10 ? '0' + minutes : minutes);
+            seconds -= minutes*60;
+            seconds = seconds.toFixed(0);
+            seconds = (seconds < 10 ? '0' + seconds : seconds);
+            return hours +":"+ minutes +":"+ seconds;
         },
         getSubtitles:function() {
             var data = {function : "getMovieSubtitles", path : this.options.basePath};

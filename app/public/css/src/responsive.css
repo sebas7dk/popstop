@@ -70,7 +70,7 @@
     }
 
     .window .side-bar  #genresList{
-        height: 245px;
+        height: 275px;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
@@ -83,6 +83,10 @@
         margin: 2%;
         max-width: none;
         width: 46%;
+    }
+
+    .window .main .movie-list .list li:after {
+        font-size: 0px;
     }
 
     .side-bar-open .list > li {
@@ -221,8 +225,7 @@
 
     .control-bar {
         width: 100%;
-        bottom: 31px;
-        height: 40px;
+        height: 70px;
         position: absolute;
     }
 
@@ -453,6 +456,11 @@
 
 
 @media only screen and (min-width : 1200px) and (max-width: 1600px)  {
+
+    .window .main .movie-list .list > li {
+        max-width: 233px;
+    }
+
     #lightboxTarget .movie-card .container {
         width: 70%;
     }
