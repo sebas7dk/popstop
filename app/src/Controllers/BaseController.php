@@ -239,7 +239,7 @@ class BaseController {
      */
     public function updateFiles()
     {
-        $path = $this->db->fetch("SELECT movie_id, path FROM files", false, true);
+        $path = $this->db->fetch("SELECT movie_id, target FROM files", false, true);
 
         $not_found = [];
         $count = 0;
@@ -252,7 +252,6 @@ class BaseController {
                         $data = $this->createArraysToInsert($movie, $file);
                         $this->db->insert('movies', $data['movie']);
                         $this->db->insert('files', $data['file']);
-                        sleep(1);
                         $count++;
                     } else {
 //                        $this->db->bind([
