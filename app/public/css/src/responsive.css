@@ -22,7 +22,6 @@
 
     .window .main .featured-movie {
         height: 300px;
-        background-position: center center;
     }
 
     .window .main .featured-movie:after {
@@ -150,6 +149,7 @@
         position: absolute;
         bottom: 50px;
         left: 15px;
+        z-index: 999;
     }
 
     #lightboxTarget .movie-card .column-left .tags .tag {
@@ -187,6 +187,13 @@
         line-height: 15px;
     }
 
+    #lightboxTarget .movie-card .cover-holder {
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+    }
+
     #lightboxTarget .movie-card .button {
         font-size: 16px;
         width: 100%;
@@ -194,6 +201,7 @@
         left: 0;
         bottom: 10px;
         border-radius: 0!important;
+        position: absolute;
     }
 
     .lightbox-close {
@@ -249,6 +257,15 @@
 
 }
 @media only screen and (min-width : 480px) and (max-width : 690px) {
+    .logo-sticky {
+        margin-left: 0;
+    }
+
+    .window .main .menu-bar .right {
+        margin-right: 15px;
+    }
+
+
     .window .main .featured-movie {
         height: 300px;
         background-position: center center;
@@ -285,10 +302,9 @@
         margin-left: 190px;
     }
 
-    .window .side-bar {
+    .window .side-bar  #genresList{
+        height: 130px;
         overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-
     }
 
     .side-bar-open .list {
@@ -296,14 +312,14 @@
     }
 
     .window .main .movie-list .list > li {
-        margin: 2%;
+        margin: 1%;
         max-width: none;
-        width: 46%;
+        width: 29%;
     }
 
     .side-bar-open .list > li {
-        margin: 2%!important;
-        width: 100%!important;
+        margin: 1%!important;
+        width: 40%!important;
     }
 
 
@@ -335,40 +351,112 @@
         width: 50px;
     }
 
+    #lightboxTarget .movie-card {
+        padding: 30px 0;
+    }
+
     #lightboxTarget .movie-card .hero {
-        height: 245px;
+        height: 190px;
     }
 
 
     #lightboxTarget .movie-card .container {
         width: 90%;
-    }
-
-    #lightboxTarget .movie-card .cover {
-        width: 140px;
-        top: 220px;
-    }
-
-    #lightboxTarget .movie-card .button {
-        font-size: 15px;
-        width: 120px;
-        bottom: 180px;
+        height: 370px;
     }
 
     #lightboxTarget .movie-card .column-left {
-        padding-left: 50px;
-        padding-top: 130px;
-        width: 15%;
+        float: none;
+        padding-left: 0;
+        padding-top: 0;
+        height: 0;
     }
 
-    #lightboxTarget .movie-card .tag {
+    #lightboxTarget .movie-card .column-left .tags {
+        position: absolute;
+        bottom: 45px;
+        left: 15px;
+        z-index: 999;
+    }
+
+    #lightboxTarget .movie-card .column-left .tags .tag {
         font-size: 12px;
     }
 
+    #lightboxTarget .movie-card .cover-holder .cover,
+    #lightboxTarget .movie-card .column-left .runtime,
+    #lightboxTarget .movie-card .column-left br {
+        display: none;
+    }
+
+    #lightboxTarget .movie-card .details .bottom-bar .right {
+        font-size: 14px;
+    }
+
+    #lightboxTarget .movie-card .details .bottom-bar .title-container {
+        margin-left: 0;
+        font-size: 14px;
+    }
+
     #lightboxTarget .movie-card .column-right {
-        width: 70%;
+        padding-left: 0;
+        margin-left: 15px;
+        width: 85%;
+    }
+
+    #lightboxTarget .movie-card .column-right > p {
+        height: 75px;
+        overflow-y: auto;
+    }
+
+    #lightboxTarget .movie-card .description {
+        height: 260px;
+        font-size: 13px;
+        line-height: 15px;
+    }
+
+    #lightboxTarget .movie-card .cover-holder {
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+    }
+
+    #lightboxTarget .movie-card .button {
+        font-size: 16px;
+        width: 100%;
+        padding: 7px 0px;
+        left: 0;
+        bottom: 10px;
+        border-radius: 0!important;
+        position: absolute;
+
+    }
+
+    .control-bar {
+        width: 100%;
+        height: 70px;
+        position: absolute;
+    }
+
+    .time-holder {
+        padding: 10px 0 0 10px;
+    }
+
+    #movieInfo {
+        display: none;
+    }
+
+    #volume:hover #volumeControl,
+    #subtitleMenu:hover #subtitleDisplay{
+        bottom: 75px;
+    }
+
+    #messageContainer {
+        top: 40%;
     }
 }
+
 @media only screen and (min-width : 690px) and (max-width : 1110px)  {
     .window .main .featured-movie {
         height: 300px;

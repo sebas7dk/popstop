@@ -86,6 +86,7 @@ a {
     height: 400px;
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: center center;
     cursor: pointer;
 }
 .window .main .featured-movie .cover {
@@ -544,11 +545,10 @@ a {
 #lightboxTarget .movie-card .button {
     background: none repeat scroll 0 0 #F94F6A;
     font-size: 16px;
-    width: 165px;
+    width:  89.5%;
     padding: 7px 10px;
-    position: absolute;
-    left: 40px;
-    bottom: 184px;
+    position: relative;
+    bottom: 15px;
 }
 
 #lightboxTarget .movie-card .button:hover {
@@ -575,13 +575,18 @@ a {
     background-size: cover;
 }
 
-#lightboxTarget .movie-card .cover {
+#lightboxTarget .movie-card .cover-holder {
     width: 185px;
     height: 265px;
     position: absolute;
     top: 160px;
     left: 40px;
     z-index: 2;
+}
+
+
+#lightboxTarget .movie-card .cover-holder .cover {
+    width: 100%;
 }
 
 #lightboxTarget .movie-card .details {
@@ -626,7 +631,7 @@ a {
 
 #lightboxTarget .movie-card .column-left {
     padding-left: 50px;
-    padding-top: 125px;
+    padding-top: 135px;
     width: 20%;
     float: left;
     text-align: left;

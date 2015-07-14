@@ -141,7 +141,7 @@ class MovieController extends BaseController {
     }
 
     /**
-     * Get the movie file location to play in the browser
+     * Save the current time of the movie
      *
      * @param array $params
      * @return array
@@ -151,6 +151,9 @@ class MovieController extends BaseController {
             "current_at" => $params['current_time'],
             "movie_id" => $params['movie_id']
         ]);
+
         $this->db->update("UPDATE movies SET resume_at = :current_at WHERE movie_id = :movie_id");
+
+        return ['saved' => true];
     }
 }
