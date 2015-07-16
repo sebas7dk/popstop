@@ -254,12 +254,13 @@ class BaseController {
                         $this->db->insert('files', $data['file']);
                         $count++;
                     } else {
-//                        $this->db->bind([
-//                            "target" => $file['target'],
-//                            "path" => $file['path'],
-//                            "movie_id" => $movie['id'],
-//                        ]);
-//                        $this->db->update("UPDATE files SET target = :target, path = :path  WHERE movie_id = :movie_id");
+                        $this->db->bind([
+                            "target" => $file['target'],
+                            "path" => $file['path'],
+                            "movie_id" => $movie['id']
+                        ]);
+
+                        $this->db->update("UPDATE files SET target = :target, path = :path WHERE movie_id = :movie_id");
                     }
                 } else {
                     $not_found[] = ["file" => $file['name']];

@@ -15,7 +15,13 @@ class Scan {
     protected $directory;
 
     /** @var array  */
-    protected $filter = ['mp4', 'mkv', 'avi', 'mov'];
+    protected $filter = [
+        'mp4', 'mkv', 'avi',
+        'mov', 'webm', 'vob',
+        'ogv', 'ogg', 'wmv',
+        'rm', 'mpeg', 'mpg',
+        'm4v'
+    ];
 
     /** @var \Response */
     protected $response;
@@ -29,6 +35,7 @@ class Scan {
 
     /**
      * Filter the files with a movie extension
+     *
      * @return array
      */
     public function getFiles() {
@@ -49,6 +56,12 @@ class Scan {
         return $content;
     }
 
+    /**
+     * Filter the files with a .srt extension
+     *
+     * @var string $path
+     * @return array
+     */
     public function getSubtitles($path) {
         $subtitles = [];
         foreach ($this->getIterator($path) as $item) {
@@ -64,6 +77,7 @@ class Scan {
 
     /**
      * Index the all the files in the directory and sub directories
+     *
      * @return RecursiveDirectoryIterator
      */
     protected function getIterator($directory = null) {

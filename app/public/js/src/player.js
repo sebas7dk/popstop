@@ -70,7 +70,7 @@
         var data = {function : "saveCurrentTime", current_time : currentTime, movie_id : movieId};
         $.ajax({type: 'POST', url: 'bootstrap.php', data: data, dataType: 'json'});
 
-        //Destroy the plugin instance
+        /* Destroy the plugin instance */
         $.data(this, 'plugin_' + pluginName, null);
         $('.PopStopPlayer').remove();
     }
@@ -101,16 +101,16 @@
             }
 
             $player.on('loadedmetadata', function() {
-                //Show the total play time
+                /* Show the total play time */
                 $totalTime.html(self.timeFormat($player[0].duration));
-                //Show the current volume level
+                /* Show the current volume level */
                 $currentVolume.css("height", $player[0].volume * 100 + "%");
             });
             $player.on("timeupdate", function() {
                 var currentTime = $player[0].currentTime;
                 var duration = $player[0].duration;
                 var bufferEnd =  $player[0].buffered.end(0);
-                //Show the played & buffered time
+                /* Show the played & buffered time */
                 //$loadedBar.css("width", self.toPercentage(bufferEnd,duration) + "%");
                 $playedTime.text(self.timeFormat(currentTime));
                 $progressBar.css("width", self.toPercentage(currentTime,duration) + "%");
@@ -125,68 +125,68 @@
                 _destroy();
             });
             $volumeControl.mousedown(function(e) {
-                //Adjust the dragged volume level
+                /* Adjust the dragged volume level */
                 volumeDrag = true;
                 $player[0].muted = false;
                 self.updateVolume(e.pageY);
             });
             $volumeControl.mouseup(function(e) {
-                //Adjust the dragged volume level
+                /* Adjust the dragged volume level */
                 if(volumeDrag) {
                     volumeDrag = false;
                     self.updateVolume(e.pageY);
                 }
             });
             $volumeControl.mousemove(function(e) {
-                //Adjust the dragged volume level
+                /* Adjust the dragged volume level */
                 if(volumeDrag) {
                     self.updateVolume(e.pageY);
                 }
             });
             $progressControl.mousedown(function(e) {
-                //Adjust the dragged time
+                /*Adjust the dragged time */
                 timeDrag = true;
                 self.updateBar(e.pageX);
             });
             $progressControl.mouseup(function(e) {
-                //Adjust the dragged time
+                /* Adjust the dragged tim*/
                 if(timeDrag) {
                     timeDrag = false;
                     self.updateBar(e.pageX);
                 }
             });
             $progressControl.mousemove(function(e) {
-                //Adjust the dragged time
+                /* Adjust the dragged time */
                 if(timeDrag) {
                     self.updateBar(e.pageX);
                 }
             });
             $playerButton.on('click', function(){
-                //Play pause
+                /* Change the player status */
                 self.playerStatus();
             });
 
             $volumeIcon.on('click', function(){
-                //Mute the volume
+                /* Mute the volume */
                 self.muteSound();
             });
 
             $fullScreenButton.on('click', function(){
-                //Show hide fullscreen
+                /* Show hide fullscreen */
                 self.fullscreenToggle();
             });
             $closeButton.on('click', function(){
                 _destroy();
             });
-            $controlsHolder.hover(
-                //Show or hide the controls
-                function () {
-                    self.showControls('show');
-                },
-                function () {
-                    self.showControls('hide');
-                }
-            );
+            $controlsHolder.mouseenter(function() {
+                /* Show the controls */
+                self.showControls('show');
+            });
+
+            $controlsHolder.mouseleave(function() {
+                /* Hide the controls */
+                self.showControls('hide');
+            });
 
             $(document).on('click', '.subtitle-item', function(){
                 var $this = $(this);
@@ -218,7 +218,7 @@
             });
         },
         getControls:function() {
-            //Get the variables for the controls
+            /* Get the variables for the controls */
             $totalTime = $('#totalTime'),
             $progressBar = $('#played'),
             $playedTime = $('#playingTime'),
@@ -229,26 +229,24 @@
             $progressControl = $("#progressBar"),
             $normalScreenButton = $("#normalScreenButton"),
             $loadedBar = $("#loadedBar"),
-            $fullScreenButton = $("#fullScreenButton");
-            $closeButton = $("#closeButton");
-            $movieHolder = $('#movieHolder');
-            $playerControls = $('#controls');
-            $controlsHolder = $('.holder');
-            $subtitleMenu = $('#subtitleMenu');
-            $subtitleDisplay = $('#subtitleDisplay');
+            $fullScreenButton = $("#fullScreenButton"),
+            $closeButton = $("#closeButton"),
+            $movieHolder = $('#movieHolder'),
+            $playerControls = $('#controls'),
+            $controlsHolder = $('.holder'),
+            $subtitleMenu = $('#subtitleMenu'),
+            $subtitleDisplay = $('#subtitleDisplay'),
             $subtitleHolder = $('#subtitleHolder');
         },
 
         showControls:function(status) {
-            //Show or hide the controls depending on the status
+            /*Show or hide the controls depending on the status*/
             switch (status) {
                 case 'show':
-                    if ($playerControls.css('opacity') !== '1') {
-                        $playerControls.animate({opacity: 1}, 1500);
-                    }
+                    $playerControls.animate({opacity: 1}, 1500);
                     break;
                 case 'hide':
-                    $playerControls.delay(2000).animate({opacity: 0}, 1500);
+                    $playerControls.delay(4000).animate({opacity: 0}, 1500);
                     break;
                 case 'play':
                     $closeButton.animate({top: '-60px'});
@@ -260,34 +258,25 @@
         },
 
         createPlayer:function(){
-            //Create a new div with the player controls
+            /*Create a new div with the player controls*/
             $(this.element).wrap('<div class="PopStopPlayer" />');
             var $PopStopPlayer = $(".PopStopPlayer");
 
-            var output = '<div class="holder">'
-                +'<div id="controls"><div class="control-bar">'
-                +'<div id="progressBar"><div id="played"></div><div id="loadedBar"></div></div>'
-                +'<ul class="left"><li><div class="play" id="playerButton"></div></li>'
-                +'<li><div class="time-holder"><span id="playingTime">00:00</span> '
-                +'<span>/</span> <span id="totalTime">00:00</span></div></li>'
+            var output = '<div class="holder"><div id="controls"><div class="control-bar"><div id="progressBar">'
+                +'<div id="played"></div><div id="loadedBar"></div></div><ul class="left"><li>'
+                +'<div class="play" id="playerButton"></div></li><li><div class="time-holder">' +
+                '<span id="playingTime">00:00</span><span>/</span> <span id="totalTime">00:00</span></div></li>'
                 +'<li><div id="movieInfo">'+ movieTitle +' ('+ movieYear +') '+ movieRating +' </div></li></ul>'
-                +'<ul class="right"><li><div id="volume">'
-                +'<div id="volumeIcon" class="volume-max"><span></span></div>'
-                +'<div id="volumeControl">'
-                +'<div id="volumePosition">'
-                +'<div id="currentVolume"></div></div></div></div></li>'
-                +'<li><div id="subtitleMenu">'
-                +'<div id="subtitleMenuIcon"></div>'
-                +'<div id="subtitleDisplay"></div></div></li>'
-                +'<li><div id="fullScreenButton"><span></span></div></li></ul>'
-                +'</div></div></div>'
-                +'<div id="subtitleHolder"></div>'
-                +'<span id="closeButton"></span>';
+                +'<ul class="right"><li><div id="volume"><div id="volumeIcon" class="volume-max"><span></span></div>'
+                +'<div id="volumeControl"><div id="volumePosition"><div id="currentVolume"></div></div></div></div></li>'
+                +'<li><div id="subtitleMenu"><div id="subtitleMenuIcon"></div><div id="subtitleDisplay"></div></div></li>'
+                +'<li><div id="fullScreenButton"><span></span></div></li></ul></div></div></div>'
+                +'<div id="subtitleHolder"></div><span id="closeButton"></span>';
 
             $PopStopPlayer.append(output);
         },
         updateVolume:function(yPosition) {
-            //Get the position
+            /*Get the position of the volume bar */
             var position = yPosition - $volumeControl.offset().top;
             var percentage = 100 - (100 * position / $volumeControl.height());
 
@@ -298,14 +287,14 @@
                 percentage = 0;
             }
             $player[0].volume = percentage / 100;
-            //change sound icon based on volume
+            /* Change the sound icon based on the volume */
             $currentVolume.css('height' , percentage + "%");
             this.speakerChange(percentage);
         },
         playerStatus:function() {
-            //Remove the current class
+            /* Remove the current class */
             $playerButton.removeClass($playerButton.attr("class"));
-            //Add the class depending on the play status
+            /*Add the class depending on the play status*/
             if ($player[0].paused){
                 this.showControls('play');
                 $player[0].play();
@@ -317,7 +306,7 @@
             }
         },
         muteSound:function(){
-            //Mute the player
+            /* Mute the player */
             if($player.get(0).muted){
                 $volumeIcon.toggleClass("mute volume-max");
                 $currentVolume.css('height' , "100%");
@@ -329,28 +318,28 @@
             }
         },
         updateBar:function(xPosition) {
-            //Video duration
+           /*Video duration*/
             var max_duration = $player.get(0).duration;
-            //Get the click position
+            /* Get the click position */
             var position = xPosition - $progressControl.offset().left;
             var percentage = 100 * position / $progressControl.width();
 
-            //Check within range
+            /* Check within range */
             if(percentage > 100) {
                 percentage = 100;
             }
             if(percentage < 0) {
                 percentage = 0;
             }
-            //Update progress bar and video current time
+            /* Update progress bar and video current time */
             $progressBar.css('width', percentage+'%');
             $player[0].currentTime = max_duration * percentage / 100;
         },
         speakerChange:function(percentage) {
-            //Remove the current class
+            /* Remove the current class */
             $volumeIcon.removeClass($volumeIcon.attr("class"));
 
-            //Add the class depending on the percentage
+            /* Add the class depending on the percentage */
             if (percentage > 60){
                 $volumeIcon.addClass("volume-max");
             } else if(percentage > 30){
@@ -363,8 +352,8 @@
             }
         },
 
-        fullscreenToggle:function(o){
-            //Get the fullscreen status in multiple browsers
+        fullscreenToggle:function(){
+            /*Get the fullscreen status in multiple browsers */
             if (fullScreenStatus) {
                 fullScreenStatus = false;
                 if (document.exitFullscreen) {
@@ -390,22 +379,25 @@
             }
         },
         toPercentage:function(num, amount){
-            //Return the percentage
+            /* Return the percentage */
             return (num/amount*100).toFixed(2);
         },
         timeFormat:function (seconds){
-            //Calculate the time in minutes and seconds
-            var hours = Math.floor(seconds/3600); //Get whole hours
+            /* Get whole hours */
+            var hours = Math.floor(seconds/3600);
             hours = (hours < 10 ? '0' + hours : hours);
             seconds -= hours*3600;
-            var minutes = Math.floor(seconds/60); //Get remaining minutes
+            /* Get remaining minutes */
+            var minutes = Math.floor(seconds/60);
             minutes = (minutes < 10 ? '0' + minutes : minutes);
             seconds -= minutes*60;
             seconds = seconds.toFixed(0);
             seconds = (seconds < 10 ? '0' + seconds : seconds);
+            /* Calculate the time in minutes and seconds */
             return hours +":"+ minutes +":"+ seconds;
         },
         getSubtitles:function() {
+            /* Get the subtitle file in the directory */
             var data = {function : "getMovieSubtitles", path : this.options.basePath};
             $.ajax({type: 'GET', url: 'bootstrap.php', data:data, dataType: 'json'}).done(function(response) {
                 var output = '<ul>';

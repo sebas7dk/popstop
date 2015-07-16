@@ -13,6 +13,7 @@
 class Response {
     /**
      * Return a JSON response
+     *
      * @params array|string
      * return void
      */
