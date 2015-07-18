@@ -319,7 +319,7 @@
                  _call(data, 'POST', false).done(function(response) {
                      loading = true;
                      if (response == undefined || response == null || response.length == 0) {
-                         $(movieContainer).html('<div class="no-results"><i class="fa fa-search"></i> Oops there are no search results for ' + value + '..</div>');
+                         $(movieContainer).html('<div class="no-results"><p><i class="fa fa-search"></i> Oops there are no search results for ' + value + '..</p></div>');
                      } else {
                          var output = '';
                          $.each(response, function (key, val) {
@@ -377,7 +377,9 @@
                     $movieDetails.html(movieDetailsOutput);
 
                     if (response.resume_at !== null) {
-                        $(playNow).html('<i class="fa fa-play-circle"></i> RESUME');
+                        console.log(response.resume_at);
+                        var text = (response.resume_at == 0) ? 'WATCH AGAIN' : 'RESUME';
+                        $(playNow).html('<i class="fa fa-play-circle"></i> ' + text);
                     }
 
                     /* display the lightbox */

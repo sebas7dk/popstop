@@ -252,10 +252,17 @@ a {
 }
 
 .window .main .no-results {
-    color: #279CEB;
+    background: #279CEB;
+    color: #FFFFFF;
     font-size: 20px;
     font-weight: bold;
     margin: 30px 30px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.window .main .no-results > p {
+    margin: 5px;
 }
 
 /* SIDE-MENU
@@ -399,7 +406,7 @@ a {
     flex: auto;
     cursor: pointer;
     max-width: 250px;
-    margin: 8px 10px;
+    margin: 8px 11px;
 }
 .window .main .movie-list .list li:hover:after {
     opacity: 1;

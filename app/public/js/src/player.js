@@ -122,6 +122,7 @@
                 }
             });
             $player.on("ended", function () {
+                $player[0].currentTime = null;
                 _destroy();
             });
             $volumeControl.mousedown(function(e) {

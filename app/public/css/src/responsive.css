@@ -114,6 +114,13 @@
         right: 20px;
     }
 
+    .window .main .no-results {
+        background: none;
+        color: #279CEB;
+        font-size: 14px;
+        margin: 15px 10px;
+    }
+
     .spinner {
         top: 30%;
         height: 50px;
@@ -344,6 +351,10 @@
         font-size: 12px;
     }
 
+    .window .main .no-results {
+        font-size: 15px;
+    }
+
     .spinner {
         top: 30%;
         height: 50px;
@@ -485,6 +496,7 @@
 
     .window .main .movie-list .list li {
         max-width: 240px;
+        margin: 8px 10px;
     }
 
 
@@ -496,15 +508,19 @@
         height: 260px;
     }
 
+    #lightboxTarget .movie-card .cover-holder {
+        width: 170px;
+        top: 95px;
+    }
+
     #lightboxTarget .movie-card .cover {
-        width: 140px;
+        width: 170px;
         top: 138px;
     }
 
     #lightboxTarget .movie-card .button {
-        font-size: 15px;
-        width: 120px;
-        bottom: 180px;
+        width: 88%;
+
     }
 
     #lightboxTarget .movie-card .column-left {
@@ -518,7 +534,7 @@
     }
 
     #lightboxTarget .movie-card .column-right {
-        width: 70%;
+        margin-left: 55px;
     }
 
     .control-bar {
@@ -551,13 +567,16 @@
         width: 70%;
     }
 
+    #lightboxTarget .movie-card .cover-holder {
+        top: 155px;
+    }
+
     #lightboxTarget .movie-card .cover {
         width: 170px;
     }
 
     #lightboxTarget .movie-card .button {
-        width: 150px;
-        bottom: 194px;
+        width: 89%;
     }
 
     #lightboxTarget .movie-card .column-left {
