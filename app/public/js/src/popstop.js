@@ -579,7 +579,7 @@
                     }
                     output +='</ul>'
                     +'<p>Rename the file(s) or add the year of the movie to the file name and try again.</p>'
-                    +'<div step-id="3" class="button step" id="installButton" style="left:10px">Try Again</div>'
+                    +'<div step-id="7" class="button step" id="installButton" style="left:10px">Try Again</div>'
                     +'<div step-id="6" class="button step" id="installButton">Skip</div>';
                 }
 

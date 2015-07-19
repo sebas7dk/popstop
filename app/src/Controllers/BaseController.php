@@ -25,7 +25,7 @@ class BaseController {
     /**
      * @var string
      */
-    protected $cookie_name = 'popit_cookie';
+    protected $cookie_name = '_popstop';
 
     /**
      * @var int
