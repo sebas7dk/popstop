@@ -406,7 +406,7 @@ a {
     flex: auto;
     cursor: pointer;
     max-width: 250px;
-    margin: 8px 11px;
+    margin: 8px 10px;
 }
 .window .main .movie-list .list li:hover:after {
     opacity: 1;
