@@ -34,7 +34,7 @@ class DBlite  {
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {
             // sqlite3 throws an exception when it is unable to connect
-            $this->response->toJSON("Unable to connect to the database");
+            throw new Exception("Unable to connect to the database");
         }
     }
 
@@ -88,7 +88,7 @@ class DBlite  {
         try {
             $this->db->exec($query);
         } catch (\PDOException $e) {
-            $this->response->toJSON($e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
 
@@ -128,7 +128,7 @@ class DBlite  {
             $sth = $this->bindParams($sth);
             $sth->execute();
         } catch (\PDOException $e) {
-            $this->response->toJSON($e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
 
@@ -155,7 +155,7 @@ class DBlite  {
             $sth->execute($prepare);
 
         } catch(\PDOException $e) {
-            $this->response->toJSON($e->getMessage());
+            throw new Exception($e->getMessage());
         }
 
         return $sth;

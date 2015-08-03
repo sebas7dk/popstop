@@ -67,11 +67,18 @@ class MovieController extends BaseController {
         //get current starting point of records
         $position = ($params['is_loaded']);
         $genre = (!empty($params['genre'])) ? $params['genre'] : '';
-        $this->db->bind(["position" => $position, "batch" => $batch, "genre" => "%$genre%"]);
-
+        $cast = (!empty($params['cast'])) ? $params['cast'] : '';
+        $this->db->bind([
+            "position" => $position,
+            "batch" => $batch,
+            "genre" => "%$genre%",
+            "cast" => "%$cast%"
+        ]);
 
         $movies =  $this->db->fetch("SELECT * FROM movies INNER JOIN files ON movies.movie_id = files.movie_id
-                                             WHERE (',' || genres || ',') LIKE :genre $query LIMIT :position, :batch");
+                                     WHERE (',' || genres || ',') LIKE :genre
+                                     AND (',' || casts || ',') LIKE :cast
+                                     $query LIMIT :position, :batch");
 
         return ['movies' => $movies, 'batch' => $batch];
     }
@@ -127,6 +134,27 @@ class MovieController extends BaseController {
         usort($array, "sortAlphabetically");
 
         return array_count_values($array);
+    }
+
+    /**
+     * Get the movie cast by ID
+     *
+     * @param array $params
+     * @return array
+     */
+    public function getMovieCastById($params) {
+        $this->db->bind(["id" => $params['id']]);
+        $movie =  $this->db->fetch("SELECT casts FROM movies WHERE movie_id = :id", true);
+
+        $movieCast = explode(',', $movie['casts']);
+        $casts = [];
+        foreach($movieCast as $castId)
+        {
+            $this->db->bind(["cast_id" => $castId]);
+            $casts[] = $this->db->fetch("SELECT * FROM casts WHERE cast_id = :cast_id", true);
+        }
+
+        return ['casts' => $casts];
     }
 
     /**

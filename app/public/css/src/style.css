@@ -251,6 +251,10 @@ a {
     cursor: pointer;
 }
 
+.window .main .menu-bar .settings:hover {
+    color: #279CEB;
+}
+
 .window .main .no-results {
     background: #279CEB;
     color: #FFFFFF;
@@ -406,7 +410,7 @@ a {
     flex: auto;
     cursor: pointer;
     max-width: 250px;
-    margin: 8px 10px;
+    margin: 15px 10px 2px;
 }
 .window .main .movie-list .list li:hover:after {
     opacity: 1;
@@ -630,7 +634,7 @@ a {
 
 #lightboxTarget .movie-card .description {
     bottom: 0px;
-    height: 300px;
+    height: 350px;
     font-size: 14px;
     line-height: 26px;
 }
@@ -1094,6 +1098,128 @@ body:not(:-moz-handler-blocked) #messageContainer form input[type="checkbox"] {
     color: #c7254e;
     background-color: #f9f2f4;
     border-radius: 4px;
+}
+
+/* TABS
+---------------------------
+--------------------------- */
+
+.tab-wrap {
+  width: 100%;
+  float: none;
+  list-style: none;
+  position: relative;
+  margin: 0 auto;
+  padding: 0;
+  text-align: left;
+}
+
+.tab-wrap input[type=radio] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+.tab-wrap li {
+  float: left;
+  display: block;
+}
+
+.tab-wrap label {
+    display: inline-block;
+    margin: 0 0 -1px;
+    padding: 15px 25px;
+    font-weight: 600;
+    text-align: center;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+.label-1 {
+  z-index: 100;
+}
+
+.label-2 {
+  z-index: 90;
+}
+
+.tab-wrap .tab-content {
+  z-index: 200;
+  display: none;
+  overflow: auto;
+  height: 200px;
+  position: absolute;
+  left: 0;
+  padding: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.tab-wrap .tab-content > ul .image-wrap {
+    z-index: 1;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: .5em;
+    overflow: hidden;
+    width: auto;
+    line-height: 0;
+}
+
+.tab-wrap .tab-content > ul .image-wrap {
+    border: 4px solid white;
+    -moz-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+}
+.tab-wrap .tab-content > ul .image-wrap img {
+    max-width: 100%;
+    height: 200px;
+    width: 140px;
+    opacity: 1;
+    -moz-transition-property: opacity;
+    -o-transition-property: opacity;
+    -webkit-transition-property: opacity;
+    transition-property: opacity;
+    -moz-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+.tab-wrap .tab-content > ul li {
+    list-style: none;
+    float: left;
+    width: 22%;
+    margin-right: 3%;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+}
+
+.tab-wrap .tab-content span {
+    position: absolute;
+    bottom: 9%;
+    left: 3%;
+    width: 93%;
+    display: inline-block;
+    text-align: center;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: .75rem;
+    padding: 0px;
+    background: rgba(10, 10, 10, 0.8);
+}
+
+.tab-wrap [id^="tab"]:checked + label {
+    background: #ffffff;
+    color: #555;
+    border: 1px solid #ddd;
+    border-top: 2px solid #F94F6A;
+    border-bottom: 1px solid #fff;
+}
+
+
+.tab-wrap [id^="tab"]:checked ~ .tab-content{
+  display: block;
 }
 
 /* SCROLLBAR

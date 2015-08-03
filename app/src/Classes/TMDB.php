@@ -47,7 +47,7 @@ class TMDB {
         if($api_key) {
             $this->api_key = (string) $api_key;
         } else {
-            $this->response->toJSON('the API-KEY is missing');
+            throw new Exception('the API-KEY is missing');
         }
     }
 
@@ -116,7 +116,7 @@ class TMDB {
             $base_url = $config['images']['base_url'];
             $image_url = $base_url.$size.$path;
         } else {
-            $this->response->toJSON('No configuration available to create the image URL');
+            throw new Exception('No configuration available to create the image URL');
         }
 
         return $image_url;
@@ -127,7 +127,7 @@ class TMDB {
      *
      * @return array
      */
-    public function listGenres()
+    public function getGenres()
     {
         $genres = $this->call('genre/list');
         return $genres['genres'];
@@ -147,7 +147,7 @@ class TMDB {
 
 
     /**
-     * Makes the CURL call to the TDMB api
+     * Makes the CURL call to the TDMB API
      *
      * @param string $url
      * @param array $params
@@ -178,11 +178,11 @@ class TMDB {
 
             curl_close($curl);
         } else {
-            $this->response->toJSON('CURL-extension not loaded');
+            throw new Exception('CURL-extension not loaded');
         }
 
         if(!$result) {
-            $this->response->toJSON('Server error on: '.$response);
+            throw new Exception('Server error on: '.$response);
         }
 
         return $result;

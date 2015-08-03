@@ -11,12 +11,6 @@
  * @author Sebastian de Kok
  */
 class BaseController {
-
-    /**
-     * @var string|array
-     */
-    protected $response;
-
     /**
      * @var \TMDB
      */
@@ -46,8 +40,6 @@ class BaseController {
     public function __construct() {
         /** @var \Scan $scan */
         $this->scan = new Scan;
-        /** @var \Response $scan */
-        $this->response = new Response;
         /** @var \DBlite $scan */
         $this->db = new DBlite();
     }
@@ -216,9 +208,7 @@ class BaseController {
             if ($movie) {
                 $movie_exists = $this->checkIfFileExists($movie['id']);
                 if(!$movie_exists) {
-                    $data = $this->createArraysToInsert($movie, $file);
-                    $this->db->insert('movies', $data['movie']);
-                    $this->db->insert('files', $data['file']);
+                    $this->insertMovieData($movie, $file);
                     sleep(1);
                 }
             } else {
@@ -249,9 +239,7 @@ class BaseController {
                 if ($movie) {
                     $movie_exists = $this->checkIfFileExists($movie['id']);
                     if(!$movie_exists) {
-                        $data = $this->createArraysToInsert($movie, $file);
-                        $this->db->insert('movies', $data['movie']);
-                        $this->db->insert('files', $data['file']);
+                        $this->insertMovieData($movie, $file);
                         $count++;
                     } else {
                         $this->db->bind([
@@ -317,13 +305,15 @@ class BaseController {
     }
 
     /**
-     * Prepare an array with all the data for insertion
+     * Prepare and insert the movie data
      *
      * @param array $info
      * @param array $file
      * @return array
      */
-    protected function createArraysToInsert(array $info, array $file) {
+    protected function insertMovieData(array $info, array $file) {
+        $casts = null;
+        $casts = $this->tmdb->getCast($info['id']);
 
         $movie = [
             'movie_id' => $info['id'],
@@ -341,6 +331,7 @@ class BaseController {
             'vote_average' => $info['vote_average'],
             'vote_count' => $info['vote_count'],
             'genres' => $this->getGenres($info['genres']),
+            'casts'  => $this->getCastIds($casts),
             'stars' => $this->calculateStars($info['vote_average']),
         ];
 
@@ -351,7 +342,21 @@ class BaseController {
             'created_at' => $file['date']
         ];
 
-        return ['movie' => $movie, 'file' => $file];
+        $this->db->insert('movies', $movie);
+        $this->db->insert('files', $file);
+
+        foreach ($casts as $cast) {
+            $this->db->insert('casts',
+                [
+                    'cast_id' => $cast['cast_id'],
+                    'name' => $cast['name'],
+                    'character' => $cast['character'],
+                    'profile_path' => ($cast['profile_path']) ? $this->tmdb->getImageUrl($cast['profile_path'], 'w185') : '',
+                    'cast_order' => $cast['order']
+                ]
+            );
+        }
+
     }
 
     /**
@@ -377,12 +382,21 @@ class BaseController {
                        vote_average,
                        vote_count,
                        genres,
+                       casts,
                        stars,
                        resume_at
                  );
 
+                CREATE TABLE IF NOT EXISTS casts (
+                       cast_id INTEGER PRIMARY KEY,
+                       name VARCHAR,
+                       character VARCHAR,
+                       profile_path VARCHAR,
+                       cast_order INTEGER
+                );
+
                 CREATE TABLE IF NOT EXISTS files (
-                       movie_id INTEGER,
+                       movie_id INTEGER PRIMARY KEY,
                        path VARCHAR,
                        target VARCHAR,
                        created_at DATETIME
@@ -404,7 +418,7 @@ class BaseController {
      * @return void
      */
     protected function resetTables() {
-        $this->db->query('DELETE FROM movies; DELETE FROM files');
+        $this->db->query('DELETE FROM movies; DELETE FROM files; DELETE FROM casts');
     }
 
     /**
@@ -429,11 +443,11 @@ class BaseController {
      * @param array $castArray
      * @return string
      */
-    protected function getCasts($castArray) {
+    protected function getCastIds($castArray) {
 
         $casts = [];
         foreach($castArray as $cast) {
-            $casts[] = $cast["name"];
+            $casts[] = $cast["cast_id"];
         }
 
         return implode(",", $casts);

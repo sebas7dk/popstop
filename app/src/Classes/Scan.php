@@ -29,8 +29,6 @@ class Scan {
     public function __construct() {
         /** @var string $directory */
         $this->directory = getcwd(). "/content/";
-        /** @var \Response $response */
-        $this->response = new Response;
     }
 
     /**
@@ -93,7 +91,7 @@ class Scan {
         $recursive = new \RecursiveIteratorIterator($iterator);
 
         if (iterator_count($recursive) == 0) {
-            $this->response->toJSON("The content directory is empty.");
+            throw new Exception("The content directory is empty.");
         }
 
         return $recursive;

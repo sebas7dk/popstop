@@ -108,10 +108,11 @@
                     plugin.startMovie();
 
                 });
-                $document.on('click', '.tag, .genre', function(e) {
+                $document.on('click', '.tag, .genre, .cast', function(e) {
                     e.preventDefault();
                     var $this = $(this);
-                    plugin.getGenre($this);
+                    var type = $(this).attr('class') == 'cast' ? 'cast' : 'genre';
+                    plugin.getGenreOrCast(type, $this);
 
                 });
                 $('#side-menu-toggle').on('click', function() {
@@ -248,9 +249,9 @@
             var type = $movieContainer.attr("data-type");
 
             genre =  $movieContainer.attr("data-genre");
-            genre = (genre != 'Categories') ? genre : '';
+            cast = $movieContainer.attr("data-cast");
 
-            var data = {function : "getMovies", is_loaded : loaded, type: type, genre: genre};
+            var data = {function : "getMovies", is_loaded : loaded, type: type, genre: genre, cast :cast};
             _call(data, 'GET', false).done(function(response) {
 
                 var output = '';
@@ -284,7 +285,7 @@
             this.getMovies();
 
         },
-        getGenre:function($this) {
+        getGenreOrCast:function(type, $this) {
             var $movieContainer =  $(movieContainer);
             /* Change the total and loaded files*/
             loaded = 0;
@@ -292,11 +293,19 @@
             totalFiles = $this.attr("data-total");
             $movieContainer.attr('data-total', totalFiles);
 
-            genre = $this.attr("data-genre");
-            $(sideBar).find('#genresList li').removeClass('selected');
-            $(sideBar).find('#genresList li a[data-genre="' + genre + '"]').closest('li').addClass('selected');
+            switch (type) {
+                case 'genre':
+                    genre = $this.attr("data-genre");
+                    $(sideBar).find('#genresList li').removeClass('selected');
+                    $(sideBar).find('#genresList li a[data-genre="' + genre + '"]').closest('li').addClass('selected');
+                    $movieContainer.attr("data-genre", genre);
+                    break;
+                case 'cast':
+                    cast = $this.attr("data-cast");
+                    $movieContainer.attr("data-cast", cast);
+                    break;
+            }
 
-            $movieContainer.attr("data-genre", genre);
             this.getMovies();
             this.closeLightBox();
         },
@@ -337,7 +346,9 @@
              }
         },
         openLightBox:function($this) {
-            var data = {function : "getMovieById", id :  $this.attr("movie-id")};
+
+            var movieId =  $this.attr("movie-id");
+            var data = {function : "getMovieById", id : movieId};
             _call(data, 'GET', false).done(function(response) {
                 var stars = plugin.showStars(response.stars);
                 var year = response.release_date.split('-')[0];
@@ -347,7 +358,8 @@
                     var $backdropImage = $('.hero');
                     var $coverImage = $('#cover');
                     var $movieInfo = $('.column-left');
-                    var $overview = $('.column-right');
+                    var $overview = $('#overview');
+                    var $cast = $('#cast');
                     var $movieDetails = $('.details');
 
                     /*Left column with tags*/
@@ -368,13 +380,28 @@
                         + '<div class="title-container"><b>' + response.title + ' (' + year + ')</b></div>'
                         + '<div class="right">' + stars + '</div></div>';
 
+
                     $(movieHolder).attr('data-id', response.movie_id);
                     $backdropImage.css('background-image', 'url(' + response.cover_path + ')');
                     $coverImage.html('<img src="' + response.poster_path + '" alt="cover" class="cover" />');
                     $overview.html('<p>' + response.overview + '</p>');
+
                     /* show the output*/
                     $movieInfo.html(movieInfoOutput);
                     $movieDetails.html(movieDetailsOutput);
+
+                    $cast.html('');
+                    var data = {function : "getMovieCastById", id :  movieId};
+                    _call(data, 'GET', false).done(function(response) {
+                        var castOutput =  '<ul>';
+                        $.each(response.casts, function (index, cast) {
+                            castOutput +='<li class="cast" data-cast="'+ cast.cast_id +'"><div class="image-wrap">'
+                                    +'<img src="'+ cast.profile_path +'"></div><span>'+ cast.name +  '</span></li>';
+
+                        });
+                        castOutput += '</ul>';
+                        $cast.html(castOutput);
+                    });
 
                     if (response.resume_at !== null) {
                         console.log(response.resume_at);
