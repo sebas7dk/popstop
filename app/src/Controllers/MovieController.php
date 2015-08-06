@@ -184,4 +184,27 @@ class MovieController extends BaseController {
 
         return ['saved' => true];
     }
+
+    /**
+     * Clean the database with the files that don't exist
+     *
+     * @return array
+     */
+    public function cleanDatabase() {
+        $files =  $this->db->fetch("SELECT docid, movies.movie_id, target FROM movies LEFT JOIN files
+                                    ON movies.movie_id = files.movie_id");
+
+        $i = 0;
+        foreach($files as $file) {
+           $doc_id = $file['docid'];
+           $movie_id = $file['movie_id'];
+
+            if(!file_exists(getcwd() . "/" . $file['target'])) {
+                $this->db->query("DELETE FROM movies WHERE docid = $doc_id; DELETE FROM files WHERE movie_id = $movie_id");
+                $i++;
+            }
+        }
+
+        return ['cleaned' => $i];
+    }
 }

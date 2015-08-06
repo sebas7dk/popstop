@@ -10,7 +10,7 @@
  *
  * @author Sebastian de Kok
  */
-class BaseController {
+abstract class BaseController {
     /**
      * @var \TMDB
      */
@@ -36,6 +36,11 @@ class BaseController {
      */
     protected $auto_update = 0;
 
+    /**
+     * @var int
+     */
+    protected $auto_clean = 0;
+
 
     public function __construct() {
         /** @var \Scan $scan */
@@ -54,6 +59,7 @@ class BaseController {
         $is_installed = false;
         $is_updated = true;
         $password = false;
+        $is_clean = false;
 
         $total_files = $this->getTotalFiles();
 
@@ -70,11 +76,15 @@ class BaseController {
             if($total_movies > 0) {
                 $is_installed = true;
             }
+            if($total_movies > $total_files &&  $settings['auto_clean']) {
+                $is_clean = true;
+            }
         }
         return [
             'is_installed' => $is_installed,
             'total_files' => $total_files,
             'is_updated' => $is_updated,
+            'is_clean' => $is_clean,
             'password' => $password
         ];
     }
@@ -114,6 +124,7 @@ class BaseController {
             'api_key' => $params['key'],
             'batch' => $this->batch,
             'auto_update' => $this->auto_update,
+            'auto_clean' => $this->auto_clean,
         ];
 
         $this->db->insert('settings', $settings);
@@ -312,7 +323,6 @@ class BaseController {
      * @return array
      */
     protected function insertMovieData(array $info, array $file) {
-        $casts = null;
         $casts = $this->tmdb->getCast($info['id']);
 
         $movie = [
@@ -348,13 +358,14 @@ class BaseController {
         foreach ($casts as $cast) {
             $this->db->insert('casts',
                 [
-                    'cast_id' => $cast['cast_id'],
+                    'cast_id' => $cast['id'],
                     'name' => $cast['name'],
                     'character' => $cast['character'],
                     'profile_path' => ($cast['profile_path']) ? $this->tmdb->getImageUrl($cast['profile_path'], 'w185') : '',
                     'cast_order' => $cast['order']
                 ]
             );
+
         }
 
     }
@@ -407,6 +418,7 @@ class BaseController {
                        api_key VARCHAR,
                        password VARCHAR,
                        auto_update INTEGER,
+                       auto_clean INTEGER,
                        batch INTEGER
                 );
             ");
@@ -447,7 +459,7 @@ class BaseController {
 
         $casts = [];
         foreach($castArray as $cast) {
-            $casts[] = $cast["cast_id"];
+            $casts[] = $cast["id"];
         }
 
         return implode(",", $casts);

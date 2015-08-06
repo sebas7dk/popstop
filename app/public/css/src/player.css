@@ -140,7 +140,7 @@ video {
     font-weight: bold;
     position: relative;
     left: 30px;
-    top: 12px;
+    top: 16px;
     font-size: 16px;
 }
 
@@ -159,7 +159,7 @@ video {
 
 .time-holder span{
     position: relative;
-    top: 12px;
+    top: 16px;
     font-size: 16px;
     cursor: default;
     text-align: center;

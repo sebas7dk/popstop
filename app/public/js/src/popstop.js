@@ -182,6 +182,8 @@
                      plugin.showLogin();
                  } else if(!response.is_updated) {
                      plugin.updateMovies();
+                 } else if(response.is_clean) {
+                     plugin.cleanDatabase();
                  } else {
                      $(windowMargin).fadeIn(2000);
                      plugin.getFeatured();
@@ -299,9 +301,10 @@
                     $(sideBar).find('#genresList li').removeClass('selected');
                     $(sideBar).find('#genresList li a[data-genre="' + genre + '"]').closest('li').addClass('selected');
                     $movieContainer.attr("data-genre", genre);
+                    $movieContainer.attr("data-cast", '');
                     break;
                 case 'cast':
-                    cast = $this.attr("data-cast");
+                    var cast = $this.attr("data-cast");
                     $movieContainer.attr("data-cast", cast);
                     break;
             }
@@ -395,8 +398,9 @@
                     _call(data, 'GET', false).done(function(response) {
                         var castOutput =  '<ul>';
                         $.each(response.casts, function (index, cast) {
+                            var profile_image = (cast.profile_path.length > 0) ? cast.profile_path : 'app/public/images/no-image.jpg';
                             castOutput +='<li class="cast" data-cast="'+ cast.cast_id +'"><div class="image-wrap">'
-                                    +'<img src="'+ cast.profile_path +'"></div><span>'+ cast.name +  '</span></li>';
+                                    +'<img src="'+ profile_image +'"></div><span>'+ cast.name +  '</span></li>';
 
                         });
                         castOutput += '</ul>';
@@ -521,6 +525,14 @@
                case '7':
                    plugin.updateMovies();
                    break;
+               case '8':
+                   output ='<p>Whenever you delete a file it will remain in the database, this will remove the entries in the database. '
+                        +'This won\'t delete any files in the content directory.</p>'
+                   +'<div step-id="9" class="button step" id="installButton">Start</div>';
+                   break;
+               case '9':
+                   plugin.cleanDatabase();
+                   break;
                default:
                    var title = '<i class="fa fa-cube"></i> Installation';
                    output ='<p>Before you can stream your movies we first have to locate them and fetch the movie information.'
@@ -621,23 +633,50 @@
                 $(messageContent).html(output);
             });
         },
+        cleanDatabase: function() {
+            var output ='<pCleaning up the database please wait...<p>'
+                +'<div class="progress">'
+                +'<span class="progress-bar">'
+                +'<div class="loader"></div>'
+                +'</span></div>'
+                +'<br><br><p>Don\'t\ close this window and wait until the script is finished.</p>';
+            var title = '<i class="fa fa-eraser"></i> Clean Up';
+            _container(output, title);
+
+            var data = {function : "cleanDatabase"};
+            _call(data, 'GET', false).done(function(response) {
+                var total = response.cleaned;
+                if(total > 0) {
+                    output ='<p>The script was able to remove ' + total + ' entries successfully!</p>'
+                    +'<div step-id="4" class="button step" id="installButton">Finish</div>';
+                } else {
+                    output ='<p>The script hasn\'t\ found any entries to delete.</p>'
+                    +'<div step-id="4" class="button step" id="installButton">Finish</div>';
+                }
+
+                $(messageContent).html(output);
+            });
+        },
         showSettings:function() {
             var data = {function : "getSettings"};
             _call(data, "GET", false).done(function(response) {
                 var password_checked = response.password ? 'checked' : '';
                 var auto_update_checked = response.auto_update != 0 ? 'checked' : '';
+                var auto_clean_checked = response.auto_clean != 0 ? 'checked' : '';
                 var batch = response.batch;
 
                 var title = '<i class="fa fa-cog"></i> Settings';
                 var output = '<form>'
                     + '<label><span>Auto update </span><input id="autoUpdate" type="checkbox" ' + auto_update_checked + '/></label>'
+                    + '<label><span>Auto Clean </span><input id="autoClean" type="checkbox" ' + auto_clean_checked + '/></label>'
                     + '<label><span>Password  </span><input id="passwordField" type="checkbox" ' + password_checked + '/></label>'
                     + '<label id="enterPassword"><span>Enter your password  </span><input id="passwordInput" type="password"/> <small class="error"></small></label>'
                     + '<label><span>Batch per page </span><input id="batchInput" type="text" value="' + batch + '"/></label>'
-                    + '</form>'
+                    + '</form><div class="button-group">'
                     + '<div step-id="5" class="button setting install" id="installButton"><i class="fa fa-cube"></i> Re-Install</div>'
                     + '<div step-id="7" class="button setting update" id="installButton"><i class="fa fa-database"></i> Update</div>'
-                    + '<div class="button step" id="saveSettings">Save & Exit</div>';
+                    + '<div step-id="8" class="button setting clean" id="installButton"><i class="fa fa-eraser"></i> Clean Up</div>'
+                    + '</div><div class="button step" id="saveSettings">Save & Exit</div>';
                 _container(output, title);
             });
         },
@@ -647,6 +686,7 @@
             var $passwordField = $('#passwordField');
             var $batchInput = $('#batchInput');
             var $autoUpdate = $('#autoUpdate');
+            var $autoClean = $('#autoClean');
 
             var passwordInputValue = $passwordInput.val();
             var batchInputValue = $batchInput.val();
@@ -670,6 +710,7 @@
             }
 
             settings['auto_update'] = $autoUpdate.is(':checked') ? 1 : 0;
+            settings['auto_clean'] = $autoClean.is(':checked') ? 1 : 0;
 
             var data = {function : "updateSettings", settings : settings};
             response = _call(data, "POST", false).done(function(response) {
