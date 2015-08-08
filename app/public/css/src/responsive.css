@@ -177,6 +177,10 @@
         font-size: 14px;
     }
 
+    #lightboxTarget .movie-card .details {
+        bottom: 24px;
+    }
+
     #lightboxTarget .movie-card .column-right {
         padding-left: 0;
         margin-left: 20px;
@@ -250,7 +254,7 @@
     .control-bar {
         width: 100%;
         position: absolute;
-        bottom: 18%;
+        /*bottom: 18%;*/
     }
 
     .time-holder {
@@ -601,16 +605,20 @@
     }
 
     #lightboxTarget .movie-card .column-left {
-        width: 19.5%;
-        padding-top: 120px;
+        width: 20%;
+        padding-top: 130px;
     }
 
     #lightboxTarget .movie-card .tag {
         font-size: 12px;
     }
 
-    #lightboxTarget .movie-card .column-right {
-        width: 65%;
+    #lightboxTarget .movie-card .description {
+        height: 300px;
+    }
+
+    .tab-wrap .tab-content {
+        height: 150px;
     }
 
     .info {

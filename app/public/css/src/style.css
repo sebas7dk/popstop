@@ -652,7 +652,7 @@ a {
 }
 
 #lightboxTarget .movie-card .tag {
-    background: #44484B;
+    background: #279CEB;
     border-radius: 5px;
     padding: 3px 8px;
     font-size: 14px;
@@ -663,7 +663,7 @@ a {
 }
 
 #lightboxTarget .movie-card .tag:hover {
-    background: #000;
+    background: #F94F6A;
 }
 
 #lightboxTarget .movie-card .column-right {

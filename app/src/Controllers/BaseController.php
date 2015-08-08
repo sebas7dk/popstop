@@ -517,6 +517,5 @@ abstract class BaseController {
                 setcookie($this->cookie_name, '', time() - 3600);
                 break;
         }
-
     }
 }
