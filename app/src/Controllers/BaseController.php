@@ -72,11 +72,17 @@ abstract class BaseController {
             if($total_movies > 0) {
                 $is_installed = true;
             }
-            if($settings['auto_update'] ||  $settings['auto_clean']) {
+
+            if ($settings['auto_update'] || $settings['auto_clean']) {
                 $total_files = $this->getTotalFiles();
+            }
+
+            if($settings['auto_update'] ) {
                 if ($total_files > $total_movies) {
                     $is_updated = false;
                 }
+            }
+            if($settings['auto_clean']) {
                 if($total_movies > $total_files) {
                     $is_clean = true;
                 }
