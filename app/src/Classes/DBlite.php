@@ -150,7 +150,7 @@ class DBlite  {
                                         INSERT OR IGNORE INTO $table
                                         ( " . implode(', ',array_keys($data)) . ")
                                         VALUES (" . implode(', ',array_keys($prepare)) . ")
-                                    ");
+                                      ");
 
             $sth->execute($prepare);
 

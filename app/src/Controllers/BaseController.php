@@ -60,8 +60,7 @@ abstract class BaseController {
         $is_updated = true;
         $password = false;
         $is_clean = false;
-
-        $total_files = $this->getTotalFiles();
+        $total_movies = 0;
 
         if(filesize(getcwd() . "/" . $this->db->getPath()) > 0) {
             $settings = $this->getSettings();
@@ -70,19 +69,22 @@ abstract class BaseController {
             if(!empty($settings['password']) && !$this->cookies('get')) {
                 $password = true;
             }
-            if($total_files > $total_movies && $settings['auto_update'] ) {
-                $is_updated = false;
-            }
             if($total_movies > 0) {
                 $is_installed = true;
             }
-            if($total_movies > $total_files &&  $settings['auto_clean']) {
-                $is_clean = true;
+            if($settings['auto_update'] ||  $settings['auto_clean']) {
+                $total_files = $this->getTotalFiles();
+                if ($total_files > $total_movies) {
+                    $is_updated = false;
+                }
+                if($total_movies > $total_files) {
+                    $is_clean = true;
+                }
             }
         }
         return [
             'is_installed' => $is_installed,
-            'total_files' => $total_files,
+            'total_files' => $total_movies,
             'is_updated' => $is_updated,
             'is_clean' => $is_clean,
             'password' => $password
