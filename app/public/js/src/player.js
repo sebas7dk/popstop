@@ -73,8 +73,8 @@
         $.ajax({type: 'POST', url: 'bootstrap.php', data: data, dataType: 'json'});
 
         /* Destroy the plugin instance */
-        $('.PopStopPlayer').remove();
         $.data(this, 'plugin_' + pluginName, null);
+        $('.PopStopPlayer').remove();
 
     }
     Plugin.prototype = {
