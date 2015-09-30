@@ -408,7 +408,6 @@
                     });
 
                     if (response.resume_at !== null) {
-                        console.log(response.resume_at);
                         var text = (response.resume_at == 0) ? 'WATCH AGAIN' : 'RESUME';
                         $(playNow).html('<i class="fa fa-play-circle"></i> ' + text);
                     }
@@ -434,6 +433,7 @@
                     'movieId' : response.movie_id,
                     'posterPath': response.poster_path,
                     'title': response.title,
+                    'overview': response.overview,
                     'year' : response.release_date.split('-')[0],
                     'stars' : plugin.showStars(response.stars),
                     'autoPlay': true,

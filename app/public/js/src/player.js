@@ -13,6 +13,7 @@
             resumeTime : "",
             posterPath : "",
             title: "",
+            overview: "",
             year: "",
             stars : "",
             basePath : ""
@@ -25,6 +26,7 @@
         this.element = element,
         this.options = $.extend({},defaults,options),
         this.$player,
+        this.$overlay,
         this.self,
         this.subtitles,
         this.movieId,
@@ -71,8 +73,9 @@
         $.ajax({type: 'POST', url: 'bootstrap.php', data: data, dataType: 'json'});
 
         /* Destroy the plugin instance */
-        $.data(this, 'plugin_' + pluginName, null);
         $('.PopStopPlayer').remove();
+        $.data(this, 'plugin_' + pluginName, null);
+
     }
     Plugin.prototype = {
         init: function(){
@@ -81,6 +84,7 @@
             movieId = this.options.movieId;
             moviePoster = this.options.posterPath;
             movieTitle = this.options.title;
+            movieOverview = this.options.overview;
             movieYear = this.options.year;
             movieRating = this.options.stars;
             var timeDrag = false;
@@ -162,10 +166,6 @@
                     self.updateBar(e.pageX);
                 }
             });
-            $playerButton.on('click', function(){
-                /* Change the player status */
-                self.playerStatus();
-            });
 
             $volumeIcon.on('click', function(){
                 /* Mute the volume */
@@ -189,6 +189,11 @@
                 self.showControls('hide');
             });
 
+            $(document).on('click', '#playerButton, #resumeButton', function() {
+                /* Change the player status */
+                self.playerStatus();
+            });
+
             $(document).on('click', '.subtitle-item', function(){
                 var $this = $(this);
                 var path = $this.find('span').attr('data-path');
@@ -208,6 +213,9 @@
                     case 32:
                         self.playerStatus();
                         break;
+                    case 70:
+                        self.fullscreenToggle();
+                        break;
                     case 27:
                         _destroy();
                         break;
@@ -220,6 +228,7 @@
         },
         getControls:function() {
             /* Get the variables for the controls */
+            $overlay = $("#overlay"),
             $totalTime = $('#totalTime'),
             $progressBar = $('#played'),
             $playedTime = $('#playingTime'),
@@ -251,9 +260,11 @@
                     break;
                 case 'play':
                     $closeButton.animate({top: '-60px'});
+                    $overlay.animate({opacity: 0});
                     break;
                 case 'pause':
                     $closeButton.animate({top: '10px'});
+                    this.overlayWindow();
                     break;
             }
         },
@@ -266,13 +277,12 @@
             var output = '<div class="holder"><div id="controls"><div class="control-bar"><div id="progressBar">'
                 +'<div id="played"></div><div id="loadedBar"></div></div><ul class="left"><li>'
                 +'<div class="play" id="playerButton"></div></li><li><div class="time-holder">' +
-                '<span id="playingTime">00:00</span><span>/</span> <span id="totalTime">00:00</span></div></li>'
-                +'<li><div id="movieInfo">'+ movieTitle +' ('+ movieYear +') '+ movieRating +' </div></li></ul>'
+                '<span id="playingTime">00:00</span><span>/</span> <span id="totalTime">00:00</span></div></li></ul>'
                 +'<ul class="right"><li><div id="volume"><div id="volumeIcon" class="volume-max"><span></span></div>'
                 +'<div id="volumeControl"><div id="volumePosition"><div id="currentVolume"></div></div></div></div></li>'
                 +'<li><div id="subtitleMenu"><div id="subtitleMenuIcon"></div><div id="subtitleDisplay"></div></div></li>'
                 +'<li><div id="fullScreenButton"><span></span></div></li></ul></div></div></div>'
-                +'<div id="subtitleHolder"></div><span id="closeButton"></span>';
+                +'<div id="subtitleHolder"></div><div id="overlay"></div><span id="closeButton"></span>';
 
             $PopStopPlayer.append(output);
         },
@@ -305,6 +315,20 @@
                 $player[0].pause();
                 $playerButton.addClass("play");
             }
+        },
+        overlayWindow: function() {
+            var timeLeft = this.timeRemaining($player[0].duration - $player[0].currentTime);
+
+            var output = '<div class="window"><div class="left">'
+                +'<div class="cover" style="background-image: url('+ moviePoster +');">'
+                +'</div></div><div class="right"><h1>'+ movieTitle +' ('+ movieYear +')</h1>'
+                +'<div class="rating">'+ movieRating +'</div>'
+                +'<div class="overview"><p>'+ movieOverview +'</p>'
+                +'</div><div class="remaining">Remaining: '+ timeLeft +'</div>'
+                +'</div><div class="button" id="resumeButton">'
+                +'<i class="fa fa-play-circle"></i> RESUME</div>'
+                +'</div></div></div></div>';
+            $overlay.animate({opacity: 1}).html(output);
         },
         muteSound:function(){
             /* Mute the player */
@@ -470,6 +494,21 @@
                     seconds = seconds * 60 + parseFloat(part[i].replace(',', '.'))
             }
             return seconds;
+        },
+        timeRemaining:function(time) {
+            var hours = Math.floor(time / 3600);
+            time %= 3600;
+            var minutes = Math.floor(time / 60);
+            var seconds = Math.round(time % 60);
+
+            var string = hours + 'h ' + minutes + 'm';
+            if (hours == 0 && minutes > 0) {
+                string = minutes + 'm';
+            } else {
+                string = seconds + 's';
+            }
+
+            return string;
         }
     };
     // preventing against multiple instantiations
