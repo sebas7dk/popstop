@@ -483,7 +483,7 @@
                         var data = {function: "saveApiKey", key: key};
                         _call(data, "POST", false).done(function(response) {
                             if (response.saved) {
-                                plugin.startInstallation(3);
+                                plugin.installationProcess('2');
                             }
                         });
                     }
@@ -502,7 +502,8 @@
                        +'<div step-id="2" class="button step" id="confirmKey">Confirm</div>';
                    break;
                case '2':
-                   output ='<p>We have detected <strong>'+ totalFiles +'</strong> files in the content directory.'
+                   var total = $movieContainer.attr('data-total');
+                   output ='<p>We have detected <strong>'+ total +'</strong> files in the content directory.'
                        +'The next step will fetch the movie information for each file, depending on the number of files this might take a while.'
                        +'<div step-id="3" class="button step" id="installButton">continue</div>';
                    break;

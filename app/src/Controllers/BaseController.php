@@ -87,7 +87,10 @@ abstract class BaseController {
                     $is_clean = true;
                 }
             }
+        } else {
+            $total_movies = $this->getTotalFiles();
         }
+
         return [
             'is_installed' => $is_installed,
             'total_files' => $total_movies,
