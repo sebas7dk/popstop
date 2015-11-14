@@ -32,19 +32,6 @@ video {
 /* OVERLAY
 ---------------------------
 --------------------------- */
-#overlay {
-    opacity: 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    width: 100%;
-    height:  94%;
-    z-index: 2147483647;
-}
-
-
-
 #overlay .window {
     color: #fff;
     width: 800px;
@@ -56,6 +43,7 @@ video {
     margin: 10% auto;
     top: 0;
     bottom: 0;
+    z-index: 2147483647;
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;

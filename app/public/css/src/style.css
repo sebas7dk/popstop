@@ -85,7 +85,7 @@ a {
     height: 400px;
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position: center -100px;;
     cursor: pointer;
 }
 .window .main .featured-movie .cover {
@@ -1234,17 +1234,20 @@ body:not(:-moz-handler-blocked) #messageContainer form input[type="checkbox"] {
 ---------------------------
 --------------------------- */
 #lightboxTarget .tab-wrap .tab-content::-webkit-scrollbar,
+#overlay .window .overview::-webkit-scrollbar,
 .window .side-bar #genresList::-webkit-scrollbar {
     width: 8px;
 }
 
 #lightboxTarget .tab-wrap .tab-content::-webkit-scrollbar-track,
+#overlay .window .overview::-webkit-scrollbar-track,
 .window .side-bar #genresList::-webkit-scrollbar-track {
     border-radius: 0px;
     background: #cbcbcb;
 }
 
 #lightboxTarget .tab-wrap .tab-content::-webkit-scrollbar-thumb,
+#overlay .window .overview::-webkit-scrollbar-track,
 .window .side-bar #genresList::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background-color: #F94F6A;

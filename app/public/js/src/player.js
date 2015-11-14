@@ -490,21 +490,22 @@
             var seconds = 0.0;
             if(time) {
                 var part = time.split(':');
-                for(i= 0; i < part.length; i++)
+                for(i= 0; i < part.length; i++) {
                     seconds = seconds * 60 + parseFloat(part[i].replace(',', '.'))
+                }
             }
             return seconds;
         },
         timeRemaining:function(time) {
-            var hours = Math.floor(time / 3600);
-            time %= 3600;
-            var minutes = Math.floor(time / 60);
-            var seconds = Math.round(time % 60);
+            var sec_num = parseInt(time, 10); // don't forget the second param
+            var hours   = Math.floor(sec_num / 3600);
+            var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+            var seconds = sec_num - (hours * 3600) - (minutes * 60);
 
             var string = hours + 'h ' + minutes + 'm';
             if (hours == 0 && minutes > 0) {
                 string = minutes + 'm';
-            } else {
+            } else if (hours == 0 && minutes == 0) {
                 string = seconds + 's';
             }
 

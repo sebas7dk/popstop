@@ -22,6 +22,7 @@
 
     .window .main .featured-movie {
         height: 300px;
+        background-position: center center;
     }
 
     .window .main .featured-movie:after {
@@ -274,6 +275,42 @@
         bottom: 50px;
     }
 
+    #overlay .window {
+        width: 100%;
+        margin: 20% auto;
+    }
+
+    #overlay .window h1 {
+        font-size: 18px;
+    }
+
+    #overlay .window .left {
+        width: 0;
+    }
+
+    #overlay .window .right {
+        width: 100%;
+    }
+
+    #overlay .window .overview > p {
+        height: 200px;
+        overflow-y: auto;
+    }
+
+    #overlay .window .overview {
+        height: 260px;
+        font-size: 13px;
+        line-height: 15px;
+    }
+
+    #overlay .window .button {
+        width: 100%!important;
+    }
+
+    #overlay .window .remaining {
+        bottom: 70px;
+        font-size: 12px;
+    }
 
 }
 @media only screen and (min-width : 480px) and (max-width : 690px) {
