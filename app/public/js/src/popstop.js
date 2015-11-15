@@ -327,21 +327,23 @@
         onSearch:function() {
              var value = $(searchBox).val();
              if (value.length > 0)  {
-                 var data = {function : "searchMovies", query : value};
-                 _call(data, 'POST', false).done(function(response) {
-                     loading = true;
-                     if (response == undefined || response == null || response.length == 0) {
-                         $(movieContainer).html('<div class="no-results"><p><i class="fa fa-search"></i> Oops there are no search results for ' + value + '..</p></div>');
-                     } else {
-                         var output = '';
-                         $.each(response, function (key, val) {
-                             output += '<li class="movie" movie-id="' + val.movie_id + '">'
-                             + '<img src="' + val.poster_path + '" alt="' + val.title + '" />'
-                             + '</li>';
-                         });
-                         $(movieContainer).html(output);
-                     }
-                 });
+                 window.setTimeout(function() {
+                     var data = {function: "searchMovies", query: value};
+                     _call(data, 'POST', false).done(function (response) {
+                         loading = true;
+                         if (response == undefined || response == null || response.length == 0) {
+                             $(movieContainer).html('<div class="no-results"><p><i class="fa fa-search"></i> Oops there are no search results for ' + value + '..</p></div>');
+                         } else {
+                             var output = '';
+                             $.each(response, function (key, val) {
+                                 output += '<li class="movie" movie-id="' + val.movie_id + '">'
+                                 + '<img src="' + val.poster_path + '" alt="' + val.title + '" />'
+                                 + '</li>';
+                             });
+                             $(movieContainer).html(output);
+                         }
+                     });
+                 }, 600);
             } else if (value.length === 0){
                  loaded = 0;
                  loading = false;
