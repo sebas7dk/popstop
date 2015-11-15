@@ -21,4 +21,4 @@ Before you start with the installation have a look if your setup meets all the r
 * Copy your movies or create a symlink inside content
 * Open a browser and point to your domain/ip address and the installation window will come up. Follow the instructions and you are good to go!
 
-For more information visit [a popstop.io](http://popstop.io).
+For more information visit [popstop.io](http://popstop.io).
