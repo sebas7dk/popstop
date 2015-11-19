@@ -12,24 +12,30 @@
  */
 class DBlite  {
 
-    /** @var \PDO $db  */
+    /** @var PDO $db  */
     protected $db;
 
     /** @var  array $parameters */
     protected $parameters;
 
-    /** @var  \Response $response */
+    /** @var Response $response */
     protected $response;
 
     /** @var string $path */
-    protected $path = 'app/database/popstop.sqlite';
+    protected $path;
 
     public function __construct()
     {
-        /** @var \Repsonse $response */
+        /** @var Config $config */
+        $config = (new Config)->getConfiguration();
+        /** @var Response response */
         $this->response = new Response;
+
+        /** @var string path */
+        $this->path = $config['sqlite_path'];
+
         try {
-            /** @var \PDO $db */
+            /** @var PDO db */
             $this->db = new \PDO('sqlite:' . $this->path);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {

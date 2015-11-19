@@ -189,12 +189,17 @@
                 self.showControls('hide');
             });
 
-            $(document).on('click', '#playerButton, #resumeButton', function() {
+            $controlsHolder.on('click', '#playerButton', function() {
                 /* Change the player status */
                 self.playerStatus();
             });
 
-            $(document).on('click', '.subtitle-item', function(){
+            $overlay.on('click', '#resumeButton', function() {
+                /* Change the player status */
+                self.playerStatus();
+            });
+
+            $controlsHolder.on('click', '.subtitle-item', function(){
                 var $this = $(this);
                 var path = $this.find('span').attr('data-path');
 
@@ -206,7 +211,7 @@
                 }
             });
 
-            $(document).keyup(function(e) {
+            $(document).unbind('keydown').bind('keydown', function(e) {
                 /* Some controls */
                 var key = e.keyCode;
                 switch (key) {

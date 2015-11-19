@@ -54,8 +54,11 @@
             + '<div step-id="4" class="button step" id="installButton">Try Again</div>';
         _container(output, title);
 
-        /*Stop the progress bar*/
-        clearInterval(progressBar);
+        if (typeof progressBar !== 'undefined') {
+            /*Stop the progress bar*/
+            clearInterval(progressBar);
+        }
+
         return false;
     }
     function _container(content, title) {
@@ -150,9 +153,9 @@
                     plugin.updateMovies();
 
                 });
-                $document.on('click', '#confirmKey', function() {
+                $document.on('click', '#saveKey', function() {
                     var key = $(messageContent).find('input').val();
-                    plugin.confirmApiKey(key);
+                    plugin.saveApiKey(key);
 
                 });
 
@@ -428,9 +431,10 @@
             $(lightBoxTarget).remove();
         },
        startMovie:function() {
-            var data = {function : "playMovie", id : $(movieHolder).attr("data-id")};
+            var id = $(movieHolder).attr("data-id");
+            var data = {function : "playMovie", id : id};
             _call(data, 'GET', false).done(function(response) {
-                $(movieHolder).html('<video autoplay="autoplay"><source src="' + response.target + '"></video>');
+                $(movieHolder).html('<video autoplay="autoplay"><source src="bootstrap.php?function=streamMovie&id='+ id +'"></video>');
                 $('video').PopStopPlayer({
                     'movieId' : response.movie_id,
                     'posterPath': response.poster_path,
@@ -473,25 +477,14 @@
                }
             }
        },
-        confirmApiKey:function(key) {
-            if(key.length > 0) {
-                data = {function : "confirmApiKey", key: key};
-                _call(data, "POST", false).done(function(response) {
-                    if (!response.status) {
-                        $(messageContent).find('input').css('border', '2px solid #F94F6A');
-                        $(messageContent).find('.error').html('The API-KEY is not valid, make sure you insert a valid key and that the key is activated.')
-                            .css({'color': '#F94F6A', 'font-weight': 'bold'});
-                    } else {
-                        var data = {function: "saveApiKey", key: key};
-                        _call(data, "POST", false).done(function(response) {
-                            if (response.saved) {
-                                plugin.installationProcess('2');
-                            }
-                        });
-                    }
-                });
-            }
-            $('input').css('border', '2px solid #F94F6A');
+        saveApiKey:function(key) {
+            var data = {function: "saveApiKey"};
+            _call(data, "GET", false).done(function(response) {
+                if (response.saved) {
+                    plugin.installationProcess('2');
+                }
+            });
+
         },
        installationProcess: function(step) {
            var output = '';
@@ -540,10 +533,10 @@
                    var title = '<i class="fa fa-cube"></i> Installation';
                    output ='<p>Before you can stream your movies we first have to locate them and fetch the movie information.'
                        +' If you have done everything on the list below you can go to the next step.</p>'
-                       +'<ul><li>Add your movies to the content Directory. Copy them over or even better create a symlink.</li>'
+                       +'<ul><li>Add your movies to the content directory. Or change the config file with the directories to your movies.</li>'
                        +'<li>Make sure the <code>app/database</code> folder is writable.</li>'
                        +'<li>Rename your files with the title of the movie, for better results add the year of the movie. </li></ul>'
-                       +'<div step-id="1" class="button step" id="installButton">Continue</div>';
+                       +'<div step-id="2" class="button step" id="saveKey">Continue</div>';
                    _container(output, title);
            }
            $(messageContent).html(output);

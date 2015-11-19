@@ -11,42 +11,53 @@
  * @author Sebastian de Kok
  */
 abstract class BaseController {
-    /**
-     * @var \TMDB
-     */
+    /* @var config */
+    protected $config;
+
+    /* @var TMDB */
     protected $tmdb;
 
-    /**
-     * @var string
-     */
-    protected $cookie_name = '_popstop';
+    /* @var Scan */
+    protected $scan;
 
-    /**
-     * @var int
-     */
+    /* @var DBlite */
+    protected $db;
+
+    /* @var string */
+    protected $cookieName = 'popstop';
+
+    /** @var int */
     protected $batch = 18;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $cost = 8;
 
-    /**
-     * @var int
-     */
-    protected $auto_update = 0;
+    /** @var int */
+    protected $autoUpdate = 0;
 
-    /**
-     * @var int
-     */
-    protected $auto_clean = 0;
-
+    /** @var int */
+    protected $autoClean = 0;
 
     public function __construct() {
-        /** @var \Scan $scan */
+        /** @var Config $config */
+        $this->config = (new Config)->getConfiguration();
+        /** @var Scan scan */
         $this->scan = new Scan;
-        /** @var \DBlite $scan */
-        $this->db = new DBlite();
+        /** @var DBlite scan */
+        $this->db = new DBlite;
+        /** @var TMDB tmdb */
+        $this->tmdb = new TMDB;
+
+        /** @var string cookieName */
+        $this->cookieName = $this->config['cookie_name'];
+        /** @var int batch */
+        $this->batch = $this->config['batch'];
+        /** @var int cost */
+        $this->cost = $this->config['cost'];
+        /** @var int autoUpdate */
+        $this->autoUpdate = $this->config['auto_update'];
+        /** @var int autoClean */
+        $this->autoClean = $this->config['auto_clean'];
     }
 
     /**
@@ -60,9 +71,9 @@ abstract class BaseController {
         $is_updated = true;
         $password = false;
         $is_clean = false;
-        $total_movies = 0;
+        $total_files = $this->getTotalFiles();
 
-        if(filesize(getcwd() . "/" . $this->db->getPath()) > 0) {
+        if(filesize($this->db->getPath()) > 0) {
             $settings = $this->getSettings();
             $total_movies = $this->getInserted()['inserted'];
 
@@ -72,11 +83,6 @@ abstract class BaseController {
             if($total_movies > 0) {
                 $is_installed = true;
             }
-
-            if ($settings['auto_update'] || $settings['auto_clean']) {
-                $total_files = $this->getTotalFiles();
-            }
-
             if($settings['auto_update'] ) {
                 if ($total_files > $total_movies) {
                     $is_updated = false;
@@ -87,55 +93,29 @@ abstract class BaseController {
                     $is_clean = true;
                 }
             }
-        } else {
-            $total_movies = $this->getTotalFiles();
         }
 
         return [
             'is_installed' => $is_installed,
-            'total_files' => $total_movies,
+            'total_files' => (isset($total_movies)) ? $total_movies : $total_files,
             'is_updated' => $is_updated,
             'is_clean' => $is_clean,
             'password' => $password
         ];
     }
 
-
-    /**
-     * Check if the inserted key is valid
-     *
-     * @param array $params
-     * @return array
-     */
-    public function confirmApiKey($params) {
-        $tmdb = new TMDB($params['key']);
-        $confirm = $tmdb->getStatuscode();
-
-        if(!empty($confirm['status_code']) && $confirm['status_code'] === 7) {
-            $status = false;
-        } else {
-            $status = true;
-        }
-
-        return ['status' =>  $status];
-
-    }
-
     /**
      * Store the key in the database
      *
-     * @param array $params
      * @return array
      */
-    public function saveApiKey($params) {
-
+    public function saveApiKey() {
         $this->createTables();
 
         $settings = [
-            'api_key' => $params['key'],
             'batch' => $this->batch,
-            'auto_update' => $this->auto_update,
-            'auto_clean' => $this->auto_clean,
+            'auto_update' => $this->autoUpdate,
+            'auto_clean' => $this->autoClean,
         ];
 
         $this->db->insert('settings', $settings);
@@ -302,7 +282,6 @@ abstract class BaseController {
             $search = str_replace($match[0], '', $search);
         }
 
-        $this->tmdb = new TMDB($this->getSettings()['api_key']);
         $search = $this->tmdb->search($search, "movie", (isset($year)) ? $year : '');
 
         if (isset($search['results']) && $search['total_results'] > 0) {
@@ -360,6 +339,8 @@ abstract class BaseController {
             'movie_id' => $info['id'],
             'path' => $file['path'],
             'target' => $file['target'],
+            'size' => $file['size'],
+            'mime' => $file['mime'],
             'created_at' => $file['date']
         ];
 
@@ -376,9 +357,7 @@ abstract class BaseController {
                     'cast_order' => $cast['order']
                 ]
             );
-
         }
-
     }
 
     /**
@@ -421,6 +400,8 @@ abstract class BaseController {
                        movie_id INTEGER PRIMARY KEY,
                        path VARCHAR,
                        target VARCHAR,
+                       size INTEGER,
+                       mime VARCHAR,
                        created_at DATETIME
                 );
 
@@ -518,14 +499,14 @@ abstract class BaseController {
     protected function cookies($action) {
         switch($action) {
             case 'get':
-                return isset($_COOKIE[$this->cookie_name]);
+                return isset($_COOKIE[$this->cookieName]);
                 break;
             case 'set':
-                setcookie($this->cookie_name, time() ,time() + (86400 * 7)); // 86400 = 1 day
+                setcookie($this->cookieName, time() ,time() + (86400 * 7)); // 86400 = 1 day
                 break;
             case 'delete':
-                unset($_COOKIE[$this->cookie_name]);
-                setcookie($this->cookie_name, '', time() - 3600);
+                unset($_COOKIE[$this->cookieName]);
+                setcookie($this->cookieName, '', time() - 3600);
                 break;
         }
     }

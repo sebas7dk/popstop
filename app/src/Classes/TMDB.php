@@ -15,40 +15,41 @@ class TMDB {
     /**
      * @var string
      */
-    protected $api_key;
+    protected $apiKey;
     /**
      * @var string
      */
-    protected $api_url = 'http://api.themoviedb.org';
+    protected $apiUrl;
 
     /**
      * @var string
      */
-    protected $api_version = 3;
+    protected $apiVersion;
 
     /**
      * @var string
      */
-    protected $session_id;
+    protected $sessionId;
 
     /**
      * @var \Response
      */
     protected $response;
 
-    /**
-     * @param string $api_key
-     */
-    public function __construct($api_key = null)
+    public function __construct()
     {
-        /** @var \Response $response */
+        /** @var Config $config */
+        $config = (new Config)->getConfiguration();
+        /** @var \Response response */
         $this->response = new Response;
 
-        if($api_key) {
-            $this->api_key = (string) $api_key;
-        } else {
-            throw new Exception('the API-KEY is missing');
-        }
+        /** @var string apiKey */
+        $this->apiKey = $config['api_key'];
+        /** @var string apiUrl */
+        $this->apiUrl = $config['api_url'];
+        /** @var int apiVersion */
+        $this->apiVersion = $config['api_version'];
+
     }
 
     /**
@@ -58,7 +59,6 @@ class TMDB {
      */
     public function getStatusCode() {
         $call = $this->call('');
-
         return $call;
     }
 
@@ -69,7 +69,6 @@ class TMDB {
      */
     public function getConfig() {
         $config = $this->call('configuration');
-
         return $config;
     }
 
@@ -155,7 +154,7 @@ class TMDB {
      */
     protected function call($url, $params = []) {
         $params = (!empty($params)) ? http_build_query($params, '', '&') : '';
-        $url = $this->api_url.'/'.$this->api_version.'/'.$url.'?api_key='.$this->api_key. '&'.$params;
+        $url = $this->apiUrl.'/'.$this->apiVersion.'/'.$url.'?api_key='.$this->apiKey. '&'.$params;
 
         if (extension_loaded('curl')) {
             $curl = curl_init();

@@ -1,4 +1,16 @@
 <?php
+/**
+ * PopStop is a PHP script that let's you stream your
+ * movie collection to your browser.
+ *
+ * This software is distributed under the MIT License
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * Visit http://www.popstop.io for more information
+ *
+ * @author Sebastian de Kok
+ */
+
 //Autoload all the controllers and classes
 spl_autoload_register(function($class)
 {
@@ -10,7 +22,7 @@ spl_autoload_register(function($class)
 });
 
 $request_method = getenv('REQUEST_METHOD');
- //Catch the post request and call the related function
+ //Catch the post|get request and call the related function
 if($request_method === "POST" || $request_method === "GET")
 {
     $params = ($request_method === "POST") ? filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING) :

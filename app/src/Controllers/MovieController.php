@@ -92,8 +92,9 @@ class MovieController extends BaseController {
     public function playMovie($params) {
         $this->db->bind(["id" => $params['id']]);
         $result =  $this->db->fetch("SELECT * FROM movies INNER JOIN files
-                                             ON movies.movie_id = files.movie_id WHERE movies.movie_id = :id",
-            true);
+                                     ON movies.movie_id = files.movie_id
+                                     WHERE movies.movie_id = :id", true);
+
         return $result;
     }
 
@@ -158,6 +159,20 @@ class MovieController extends BaseController {
     }
 
     /**
+     * Open the file and create a stream
+     *
+     * @param array $params
+     * @return void
+     */
+    public function streamMovie($params) {
+        $this->db->bind(["id" => $params['id']]);
+        $result =  $this->db->fetch("SELECT * FROM files WHERE movie_id = :id", true);
+
+        $stream = new VideoStream($result['target'], $result['size'], $result['mime']);
+        $stream->start();
+    }
+
+    /**
      * Get the movie file location to play in the browser
      *
      * @param array $params
@@ -199,7 +214,7 @@ class MovieController extends BaseController {
            $doc_id = $file['docid'];
            $movie_id = $file['movie_id'];
 
-            if(!file_exists(getcwd() . "/" . $file['target'])) {
+            if(!file_exists($file['target'])) {
                 $this->db->query("DELETE FROM movies WHERE docid = $doc_id; DELETE FROM files WHERE movie_id = $movie_id");
                 $i++;
             }
