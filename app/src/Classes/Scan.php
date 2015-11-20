@@ -40,10 +40,10 @@ class Scan {
             if (in_array($item->getExtension() , $this->filter) ) {
                 $content[] = [
                     "path"        => $item->getPath(),
-                    "target"      => strstr($item->getPathname(), $item->getPath()),
+                    "target"      => $target = strstr($item->getPathname(), $item->getPath()),
                     "search_name" => $item->getBasename('.' . $item->getExtension()),
                     "name"        => $item->getBasename(),
-                    "size"        => $item->getSize(),
+                    "size"        => $this->fileSize($target),
                     "mime"        => $this->getMimeTypes($item->getExtension()),
                     "date"        => $item->getMTime(),
                     "extension"   => $item->getExtension(),
@@ -140,5 +140,39 @@ class Scan {
         ];
 
         return $mimeTypes[$extension];
+    }
+
+    /**
+     * Calculate the file size
+     * large files are a problem on php 32 bit so we need to open the file and re-calculate it
+     *
+     * @param $file
+     * @return int
+     */
+    protected function fileSize($path) {
+        $fileSize = filesize($path);
+
+        // return file size for php 64 bit
+        if(PHP_INT_SIZE > 4) {
+            return $fileSize;
+        }
+
+        // find the upper 32 bits
+        $file = fopen($path, "r");
+
+        $i = 0;
+        while (strlen(fread($file, 1)) === 1) {
+            fseek($file, PHP_INT_MAX, SEEK_CUR);
+            $i++;
+        }
+        fclose($file);
+
+        if ($i % 2 == 1) {
+            $i--;
+        }
+
+        // add the lower 32 bit to our PHP_INT_MAX multiplier
+        return sprintf("%s", ((float)($i) * (PHP_INT_MAX + 1)) + $fileSize);
+
     }
 }
