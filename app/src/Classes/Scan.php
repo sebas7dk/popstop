@@ -118,8 +118,9 @@ class Scan {
      * @return string
      */
     protected function getDirectoryAlias($path) {
-        foreach ($this->config['content_directories'][0] as $alias => $directory) {
-            if (strpos($path,$alias) !== false) {
+        foreach ($this->config['content_directories'] as $directory) {
+            $alias = each($directory)[0];
+            if(strlen(strstr($path,$alias)) > 0) {
                 return strstr($path, $alias);
             }
         }

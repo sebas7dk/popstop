@@ -115,7 +115,8 @@ class TMDB {
             $base_url = $config['images']['base_url'];
             $image_url = $base_url.$size.$path;
         } else {
-            throw new Exception('No configuration available to create the image URL');
+            //Try again to get the url
+            $this->getImageUrl($path, $size);
         }
 
         return $image_url;
