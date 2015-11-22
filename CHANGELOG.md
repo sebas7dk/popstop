@@ -1,7 +1,7 @@
 ## v1.0.1 (22-11-2015)
 
 Created a config file where you can change all the settings of the application. In this config file you can change the path to the content directory or add multiple paths. 
-The TMDB API key is hardcoded in the config file so there is no need to sign up for you own key. In order to stream the files from a different directory I also added a streaming class that will handle the process to stream the file to the HTML5 player.
+The TMDB API key is hardcoded in the config file so there is no need to sign up for your own key. 
 
 Breaking changes:
 
@@ -11,6 +11,7 @@ Bugfixes:
 
   * fixed the click events on the player controls bubbling up.
   * fixed the installer not fetching the total files first.
+  * refactored a lot of the code.
 
 ## v1.0.0 (15-11-205)
 

@@ -159,20 +159,6 @@ class MovieController extends BaseController {
     }
 
     /**
-     * Open the file and create a stream
-     *
-     * @param array $params
-     * @return void
-     */
-    public function streamMovie($params) {
-        $this->db->bind(["id" => $params['id']]);
-        $result =  $this->db->fetch("SELECT * FROM files WHERE movie_id = :id", true);
-
-        $stream = new VideoStream($result['target'], $result['size'], $result['mime']);
-        $stream->start();
-    }
-
-    /**
      * Get the movie file location to play in the browser
      *
      * @param array $params
@@ -180,7 +166,10 @@ class MovieController extends BaseController {
      */
     public function getMovieSubtitles($params) {
 
-        return $this->scan->getSubtitles($params['path']);
+        $this->db->bind(["id" => $params['id']]);
+        $result =  $this->db->fetch("SELECT * FROM files WHERE movie_id = :id", true);
+
+        return $this->scan->getSubtitles($result['path'], $result['alias']);
     }
 
     /**

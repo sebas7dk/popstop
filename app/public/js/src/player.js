@@ -15,10 +15,7 @@
             title: "",
             overview: "",
             year: "",
-            stars : "",
-            basePath : ""
-
-
+            stars : ""
         };
 
     // self constructor.
@@ -428,7 +425,7 @@
         },
         getSubtitles:function() {
             /* Get the subtitle file in the directory */
-            var data = {function : "getMovieSubtitles", path : this.options.basePath};
+            var data = {function : "getMovieSubtitles", id : this.options.movieId};
             $.ajax({type: 'GET', url: 'bootstrap.php', data:data, dataType: 'json'}).done(function(response) {
                 var output = '<ul>';
                 if (response.length > 0) {

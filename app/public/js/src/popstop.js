@@ -177,7 +177,9 @@
             var data = {function : "isInstalled"};
              _call(data, 'GET', false).done(function(response) {
                  var $movieContainer = $(movieContainer);
-                 $movieContainer.attr('data-total', response.total_files);
+                 /*Get the total files*/
+                 totalFiles = response.total_files;
+                 $movieContainer.attr('data-total', totalFiles);
 
                  if (!response.is_installed) {
                      plugin.installationProcess();
@@ -185,7 +187,7 @@
                      plugin.showLogin();
                  } else if(!response.is_updated) {
                      plugin.updateMovies();
-                 } else if(response.is_clean) {
+                 } else if(!response.is_clean) {
                      plugin.cleanDatabase();
                  } else {
                      $(windowMargin).fadeIn(2000);
@@ -194,11 +196,7 @@
                      plugin.showGenres();
                  }
              });
-
-            /*Get the total files*/
-            totalFiles = $movieContainer.attr('data-total');
         },
-                //getting control variables for future usage.
         getIDs:function() {
             logo = '.logo';
             menuBar = '.menu-bar';
@@ -277,7 +275,6 @@
                 $(windowMargin).removeClass('loading');
             });
             loaded = $movieContainer.attr('data-loaded');
-            totalFiles = $movieContainer.attr('data-total');
         },
         sortBy: function($this) {
             type = $this.find('a').attr('data-type');
@@ -295,8 +292,6 @@
             /* Change the total and loaded files*/
             loaded = 0;
             $movieContainer.attr('data-loaded', loaded);
-            totalFiles = $this.attr("data-total");
-            $movieContainer.attr('data-total', totalFiles);
 
             switch (type) {
                 case 'genre':
@@ -330,6 +325,7 @@
         onSearch:function() {
              var value = $(searchBox).val();
              if (value.length > 0)  {
+                 loaded = totalFiles;
                  window.setTimeout(function() {
                      var data = {function: "searchMovies", query: value};
                      _call(data, 'POST', false).done(function (response) {
@@ -434,7 +430,7 @@
             var id = $(movieHolder).attr("data-id");
             var data = {function : "playMovie", id : id};
             _call(data, 'GET', false).done(function(response) {
-                $(movieHolder).html('<video autoplay="autoplay"><source src="bootstrap.php?function=streamMovie&id='+ id +'"></video>');
+                $(movieHolder).html('<video autoplay="autoplay"><source src="'+ response.alias +'/' + response.name +'"></video>');
                 $('video').PopStopPlayer({
                     'movieId' : response.movie_id,
                     'posterPath': response.poster_path,
@@ -497,8 +493,7 @@
                        +'<div step-id="2" class="button step" id="confirmKey">Confirm</div>';
                    break;
                case '2':
-                   var total = $movieContainer.attr('data-total');
-                   output ='<p>We have detected <strong>'+ total +'</strong> files in the content directory.'
+                   output ='<p>We have detected <strong>'+ totalFiles +'</strong> files in the content directory.'
                        +'The next step will fetch the movie information for each file, depending on the number of files this might take a while.'
                        +'<div step-id="3" class="button step" id="installButton">continue</div>';
                    break;
@@ -554,9 +549,9 @@
 
             var data = {function : "installFiles"};
             _call(data, 'GET', false).done(function(response) {
+                /*Stop the progress bar*/
+                clearInterval(progressBar);
                 if(response.not_found) {
-                    /*Stop the progress bar*/
-                    clearInterval(progressBar);
                     var files = response.files;
                     var output ='<p>The script was not able to fetch the movie information for the following files:</p>'
                         +'<ul>';
@@ -576,7 +571,7 @@
                 var data = {function : "getInserted"};
                 _call(data, "GET", false).done(function(response) {
 
-                    var total = $movieContainer.attr('data-total');
+                    var total = totalFiles;
                     percentage = Math.round((response.inserted / total) * 100);
 
                     /* update the progress bar width */

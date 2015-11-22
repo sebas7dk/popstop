@@ -43,8 +43,7 @@ class Scan {
                     "target"      => $target = strstr($item->getPathname(), $item->getPath()),
                     "search_name" => $item->getBasename('.' . $item->getExtension()),
                     "name"        => $item->getBasename(),
-                    "size"        => $this->fileSize($target),
-                    "mime"        => $this->getMimeTypes($item->getExtension()),
+                    'alias'       => $this->getDirectoryAlias($item->getPath()),
                     "date"        => $item->getMTime(),
                     "extension"   => $item->getExtension(),
                 ];
@@ -59,13 +58,13 @@ class Scan {
      * @var string $path
      * @return array
      */
-    public function getSubtitles($path) {
+    public function getSubtitles($path, $alias) {
         $subtitles = [];
         foreach ($this->getIterator($path) as $item) {
             if($item->getExtension() == 'srt') {
                 $subtitles[] = [
                     'name' => $item->getBasename('.' . $item->getExtension()),
-                    'path' => strstr($item->getPathname(), 'content')
+                    'path' => strstr($item->getPathname(), $alias)
                 ];
             }
         }
@@ -93,7 +92,7 @@ class Scan {
             $directoryIterators = [];
             foreach($directories as $directory) {
                 //Create an array of the paths
-                $directoryIterators[] = new \RecursiveDirectoryIterator($directory, $flags);
+                $directoryIterators[] = new \RecursiveDirectoryIterator(each($directory)[1], $flags);
             }
 
             $iterator = new \AppendIterator();
@@ -113,66 +112,16 @@ class Scan {
     }
 
     /**
-     * Get mime type from extension
+     * Get the alias from the path
      *
-     * @param string $extension
-     * @return array
+     * @param string $path
+     * @return string
      */
-    protected function getMimeTypes($extension)
-    {
-        $mimeTypes = [
-            'rv'    => 'video/vnd.rn-realvideo',
-            'mpeg'  => 'video/mpeg',
-            'mpg'   => 'video/mpeg',
-            'mpe'   => 'video/mpeg',
-            'qt'    => 'video/quicktime',
-            'mov'   => 'video/quicktime',
-            'avi'   => 'video/x-msvideo',
-            'movie' => 'video/x-sgi-movie',
-            '3g2'   => 'video/3gpp2',
-            '3gp'   => 'video/3gp',
-            'mp4'   => 'video/mp4',
-            'f4v'   => 'video/mp4',
-            'm4v'   => 'video/mp4',
-            'webm'  => 'video/webm',
-            'mkv'   => 'video/webm',
-            'wmv'   => 'video/x-ms-wmv',
-        ];
-
-        return $mimeTypes[$extension];
-    }
-
-    /**
-     * Calculate the file size
-     * large files are a problem on php 32 bit so we need to open the file and re-calculate it
-     *
-     * @param $file
-     * @return int
-     */
-    protected function fileSize($path) {
-        $fileSize = filesize($path);
-
-        // return file size for php 64 bit
-        if(PHP_INT_SIZE > 4) {
-            return $fileSize;
+    protected function getDirectoryAlias($path) {
+        foreach ($this->config['content_directories'][0] as $alias => $directory) {
+            if (strpos($path,$alias) !== false) {
+                return strstr($path, $alias);
+            }
         }
-
-        // find the upper 32 bits
-        $file = fopen($path, "r");
-
-        $i = 0;
-        while (strlen(fread($file, 1)) === 1) {
-            fseek($file, PHP_INT_MAX, SEEK_CUR);
-            $i++;
-        }
-        fclose($file);
-
-        if ($i % 2 == 1) {
-            $i--;
-        }
-
-        // add the lower 32 bit to our PHP_INT_MAX multiplier
-        return sprintf("%s", ((float)($i) * (PHP_INT_MAX + 1)) + $fileSize);
-
     }
 }

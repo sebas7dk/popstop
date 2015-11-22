@@ -16,10 +16,10 @@ return [
     // PopStop Version
     'version' => '1.0.1',
 
-    // Multiple paths to the content directories
+    // Add here multiple paths with the alias reflecting the one in your apache or nginx configuration.
+    // e.g. ['alias' => 'path/to/your/content/directory']
     'content_directories' => [
-        // Add here multiple paths, comma separated, to your content directories
-        'content'
+        ['content' => 'content'],
     ],
 
     // TMDB API key
