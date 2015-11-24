@@ -82,7 +82,7 @@
                 genres = 0;
                 plugin = this;
                 loading = false;
-                includesPath = "/app/public/templates/includes.html";
+                includesPath = "app/public/templates/includes.html";
                 var $document = $(document);
                 var $window = $(window);
 

@@ -1,3 +1,8 @@
+## v1.0.2 (24-11-2015)
+
+Removed the slash before the paths to make it work in a sub directory with apache.
+
+
 ## v1.0.1 (22-11-2015)
 
 Created a config file where you can change all the settings of the application. In this config file you can change the path to the content directory or add multiple paths. 

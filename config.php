@@ -34,9 +34,6 @@ return [
     //The path to the sqlite database
     'sqlite_path' => 'app/database/popstop.sqlite',
 
-    //he buffer size when streaming the movie
-    'stream_buffer' => 102400,
-
     // The name of the cookie
     'cookie_name' => 'postop',
 

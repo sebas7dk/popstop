@@ -18,7 +18,7 @@ Before you start with the installation have a look if your setup meets all the r
 
 * Download the latest release and extract the content to your web directory.
 * Make the directory app/database writable.
-* Copy your movies or create a symlink inside content
+* Copy your movies to the content directory or add your own directories tot the config.php file.
 * Open a browser and point to your domain/ip address and the installation window will come up. Follow the instructions and you are good to go!
 
 For more information visit [popstop.io](http://popstop.io).
